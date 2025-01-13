@@ -1,0 +1,22 @@
+services:
+  checkmate-db:
+    image: mysql:8.0
+    container_name: checkmate-mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: checkmate
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+    restart: always
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    env_file:
+      - .env
+    volumes:
+      - checkmate-mysql:/var/lib/mysql
+
+volumes:
+  checkmate-mysql:
+    name: checkmate_db

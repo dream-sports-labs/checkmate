@@ -1,0 +1,53 @@
+name: Create/Update Tag
+
+on:
+  pull_request:
+    branches:
+      - master
+    types: [closed]
+
+jobs:
+  create-or-update-tag:
+    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'publish')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Configure Git user
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+
+      - name: Set up Yarn v4 (Berry)
+        run: |
+          corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Extract version from config.json
+        id: extract_version
+        run: |
+          VERSION=$(node -pe "require('./app/config.json').version")
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+
+      - name: Create or Update Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ env.VERSION }}
+        run: |
+          # Check if the tag exists
+          if git rev-parse "refs/tags/${VERSION}" >/dev/null 2>&1; then
+            echo "Tag ${VERSION} exists. Overriding..."
+            git tag -d "${VERSION}"
+            git push --delete origin "${VERSION}"
+          fi
+
+          # Create and push the new tag
+          git tag -a "${VERSION}" -m "Release ${VERSION}"
+          git push origin "${VERSION}"

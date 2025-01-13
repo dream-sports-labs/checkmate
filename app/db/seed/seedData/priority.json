@@ -1,0 +1,22 @@
+[
+  {
+    "priorityName": "Critical",
+    "createdBy": 1,
+    "orgId": 1
+  },
+  {
+    "priorityName": "High",
+    "createdBy": 1,
+    "orgId": 1
+  },
+  {
+    "priorityName": "Medium",
+    "createdBy": 1,
+    "orgId": 1
+  },
+  {
+    "priorityName": "Low",
+    "createdBy": 1,
+    "orgId": 1
+  }
+]

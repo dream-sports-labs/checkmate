@@ -1,0 +1,20 @@
+[
+  {
+    "userName": "Seed Admin",
+    "email": "admin@example.com",
+    "role": "admin",
+    "token": "dummy1"
+  },
+  {
+    "userName": "Seed User",
+    "email": "user@example.com",
+    "role": "user",
+    "token": "dummy2"
+  },
+  {
+    "userName": "Seed Reader",
+    "email": "reader@example.com",
+    "role": "reader",
+    "token": "dummy3"
+  }
+]

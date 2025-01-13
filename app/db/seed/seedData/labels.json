@@ -1,0 +1,51 @@
+[
+  {
+    "labelName": "Regression",
+    "labelType": "System",
+    "createdBy": 1,
+    "editHistory": [],
+    "projectId": 1
+  },
+  {
+    "labelName": "Sanity",
+    "labelType": "System",
+    "createdBy": 1,
+    "editHistory": [],
+    "projectId": 1
+  },
+  {
+    "labelName": "Android",
+    "labelType": "System",
+    "createdBy": 1,
+    "editHistory": [],
+    "projectId": 1
+  },
+  {
+    "labelName": "Web",
+    "labelType": "System",
+    "createdBy": 1,
+    "editHistory": [],
+    "projectId": 1
+  },
+  {
+    "labelName": "iOS",
+    "labelType": "System",
+    "createdBy": 1,
+    "editHistory": [],
+    "projectId": 1
+  },
+  {
+    "labelName": "Backend",
+    "labelType": "System",
+    "createdBy": 1,
+    "editHistory": [],
+    "projectId": 1
+  },
+  {
+    "labelName": "Testing",
+    "labelType": "System",
+    "createdBy": 1,
+    "editHistory": [],
+    "projectId": 1
+  }
+]

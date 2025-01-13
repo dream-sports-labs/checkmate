@@ -1,0 +1,14 @@
+node_modules
+/.cache
+/build
+.env
+.idea/*
+.DS_Store
+todo.txt
+playground.*
+.yarn
+.vscode
+coverage/*
+app/config.json
+drizzle/*
+app/db/seed/seedTests/*.json

@@ -1,0 +1,857 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "id": "97aa66ca-0e84-4c7e-b31b-67d2c080badf",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "organisations": {
+      "name": "organisations",
+      "columns": {
+        "ordId": {
+          "name": "ordId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "orgName": {
+          "name": "orgName",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "createdBy": {
+          "name": "createdBy",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "createdOn": {
+          "name": "createdOn",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "organisations_createdBy_users_userId_fk": {
+          "name": "organisations_createdBy_users_userId_fk",
+          "tableFrom": "organisations",
+          "tableTo": "users",
+          "columnsFrom": [
+            "createdBy"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "organisations_ordId": {
+          "name": "organisations_ordId",
+          "columns": [
+            "ordId"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "organisations_orgName_unique": {
+          "name": "organisations_orgName_unique",
+          "columns": [
+            "orgName"
+          ]
+        }
+      }
+    },
+    "projects": {
+      "name": "projects",
+      "columns": {
+        "projectId": {
+          "name": "projectId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "projectName": {
+          "name": "projectName",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "createdBy": {
+          "name": "createdBy",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "createdOn": {
+          "name": "createdOn",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "ordId": {
+          "name": "ordId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "projects_createdBy_users_userId_fk": {
+          "name": "projects_createdBy_users_userId_fk",
+          "tableFrom": "projects",
+          "tableTo": "users",
+          "columnsFrom": [
+            "createdBy"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "projects_ordId_organisations_ordId_fk": {
+          "name": "projects_ordId_organisations_ordId_fk",
+          "tableFrom": "projects",
+          "tableTo": "organisations",
+          "columnsFrom": [
+            "ordId"
+          ],
+          "columnsTo": [
+            "ordId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "projects_projectId": {
+          "name": "projects_projectId",
+          "columns": [
+            "projectId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "runs": {
+      "name": "runs",
+      "columns": {
+        "runId": {
+          "name": "runId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "suiteId": {
+          "name": "suiteId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "enum('Active','Locked','Archived','Deleted')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdBy": {
+          "name": "createdBy",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdOn": {
+          "name": "createdOn",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "runName": {
+          "name": "runName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "lockedBy": {
+          "name": "lockedBy",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "lockedOn": {
+          "name": "lockedOn",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "runs_suiteId_suites_suiteId_fk": {
+          "name": "runs_suiteId_suites_suiteId_fk",
+          "tableFrom": "runs",
+          "tableTo": "suites",
+          "columnsFrom": [
+            "suiteId"
+          ],
+          "columnsTo": [
+            "suiteId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "runs_createdBy_users_userId_fk": {
+          "name": "runs_createdBy_users_userId_fk",
+          "tableFrom": "runs",
+          "tableTo": "users",
+          "columnsFrom": [
+            "createdBy"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "runs_lockedBy_users_userId_fk": {
+          "name": "runs_lockedBy_users_userId_fk",
+          "tableFrom": "runs",
+          "tableTo": "users",
+          "columnsFrom": [
+            "lockedBy"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "runs_runId": {
+          "name": "runs_runId",
+          "columns": [
+            "runId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "testRuns": {
+      "name": "testRuns",
+      "columns": {
+        "testRunsId": {
+          "name": "testRunsId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "testId": {
+          "name": "testId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "suiteId": {
+          "name": "suiteId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "sectionId": {
+          "name": "sectionId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "isIncluded": {
+          "name": "isIncluded",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": true
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar(25)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'untested'"
+        },
+        "statusUpdates": {
+          "name": "statusUpdates",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "testRuns_testId_tests_testId_fk": {
+          "name": "testRuns_testId_tests_testId_fk",
+          "tableFrom": "testRuns",
+          "tableTo": "tests",
+          "columnsFrom": [
+            "testId"
+          ],
+          "columnsTo": [
+            "testId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "testRuns_suiteId_suites_suiteId_fk": {
+          "name": "testRuns_suiteId_suites_suiteId_fk",
+          "tableFrom": "testRuns",
+          "tableTo": "suites",
+          "columnsFrom": [
+            "suiteId"
+          ],
+          "columnsTo": [
+            "suiteId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "testRuns_sectionId_section_sectionId_fk": {
+          "name": "testRuns_sectionId_section_sectionId_fk",
+          "tableFrom": "testRuns",
+          "tableTo": "section",
+          "columnsFrom": [
+            "sectionId"
+          ],
+          "columnsTo": [
+            "sectionId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "suites": {
+      "name": "suites",
+      "columns": {
+        "suiteId": {
+          "name": "suiteId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "suiteName": {
+          "name": "suiteName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "suiteDescription": {
+          "name": "suiteDescription",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdOn": {
+          "name": "createdOn",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "createdBy": {
+          "name": "createdBy",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "enum('Active','Archived')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "editHistory": {
+          "name": "editHistory",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "('[]')"
+        },
+        "projectId": {
+          "name": "projectId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "suites_createdBy_users_userId_fk": {
+          "name": "suites_createdBy_users_userId_fk",
+          "tableFrom": "suites",
+          "tableTo": "users",
+          "columnsFrom": [
+            "createdBy"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "suites_projectId_projects_projectId_fk": {
+          "name": "suites_projectId_projects_projectId_fk",
+          "tableFrom": "suites",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "projectId"
+          ],
+          "columnsTo": [
+            "projectId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "suites_suiteId": {
+          "name": "suites_suiteId",
+          "columns": [
+            "suiteId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "section": {
+      "name": "section",
+      "columns": {
+        "sectionId": {
+          "name": "sectionId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "sectionName": {
+          "name": "sectionName",
+          "type": "varchar(250)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sectionDescription": {
+          "name": "sectionDescription",
+          "type": "varchar(250)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "parentSectionId": {
+          "name": "parentSectionId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "editHistory": {
+          "name": "editHistory",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "('[]')"
+        },
+        "suiteId": {
+          "name": "suiteId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "section_suiteId_suites_suiteId_fk": {
+          "name": "section_suiteId_suites_suiteId_fk",
+          "tableFrom": "section",
+          "tableTo": "suites",
+          "columnsFrom": [
+            "suiteId"
+          ],
+          "columnsTo": [
+            "suiteId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "section_sectionId": {
+          "name": "section_sectionId",
+          "columns": [
+            "sectionId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "tests": {
+      "name": "tests",
+      "columns": {
+        "testId": {
+          "name": "testId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "sectionId": {
+          "name": "sectionId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "suiteId": {
+          "name": "suiteId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "squad": {
+          "name": "squad",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "priority": {
+          "name": "priority",
+          "type": "enum('Low','Medium','High','Critical')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "automationStatus": {
+          "name": "automationStatus",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "testCoveredBy": {
+          "name": "testCoveredBy",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "preConditions": {
+          "name": "preConditions",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "steps": {
+          "name": "steps",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "expectedResult": {
+          "name": "expectedResult",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "assignedTo": {
+          "name": "assignedTo",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdBy": {
+          "name": "createdBy",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdOn": {
+          "name": "createdOn",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "historyInfo": {
+          "name": "historyInfo",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "editHistory": {
+          "name": "editHistory",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "('[]')"
+        },
+        "platform": {
+          "name": "platform",
+          "type": "varchar(25)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdByName": {
+          "name": "createdByName",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "tests_sectionId_section_sectionId_fk": {
+          "name": "tests_sectionId_section_sectionId_fk",
+          "tableFrom": "tests",
+          "tableTo": "section",
+          "columnsFrom": [
+            "sectionId"
+          ],
+          "columnsTo": [
+            "sectionId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "tests_suiteId_suites_suiteId_fk": {
+          "name": "tests_suiteId_suites_suiteId_fk",
+          "tableFrom": "tests",
+          "tableTo": "suites",
+          "columnsFrom": [
+            "suiteId"
+          ],
+          "columnsTo": [
+            "suiteId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "tests_assignedTo_users_userId_fk": {
+          "name": "tests_assignedTo_users_userId_fk",
+          "tableFrom": "tests",
+          "tableTo": "users",
+          "columnsFrom": [
+            "assignedTo"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "tests_createdBy_users_userId_fk": {
+          "name": "tests_createdBy_users_userId_fk",
+          "tableFrom": "tests",
+          "tableTo": "users",
+          "columnsFrom": [
+            "createdBy"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "tests_testId": {
+          "name": "tests_testId",
+          "columns": [
+            "testId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "accessRoles": {
+      "name": "accessRoles",
+      "columns": {
+        "accessId": {
+          "name": "accessId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rollDescription": {
+          "name": "rollDescription",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "paths": {
+          "name": "paths",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "accessRoles_accessId": {
+          "name": "accessRoles_accessId",
+          "columns": [
+            "accessId"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "accessRoles_name_unique": {
+          "name": "accessRoles_name_unique",
+          "columns": [
+            "name"
+          ]
+        }
+      }
+    },
+    "users": {
+      "name": "users",
+      "columns": {
+        "userId": {
+          "name": "userId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "userName": {
+          "name": "userName",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "accessList": {
+          "name": "accessList",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "users_userId": {
+          "name": "users_userId",
+          "columns": [
+            "userId"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "users_userName_unique": {
+          "name": "users_userName_unique",
+          "columns": [
+            "userName"
+          ]
+        },
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "columns": [
+            "email"
+          ]
+        }
+      }
+    }
+  },
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

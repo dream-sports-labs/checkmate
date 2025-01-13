@@ -1,0 +1,34 @@
+{
+  "include": ["**/*.ts", "**/*.tsx"],
+  "compilerOptions": {
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "types": ["@remix-run/node", "vite/client", "jest"],
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "target": "ES2022",
+    "strict": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@dao/*": ["./app/db/dao/*"],
+      "@controllers/*": ["./app/dataController/*"],
+      "@api/*": ["./app/routes/api/v1/*"],
+      "@components/*": ["./app/components/*"],
+      "@services/*": ["./app/services/*"],
+      "@hooks/*": ["./app/hooks/*"],
+      "@schema/*": ["./app/db/schema/*"],
+      "@ui/*": ["./app/ui/*"],
+      "@styles/*": ["./app/styles/*"],
+      "@assets/*": ["./app/assets/*"],
+      "@route/utils/*": ["app/routes/utilities/*"],
+      "~/*": ["./app/*"]
+    },
+    "noEmit": true
+  }
+}

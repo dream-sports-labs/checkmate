@@ -1,0 +1,27 @@
+[
+  {
+    "testCoveredByName": "Manual",
+    "createdBy": 1,
+    "orgId": 1
+  },
+  {
+    "testCoveredByName": "E2E",
+    "createdBy": 1,
+    "orgId": 1
+  },
+  {
+    "testCoveredByName": "Unit",
+    "createdBy": 1,
+    "orgId": 1
+  },
+  {
+    "testCoveredByName": "Integration",
+    "createdBy": 1,
+    "orgId": 1
+  },
+  {
+    "testCoveredByName": "Contract",
+    "createdBy": 1,
+    "orgId": 1
+  }
+]

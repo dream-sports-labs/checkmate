@@ -1,0 +1,328 @@
+Title,Automation Status,Expected Result,Platform,Preconditions,Priority,Section,Section Depth,Section Description,Section Hierarchy,Squad,Steps,Suite,Test Covered By,Type
+valitdate amount box when for user limit greater than breached amount for deposit alert page, Automatable,"check the prefilled amount
+validate the note it should not be visible
+and the alert button", All Platforms,"user limit is greater than
+the breached limit",Critical,Crash Test Cases,0,,Crash Test Cases, Customer_X,"Open the app
+Go Rp Landing Page using deeplink
+Click on the RP tab
+click on deposit alert component
+validate the deposit alert page
+update the amount inside the
+deposit alert page lesser than the
+existing amount
+7.click on update CTA",Revamp_App_Regression_Suite_2022, Manual Test,Functional
+valitdate amount box when for user limit greater than breached amount for deposit alert page, Automatable,"check the prefilled amount
+validate the note it should not be visible
+and the alert button", All Platforms,"user limit is greater than
+the breached limit",Critical,Crash Test Cases,0,,Crash Test Cases, Customer_X,"Open the app
+Go Rp Landing Page using deeplink
+Click on the RP tab
+click on deposit alert component
+validate the deposit alert page
+update the amount inside the
+deposit alert page lesser than the
+existing amount
+7.click on update CTA",Revamp_App_Regression_Suite_2022, Manual Test,Functional
+valitdate amount box when for user limit greater than breached amount for deposit alert page, Automatable,"check the prefilled amount
+validate the note it should not be visible
+and the alert button", All Platforms,"user limit is greater than
+the breached limit",Critical,Crash Test Cases,0,,Crash Test Cases, Customer_X,"Open the app
+Go Rp Landing Page using deeplink
+Click on the RP tab
+click on deposit alert component
+validate the deposit alert page
+update the amount inside the
+deposit alert page lesser than the
+existing amount
+7.click on update CTA",Revamp_App_Regression_Suite_2022, Manual Test,Functional
+valitdate amount box when for user limit greater than breached amount for deposit alert page, Automatable,"check the prefilled amount
+validate the note it should not be visible
+and the alert button", All Platforms,"user limit is greater than
+the breached limit",Critical,Crash Test Cases,0,,Crash Test Cases, Customer_X,"Open the app
+Go Rp Landing Page using deeplink
+Click on the RP tab
+click on deposit alert component
+validate the deposit alert page
+update the amount inside the
+deposit alert page lesser than the
+existing amount
+7.click on update CTA",Revamp_App_Regression_Suite_2022, Manual Test,Functional
+valitdate amount box when for user limit greater than breached amount for deposit alert page, Automatable,"check the prefilled amount
+validate the note it should not be visible
+and the alert button", All Platforms,"user limit is greater than
+the breached limit",Critical,Crash Test Cases,0,,Crash Test Cases, Customer_X,"Open the app
+Go Rp Landing Page using deeplink
+Click on the RP tab
+click on deposit alert component
+validate the deposit alert page
+update the amount inside the
+deposit alert page lesser than the
+existing amount
+7.click on update CTA",Revamp_App_Regression_Suite_2022, Manual Test,Functional
+"For a new user created with mobile only, the mobile number should be verified on Verify Now button click.", Automated,"For a new user created with mobile only, the mobile number should be verified on Verify Now button click.", All Platforms,User should be created with a mobile number only,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"1. Click on side nav &gt; My balance &gt; Verify Now 
+2. The mobile number is seen as verified.",Revamp_App_Regression_Suite_2022,,P1 Test Case
+For a user that gets created with email address should be able to verify mobile no after login is successful., Automated,For a user that gets created with email address should be able to verify mobile no after login is successful., All Platforms,1. Registration should be done using google / facebook account.,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"1. On registering user with Google/Facebook, the user gets created with email address but not mobile no.
+2. On successful login, the verify mobile no popup should be received.
+3. Mobile no should be verified when on OTP verification.",Revamp_App_Regression_Suite_2022,,Functional
+"When the email new user is created with mobile only flow, the email should allowed to verify from Verification screen", Automated,"When the email new user is created with mobile only flow, the email should allowed to verify from Verification screen", All Platforms,1. Login with registered mobile no and email is not verified.,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"1. Click on Side Nav &gt; My Balance &gt; Verify Now &gt; Enter email screen &gt; Add email &gt; Enter OTP received on email.
+2. Once OTP verification is done, the email get verified.",Revamp_App_Regression_Suite_2022,,P1 Test Case
+"For a user registered with Google / Facebook, its email should be verified in Verify Account page.", Automated,"For a user registered with Google / Facebook, its email should be verified in Verify Account page.", All Platforms,The user should be registered with Google and/or Facebook,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"1. Login with google or Facebook user
+2. Click on Side Nav &gt; My Balance &gt; Verify Now.
+3. The email should be seen as verified.",Revamp_App_Regression_Suite_2022,,Functional
+Organic PAN verification, Automated,"If the PAN is verified, the status should be shown as Verified for PAN in Verification screen", All Platforms,1. Verify Now button should be seen to user on My Balance page,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"1. Upload PAN no,name,PAN Card photo from Verify PAN screen.
+2. The PAN should get verified once all the conditions are met.
+3. The status should be seen as Verified in verification once PAN is verified.",Revamp_App_Regression_Suite_2022,,P0 Test Case
+Modify PAN Verification Data - Before approval, Automated,1. Modifying option of pan details should be available if the pan verification is rejected., All Platforms,PAN verification should be pending.,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"1. Click on verify Now for PAN.
+2. If the PAN is rejected, modify the PAN no, name and upload appropriate PAN card photo.
+3. Submit the details.",Revamp_App_Regression_Suite_2022,,P1 Test Case
+PAN no should be masked on PAN verification screen as well as Verify account screen., Automated,PAN no should be masked on PAN verification screen as well as Verify account screen., All Platforms,1. PAN should be verified.,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"1. Open Verify Account page , PAN no should be masked.
+2. Open Verify PAN details, PAN no should be masked.",Revamp_App_Regression_Suite_2022,,P1 Test Case
+"Verify once after PAN details are Verified/ In review, Rejected same should be reflected in My Balance- KYC Details", Automated,"Verify once after PAN details are Verified/ In review, Rejected same should be reflected in My Balance- KYC Details", All Platforms,The PAN details should either be Verified / Rejected or In-Review.,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"1. Click on Side Nav &gt; My Balance &gt; MY KYC details page.
+2. The status of the PAN verification should be seen on this page.",Revamp_App_Regression_Suite_2022,,Functional
+"Verify once after bank details get verified, same should be reflected in MY balance - KYC details", Automated,"Verify once after bank details get verified, same should be reflected in MY balance - KYC details", All Platforms,The bank should be verified.,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"1. Click on side nav &gt; My balance &gt; My KYC page
+2. If the bank is verified, the same should be seen in My KYC page.",Revamp_App_Regression_Suite_2022,,Functional
+Organic Bank Verification, Automated,"Once the valid bank details are uploaded, the bank should get verified.", All Platforms,"1. Verify Now button should be seen to user
+2. bank details of user should not belong to santo state.",Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"1. Click on side nav &gt; My balance &gt; Verify Now 
+2. Update account no, ifsc code, upload bank details page.
+3. Click on submit",Revamp_App_Regression_Suite_2022,,P0 Test Case
+Validate Existing Bank Details Check, Automated,Existing bank details check should be present for user., All Platforms,Bank details should be added in one account,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"1. Click on verify now from My balance page.
+2. Upload details of the same bank already added in another account.
+3. An error message should be seen.",Revamp_App_Regression_Suite_2022,,P1 Test Case
+Verify Unlink bank account option when Bank is Verified, Automated,"1. Unlink bank account should be present in KYC page for a verified bank account. Also, on unlinking the bank, Verify now button should be seen on My balance page.", All Platforms,Bank should be verified for a user.,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"1. Click on side nav &gt; My Balance &gt; KYC page
+2. Click on bank &gt; Unlink bank button should be present.
+3. On clicking unlink bank, the bank should get removed from the account and verify now button should be seen on My Balance page.",Revamp_App_Regression_Suite_2022,,P1 Test Case
+"If the bank details are added for verification, the status should be shown as in-review", Automated,"If the bank details are added for verification, the status should be shown as in-review", All Platforms,Verify now button should be seen to the user.,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"1. Click on Verify Now &gt; Upload bank details to be verified.
+2. Click on upload.
+3. The verification status for the bank is in-review.",Revamp_App_Regression_Suite_2022,,Functional
+"If the bank is rejected, the status should be seen in Verification page.", Automated,"If the bank is rejected, the status should be seen in Verification page.", All Platforms,1. Upload incorrect bank details for the user.,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"1. The details uploaded should get rejected with appropriate reason.
+2. The status shown on verification page should be rejected.",Revamp_App_Regression_Suite_2022,,Functional
+Validate UPI section is shown on verification, Automated,UPI section should be shown on verification page, All Platforms,"Email, bank or pan should be unverified ",Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"- Click on Side Nav --&gt; My Balance 
+- Click on Verify to Withdraw/Verify Now button
+- Check UPI section
+
+",Revamp_App_Regression_Suite_2022,,Functional
+Verify verification list page for UPI In Review state, Automated,When UPI is submitted state should be displayed as In Review, All Platforms,Execute TC C292059,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"- Click on add UPI
+- Enter valid UPI add and submit
+- Check the status of UPI on verify account page",Revamp_App_Regression_Suite_2022,,Functional
+Verify verification list page for UPI rejected state, Automated,UPI status should be displayed as Rejected, All Platforms,Execute TC C292062,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"- Click on Add new UPI
+- Enter invalid UPI
+- Click on Submit 
+- Check the status of UPI after sometime
+
+",Revamp_App_Regression_Suite_2022,,Functional
+Verify verification list page for UPI Success state, Automated,UPI status should be displayed as Verified, All Platforms,Execute TC C292060,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,- Check the UPI status after sometime,Revamp_App_Regression_Suite_2022,,Functional
+Verify in case of failure user should be able to update UPI, Automated,User should be able to update/resubmit the rejected UPI again, All Platforms,Execute TC C292062,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"- Click on rejected UPI
+- Enter/update the UPI ID
+- Click on Submit",Revamp_App_Regression_Suite_2022,,Functional
+"Verify in case of successful UPI verification, user should not be able to update UPI", Automated,Bottom-sheet should not be display to update the UPI when its already verified, All Platforms,Execute TC C292063,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,- Click on UPI to update,Revamp_App_Regression_Suite_2022,,Functional
+Verify UPI section is shown in KYC details, Automated,All the added UPIs should be displayed on KYC Details page, All Platforms,"Execute TC: C292060, C292062, C292063",Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"- Click on KYC Details from My Balance page
+- Check the verified, Failed, In Review UPI'S",Revamp_App_Regression_Suite_2022,,Functional
+Verify KYC list page for multiple UPI's, Automated,All the added UPIs should be displayed under Your UPIs section on KYC details page, All Platforms,Execute TC C292062 for adding multiple UPI IDs,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"- Click on KYC details section from My Balance page
+- Check multiple UPI added ",Revamp_App_Regression_Suite_2022,,Functional
+"Verify on KYC list page on tap of verified UPI, unlink UPI bottom sheet is shown", Automated,Unlink UPI bottom-sheet should be shown on tap of verified UPI, All Platforms,Execute TC C292063,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"- Click on KYC details from My Balance page
+- Go to UPI section
+- Click on Verified UPI",Revamp_App_Regression_Suite_2022,,Functional
+"Verify tap of unlink on unlink bottom sheet, user taken back to KYC list page with success/failure toast msg", Automated,User should be redirected back to KYC list page , All Platforms,Execute TC C292069,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,- Click on Unlink button,Revamp_App_Regression_Suite_2022,,Functional
+"Verify on tap of failed UPI, add UPI bottom sheet is shown with msg", Automated,"- """"UPI Verification rejected. Tap to retry."""" message should be displayed below rejected UPI
+- Add UPI bottom-sheet should be shown on tap of failed UPI with msg - 'This UPI ID does not exist or is no longer in use. Please try again' or 'This UPI ID already exists. Please try again with another ID'", All Platforms,Execute TC C292062,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"- Click on KYC Details from My Balance 
+- Click on Failed/Rejected UPI",Revamp_App_Regression_Suite_2022,,Functional
+Verify once user performs action on failed UPI then failed/rejected tag is removed for that UPI, Automated,"- UPI status should get updated after resubmitting the UPI
+- In Review status should be shown for submitted UPI ", All Platforms,Execute TC C292071,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,Update/add the UPI and submit the details,Revamp_App_Regression_Suite_2022,,Functional
+Verify user is able to submit UPI or Bank for verification when PAN is in review, Automated,User should be able to submit UPI or Bank for verification when PAN is in review, All Platforms,PAN should be in In-Review state,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"- Click on Add UPI
+- Enter UPI and submit
+- Click on Add bank account
+- Enter the bank details and submit",Revamp_App_Regression_Suite_2022,,Functional
+Verify user is able to submit UPI or Bank for verification when PAN is verified, Automated,User should be able to add UPI and bank account after PAN is verified , All Platforms,Execute TC C136403,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"- Add UPI and submit
+- Enter bank details and submit",Revamp_App_Regression_Suite_2022,,Functional
+Verify user is not able to submit UPI or Bank for verification when PAN is in rejected state, Automated,UPI and Bank account option should be disable, All Platforms,PAN is not verified for the user,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,- Click on Add UPI or Add bank account,Revamp_App_Regression_Suite_2022,,Functional
+"Verify when PAN state changed from in review to verified, UPI and Bank is picked for verification", Automated,"- After all the checks for PAN are passed then PAN is verified
+- UPI and Bank should be picked for verification", All Platforms,"User has submitted PAN for review
+UPI and Bank is also added for review state",Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,,Revamp_App_Regression_Suite_2022,,Functional
+Verify user is able to add UPI, Automated,"- Add UPI bottom-sheet is shown when clicked on UPI 
+- After adding UPI user should get redirected back to Verify Account page
+- UPI should get added with In review state
+", All Platforms,PAN is verified or In review state,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"- Click on Add UPI
+- Enter the valid UPI ID
+- Click on submit",Revamp_App_Regression_Suite_2022,,Functional
+Verify user is able to select chip, Automated,- Selected chip should be displayed on enter UPI textview, All Platforms,PAN is in review or verified,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"- Click on add UPI
+- Check add UPI bottomsheet
+- Click on chips present
+",Revamp_App_Regression_Suite_2022,,Functional
+Verify Clear field icon(X), Automated,Entered UPI should get removed , All Platforms,"- Unverified user
+- PAN in review or verified ",Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"- Click on add UPI
+- Enter UPI on bottomsheet shown
+- Click on X icon
+
+",Revamp_App_Regression_Suite_2022,,Functional
+Verify info and Note given on Add UPI ID bottomsheet, Automated,"Following details should be shown on Add UPI bottom-sheet:
+- Note: This process may take a while and please make sure the name in this ID is same as on your PAN 
+- The UPI ID is in the format of name@banknamev
+", All Platforms,,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"- Click on add upi
+- Check note and info displayed",Revamp_App_Regression_Suite_2022,,Functional
+Verify error message for invalid/incorrect UPI ID, Automated,'This UPI ID does not exist or is no longer in use. Please try again' message should be displayed, All Platforms,Execute TC C292062,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"- Click on rejected UPI
+- Check the msg",Revamp_App_Regression_Suite_2022,,Functional
+Verify error message while adding existing UPI ID, Automated,'This UPI ID already exists. Please try again with another ID' error msg should be displayed, All Platforms,Execute TC C292063,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,Add the same UPI again,Revamp_App_Regression_Suite_2022,,Functional
+Verify close icon(X) functionality of Unlink UPI ID bottomsheet, Automated,- Bottom-sheet should get closed and user should redirected back to Verify Account page, All Platforms,Execute TC C292069,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,- Click on X icon of Unlink UPI bottomsheet,Revamp_App_Regression_Suite_2022,,Functional
+Verify added UPI is shown in withdrawal page, Automated,Verified UPI should be displayed on withdrawal page, All Platforms,Execute TC C292077,Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"- Go to My balance
+- Click on Withdraw Instantly button
+- Check the added UPI in withdrawal page",Revamp_App_Regression_Suite_2022,,Functional
+Verify when withdrawal is placed then user is not able to unlink UPI, Automated,Error message should be displayed to user, All Platforms,"Add UPI
+Complete verification process and place the withdrawal using same UPI",Critical,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,"Go to KYC Details
+Unlink the UPI",Revamp_App_Regression_Suite_2022,,Functional
+Verify Pan details page header when pan is not verified, Automatable,, All Platforms,,Medium,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,,Revamp_App_Regression_Suite_2022, Manual Test,Functional
+Verify Rejected reason on verify account page when pan is rejected, Automatable,, All Platforms,,Medium,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,,Revamp_App_Regression_Suite_2022, Manual Test,Functional
+Verify Bank account page when user's bank details are not verified, Automatable,, All Platforms,,Medium,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,,Revamp_App_Regression_Suite_2022, Manual Test,Functional
+Verify bank name and branch name field is visible once user adds IFSC code, Automatable,, All Platforms,,Medium,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,,Revamp_App_Regression_Suite_2022, Manual Test,Functional
+Verify rejected reason text visible on KYC details for bank details, Automatable,, All Platforms,,Medium,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,,Revamp_App_Regression_Suite_2022, Manual Test,Functional
+Verify upload bank proof cta present once user bank details are rejected, Automatable,, All Platforms,,Medium,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,,Revamp_App_Regression_Suite_2022, Manual Test,Functional
+Verify upload bank proof flow  once user bank details are rejected, Automatable,, All Platforms,,Medium,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,,Revamp_App_Regression_Suite_2022, Manual Test,Functional
+Verify the kyc internal deeplink., Automatable,, All Platforms,,Medium,Verification,2,,Account Management > User Identity > Verification, User_Identity_Pod,,Revamp_App_Regression_Suite_2022, Manual Test,Functional
+To verify My info and Settings is accessible from Side Navigation, Automated,To verify My info and Settings is accessible from Side Navigation, All Platforms,Valid user is required.,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,1. Click on Side Nav &gt; My Info and Settings.,Revamp_App_Regression_Suite_2022,,P1 Test Case
+To Verify that the  change mobile screen page is seen on clicking change mobile., Automated,, All Platforms,,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,,Revamp_App_Regression_Suite_2022,,P0 Test Case
+"On clicking My Info and Settings following details should be present for newly created user - Name, Mobile, Country  etc", Automated,"On clicking My Info and Settings following details should be present for newly created user - Name, Mobile, Country ", All Platforms,New user should be created ,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"1. Click Side nav &gt; My Info and Settings 
+2. On this page following details should be present 
+Name,Mobile, Country, Toggle button for Allow SMS notifications and make me discoverable should be enabled.",Revamp_App_Regression_Suite_2022,,Functional
+Team name should contain alphabets and space only. Numbers and other special characters should not be allowed., Automated,Team name should contain alphabets and space only. Numbers and other special characters should not be allowed., All Platforms,"Open My Info and Settings 
+
+",Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"1. Type numbers or special characters apart from space, there should be an error message stating """"Please remove numbers or special characters from name"""".",Revamp_App_Regression_Suite_2022,,Functional
+Minimum characters limit for name is 3 in My info and Settings., Automated,Minimum characters limit for name is 3 in My info and Settings., All Platforms,Open My Info and Settings page on device.,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,1. Characters less 3 should not be allowed,Revamp_App_Regression_Suite_2022,,Functional
+"On clicking cancel icon, all the typed characters for name should get cleared.", Automated,"On clicking cancel icon, all the typed characters for name should get cleared.", All Platforms,User should open My Info and Settings ,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"1. Type name in name field 
+2. click on cancel icon and the right
+3. It should clear the typed entry.",Revamp_App_Regression_Suite_2022,,Functional
+"For newly created user, the email field is blank in My Info and Settings.", Automated,"For newly created user, the email field is blank in My Info and Settings.", All Platforms,User should open My Info and Settings,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"1. Click on My Info and Settings 
+2. The email address should be blank",Revamp_App_Regression_Suite_2022,,Functional
+Click on change email to add and verify email., Automated,Click on change email to add and verify email. , All Platforms,User should open My info and Settings page,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"1. Click on change email icon 
+2. Enter email address and click on GET OTP
+3. Enter OTP in OTP screen that appears
+4. Enter valid OTP, email address changed valid bottom sheet should appear.",Revamp_App_Regression_Suite_2022,,Functional
+Resend OTP should be available on change email for user in My Info and Settings, Automated,Resend OTP should be available on change email for user in My Info and Settings, All Platforms,user should be on enter OTP screen of change email.,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"1. wait for 30 seconds, resend otp hyperlink should be seen.",Revamp_App_Regression_Suite_2022,,Functional
+"On entering invalid OTP for 5 times, there should be an error toast.", Automated,"On entering invalid OTP for 5 times, there should be an error toast.", All Platforms,User should be on change email screen of My info and settings,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"1. On entering invalid OTP for 5 times there should be an error stating """"Take a breather! You’ve tried OTP too many times! Retry after a day""""",Revamp_App_Regression_Suite_2022,,Functional
+Change mobile should be seen in My info and Settings that allows user to change and verify new number, Automated,Change mobile should be seen in My info and Settings that allows user to change and verify new number, All Platforms,1. User should be on change mobile screen.,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"1. Type on new mobile number
+2. Click on Get OTP
+3. Enter valid OTP 
+4. Mobile number updated bottom sheet should appear.",Revamp_App_Regression_Suite_2022,,Functional
+Validations should be present when invalid email id is entered in change email screen., Automated,Validations should be present when invalid email id is entered in change email screen., All Platforms,"user should be on change email screen.
+
+",Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"1. Type invalid email address 
+2. Type already existing email address 
+3. Respective error toast should come.",Revamp_App_Regression_Suite_2022,,Functional
+Validations should be present on enter mobile screen on change mobile icon of My info and settings., Automated,Validations should be present on enter mobile screen on change mobile icon of My info and settings, All Platforms,User should be on change mobile screen.,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"1. Type invalid number &gt; Get OTP
+2. Type already added number &gt; Get OTP
+3. Respective validation toast should appear",Revamp_App_Regression_Suite_2022,,Functional
+"On enter OTP screen of Change mobile, resend OTP option should appear after 30 seconds", Automated,"On enter OTP screen of Change mobile, resend OTP option should appear after 30 seconds", All Platforms,1. User should be on change mobile screen.,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"1. Enter mobile no &gt; get OTP
+2. Wait for 30 seconds
+3. Resend OTP hyperlink should appear",Revamp_App_Regression_Suite_2022,,Functional
+"On Enter OTP screen of email and mobile, Contact Us should be present and clicking on Contact us should land user to chat support page.", Automated,"On Enter OTP screen of email and mobile, Contact Us should be present and clicking on Contact us should land user to chat support page.", All Platforms,User should either be on change email screen or change mobile screen,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,1. There should be Contact Us hyperlink present on Enter OTP screen,Revamp_App_Regression_Suite_2022,,Functional
+"For new user, gender is not selected by default.", Automated,"For new user, gender is not selected by default.", All Platforms,Login with newly created user.,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"1. Click on my info and settings 
+2. The gender is not selected for this user.",Revamp_App_Regression_Suite_2022,,Functional
+"user should be able to select gender among options such as """"Male, Female and Others"""".", Automated,"user should be able to select gender among options such as """"Male, Female and Others"""".", All Platforms,"User should be on My Info and Settings
+
+",Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"1. The user should be able to save gender among Male, Female or Others only.",Revamp_App_Regression_Suite_2022,,Functional
+Address can be empty in My info and settings., Automated,Address cannot be empty in My info and settings., All Platforms,1. User should be on My Info and Settings.,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"1. Keep address blank and update profile.
+2. An error should appear stating Address cannot be empty.",Revamp_App_Regression_Suite_2022,,Functional
+By default City is blank in My Info and Settings for the new user., Automated,By default City is blank in My Info and Settings for the new user., All Platforms,New user should be created and navigate to My Info and Settings.,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,1. City is blank in My Info and Settings,Revamp_App_Regression_Suite_2022,,Functional
+Pin code is blank for new user created in My info and Settings., Automated,Pin code is blank for new user created in My info and Settings., All Platforms,New user should be created and navigate to My info and Settings.,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,The value fr pin code is blank by default.,Revamp_App_Regression_Suite_2022,,Functional
+By default state should be blank for new user created in My info and Settings., Automated,By default state should be blank for new user created in My info and Settings., All Platforms,Create new user and open My info and Settings.,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,The value of State should be blank,Revamp_App_Regression_Suite_2022,,Functional
+"If any of the SANTO state is selected and update profile is tapped, there should be an error popup received stating these states are blocked.", Automated,"If any of the SANTO state is selected and update profile is tapped, there should be an error popup received stating these states are blocked.", All Platforms,User should be on My info and Settings page.,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"1. Select any of SANTO state which are blocked.
+2. Click on update profile.
+3. Error should popup with the message that the state is blocked.",Revamp_App_Regression_Suite_2022,,Functional
+DoB should be disabled if either of PAN or Aadhaar is verified, Automated,"If the bank is verified of the user, state and DOB should get disabled.  ", All Platforms,Bank should be verified of the User.,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"1. For the bank verified user, go to My info settings from either side nav or user profile.
+2. The DOB and State fields should be disabled.",Revamp_App_Regression_Suite_2022,,Functional
+User should be able to logout from My info and Settings., Automated,User should be able to logout from My info and Settings., All Platforms,user should be on My Info and Settings page.,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"1. Click on logout
+2. The user should get logout and Welcome screen should appear",Revamp_App_Regression_Suite_2022,,Functional
+My info and settings should be accessible from User profile as well, Automated,My info and settings should be accessible from User profile as well, All Platforms,User should login to app.,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"1. Click on side nav &gt; user profile
+2. Click on ellipse on right side &gt; My Info and Settings.
+3. This should open My info and settings page.",Revamp_App_Regression_Suite_2022,,Functional
+Verify error message when Pin Code is not entered while updating the profile, Automated,, All Platforms,,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,,Revamp_App_Regression_Suite_2022,,Functional
+Verify error message when name is not entered while updating the profile, Automated,, All Platforms,,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,,Revamp_App_Regression_Suite_2022,,Functional
+If Aadhaar is verified only then State should be disabled, Automated,, All Platforms,,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,,Revamp_App_Regression_Suite_2022,,Functional
+Verify error bottom sheet when verify email is failed, Automatable,, All Platforms,,High,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,,Revamp_App_Regression_Suite_2022,,Functional
+Verify error bottom sheet when verify mobile is failed, Automatable,, All Platforms,,High,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,,Revamp_App_Regression_Suite_2022,,Functional
+Verify when isEmailMobileChangeAllowed is false, Automatable,, All Platforms,,High,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,,Revamp_App_Regression_Suite_2022,,Functional
+Verify if send OTP is failed, Automatable,Error toast should be displayed  , All Platforms,,High,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,"Mock below request:
+
+/graphql/mutation/react-native/email-mobile-change-request-mutation
+
+{
+   """"data"""": {
+      """"emailMobileChangeRequest"""": {
+         """"message"""": """"OTP send failed"""",
+         """"successful"""": false,
+         """"otpAttemptCount"""": 5,
+         """"retryAfter"""": 1800,
+         """"resendButtonActive"""": 30,
+         """"remainingResendCount"""": 4
+      }
+   }
+}",Revamp_App_Regression_Suite_2022,,Functional
+"When user is verified, they should not be able to view DOB in my info and settings.", Automated,, All Platforms,,High,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,,Revamp_App_Regression_Suite_2022,,Functional
+"When user is Not verified, they should be able to view DOB in my info and settings.", Automated,, All Platforms,,High,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,,Revamp_App_Regression_Suite_2022,,Functional
+"On change mobile number for max limit error, the OTP screen should not come and instead a toast should be seen showing error", Automated,, All Platforms,,High,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,,Revamp_App_Regression_Suite_2022,,Functional
+"1. For user whose email is not yet added in system, on tapping my info and settings edit icon should be visible for user.", Automated,"For user whose email is not yet added in system, on tapping my info and settings edit icon should be visible for user.", All Platforms,,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,,Revamp_App_Regression_Suite_2022, Manual Test,Functional
+"On tapping edit icon, tap on edit icon and complete the email verification flow and check if the email is seen in my info.", Automated,, All Platforms,,Critical,My Info and Settings,2,,Account Management > User Identity > My Info and Settings, User_Identity_Pod,,Revamp_App_Regression_Suite_2022, Manual Test,Functional
+Manage Account option is visible on iOS, Automated,"
+Manage account option should be available on my info and on click redirects to manage account page", Only iOS,,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,"- Login into D11
+- Go to side Nave
+- Click on My Info & Settings
+- Scroll down
+- Click on Manage Account",Revamp_App_Regression_Suite_2022,,Functional
+Verify the details on Manage Account screen, Automated,"Below details should be visible:
+- Name
+- Mobile number
+- Email Address
+- DOB
+- Three dot menu
+- Active Since
+
+", Only iOS,,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,"Login into D11
+Go to side Nave
+Click on My Info & Settings
+Scroll down
+Click on Manage Account",Revamp_App_Regression_Suite_2022,,Functional
+To verify Request to Delete Account option is displayed on Manage Account three dots menu, Automated,Request to Delete Account option should be displayed , Only iOS,User should be on Manage account page,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,"- Click on three dots menu from top right corner
+
+",Revamp_App_Regression_Suite_2022,,Functional
+Validate Request to Delete Account page details, Automated,Strategic Timeout and Continue to Delete options should be visible with a confirmation text view, Only iOS,User should be on manage account page,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,"- Click on Three dots menu
+- Click on Request to delete account option
+- Check the details",Revamp_App_Regression_Suite_2022,,Functional
+To verify continue to delete-Continue Anyway button, Automated,Select reason to delete account page should be displayed with Continue button, Only iOS,User should be on manage account page,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,"- Click on three dots menu
+- Click on Continue to delete button
+- Click on continue anyway button",Revamp_App_Regression_Suite_2022,,Functional
+To verify Cancel button redirects back to request to delete account page, Automated,Should redirected back to request to delete account page, Only iOS,User should be on manage account page,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,"- Click on three dots menu
+- Click on Continue to delete button
+- Click on cancel button",Revamp_App_Regression_Suite_2022,,Functional
+To verify request to delete account Start Strategic Timeout button redirects to Strategic Timeout page, Automated,Should redirects to Strategic Timeout screen, Only iOS,User should be on manage account pahe,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,"- Click on 3 dots menu
+- Select request to delete account
+- Click on Strategic Timeout button",Revamp_App_Regression_Suite_2022,,Functional
+Verify request to delete account back button functionality, Automated,User should be redirected to manage account screen, Only iOS,User should be on manage account screen,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,"- Click on 3 dots menu
+- Click on request to delete account
+- Click on back button",Revamp_App_Regression_Suite_2022,,Functional
+"Verify on continue after selecting reason, bottom-sheet is displayed", Automated,"""""Attention"""" bottom-sheet should be displayed with Submit Request and Cancel buttons", Only iOS,Execute TC C292046,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,"- Select reason to delete account
+- Click on Continue button",Revamp_App_Regression_Suite_2022,,Functional
+Verify bottom-sheet Submit Request option, Automated,Account deletion request should get submitted, Only iOS,Execute TC C292050,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,- Click on Submit Button,Revamp_App_Regression_Suite_2022,,Functional
+Verify bottom-sheet cancel option, Automated,Bottom-sheet should get dismissed and user redirects back to select reason screen, Only iOS,Execute TC: C292050,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,- Click on Cancel button from bottom-sheet,Revamp_App_Regression_Suite_2022,,Functional
+Verify Continue to Delete option, Automated,"User should get redirected to next screen with following details:
+- Win Rate
+- Level
+- Your Followers
+- Exciting Tournaments 
+- Continue Anyway button
+- Cancel button", Only iOS,User should be on manage account screen,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,"- Click on 3 dots menu
+- Click on Continue to delete button",Revamp_App_Regression_Suite_2022,,Functional
+To verify continue anyway button from user progress details redirects to select reason page, Automated,User should get redirected to select reason page, Only iOS,User is on user progress details page,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,- Click on Continue anyway button,Revamp_App_Regression_Suite_2022,,Functional
+To verify cancel button from user progress details redirects to request to delete account page, Automated,User should get redirected to request to delete account page, Only iOS,User is on user progress details page,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,- Click on cancel button,Revamp_App_Regression_Suite_2022,,Functional
+Verify details of Strategic timeout page details, Automated,"Below details should be displayed:
+- Header
+- Note
+- Strategic timeout buttom", Only iOS,User should be on strategic timeout page,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,- Check the details,Revamp_App_Regression_Suite_2022,,Functional
+Verify user is able to select 2nd reason, Automated,User is able to select reason and bottom sheet-should be displayed, Only iOS,User should be on select reason page,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,"- Select second reason radio button
+- Click on continue",Revamp_App_Regression_Suite_2022,,Functional
+Verify user is able to select 3rd reason, Automated,User is able to select reason and bottom sheet-should be displayed, Only iOS,User should be on select reason page,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,"- Select 3rd reason radio button
+- Click on continue",Revamp_App_Regression_Suite_2022,,Functional
+Verify user is able to select and enter other reason, Automated,"- User should be able to select reason
+- Enter reason text-box should be displayed
+- After entering reason and clicking on continue button, bottom sheet-should be displayed", Only iOS,User should be on select reason page,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,"- Select 4th reason radio button
+- Enter the reason
+- Click on continue",Revamp_App_Regression_Suite_2022,,Functional
+Verify manage account back button redirects to my info & settings page, Automated,- User should get redirected back to my info & settings page, Only iOS,User should be on manage account page,Critical,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,- Click on back arrow from top left corner,Revamp_App_Regression_Suite_2022,,Functional
+Verify if delete account submit failed, Automated,'Something went wrong' toast should be displayed, Only iOS,,High,Manage Account iOS,2,,Account Management > User Identity > Manage Account iOS, User_Identity_Pod,,Revamp_App_Regression_Suite_2022,,Functional

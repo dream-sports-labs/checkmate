@@ -1,0 +1,17 @@
+[
+  {
+    "automationStatusName": "Not Automatable",
+    "createdBy": 1,
+    "orgId": 1
+  },
+  {
+    "automationStatusName": "Automated",
+    "createdBy": 1,
+    "orgId": 1
+  },
+  {
+    "automationStatusName": "Automatable",
+    "createdBy": 1,
+    "orgId": 1
+  }
+]

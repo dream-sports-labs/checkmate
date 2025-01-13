@@ -1,0 +1,10 @@
+
+  .gradient-thin-line {
+    border-image: radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 0.2) 25%,
+      rgba(255, 255, 255, 0) 75%
+    ) 1;
+    border-width: 0px 0px 5px 0px; /* Bottom border with no left, right, or top border */
+  }
