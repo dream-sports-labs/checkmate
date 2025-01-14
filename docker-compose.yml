@@ -1,3 +1,4 @@
+version: '3.7'
 services:
   checkmate-db:
     image: mysql:8.0
@@ -16,7 +17,32 @@ services:
       - .env
     volumes:
       - checkmate-mysql:/var/lib/mysql
+    networks:
+      - checkmate-network
+
+  checkmate-app:
+    build:
+      context: ./
+      dockerfile: ./dockerfile
+    container_name: checkmate-app
+    ports:
+      - "8000:8000"
+    environment:
+      DB_URL: "mysql://root:root_password@localhost:3306/checkmate"
+      NODE_ENV: development
+      APP_DIR: "/Users/yashmeena/Downloads"
+    depends_on:
+      - checkmate-db
+    networks:
+      - checkmate-network
+    volumes:
+      - /Users/yashmeena/Downloads/checkmate
+      - /checkmate/node_modules
+
 
 volumes:
   checkmate-mysql:
     name: checkmate_db
+
+networks:
+  checkmate-network:
