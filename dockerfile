@@ -19,13 +19,14 @@ COPY . .
 
 # # Install dependencies
 RUN yarn install
-
+RUN echo "DB seeding started"
+RUN yarn db:init
 
 # # Add build dependencies for esbuild
-RUN apt-get update && apt-get install -y build-essential
+# RUN apt-get update && apt-get install -y build-essential
 
 # # Expose application port
 EXPOSE 3000
 
 # # Start the application
-CMD ["yarn", "start"]
+CMD ["yarn", "dev"]

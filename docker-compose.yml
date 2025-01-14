@@ -1,4 +1,3 @@
-version: '3.7'
 services:
   checkmate-db:
     image: mysql:8.0
@@ -26,11 +25,13 @@ services:
       dockerfile: ./dockerfile
     container_name: checkmate-app
     ports:
-      - "8000:8000"
+      - "3000:3000"
     environment:
       DB_URL: "mysql://root:root_password@localhost:3306/checkmate"
       NODE_ENV: development
       APP_DIR: "/Users/yashmeena/Downloads"
+      GOOGLE_CLIENT_ID: "19414076491-dok0sie19mvd7tbnou1443ugu4gpnqtk.apps.googleusercontent.com"
+      GOOGLE_CLIENT_SECRET: "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"
     depends_on:
       - checkmate-db
     networks:
