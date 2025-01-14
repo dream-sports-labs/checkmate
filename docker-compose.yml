@@ -1,12 +1,7 @@
 services:
   checkmate-db:
     image: mysql:8.0
-    container_name: checkmate-mysql_db
-    environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: checkmate
-      MYSQL_USER: user
-      MYSQL_PASSWORD: user
+    container_name: checkmate-db
     restart: always
     ports:
       - 3306:3306
@@ -16,7 +11,42 @@ services:
       - .env
     volumes:
       - checkmate-mysql:/var/lib/mysql
+    networks:
+      - checkmate-network
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'mysqladmin ping -h localhost -u root -proot_password || exit 1',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  checkmate-app:
+    build:
+      context: .
+      dockerfile: ./dockerfile
+    container_name: checkmate-app
+    depends_on:
+      checkmate-db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      DB_URL: 'mysql://root:root_password@checkmate-db:3306/checkmate'
+      NODE_ENV: 'production'
+    ports:
+      - 3000:3000
+    networks:
+      - checkmate-network
 
 volumes:
   checkmate-mysql:
-    name: checkmate_db
+    name: checkmate-db
+  checkmate-app:
+    name: checkmate-app
+
+networks:
+  checkmate-network:
