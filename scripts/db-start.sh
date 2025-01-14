@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Default values for flags
-APP_DOCKER=true
-DB_INIT=false
+APP_DOCKER=false
+DB_INIT=true
 
 # Parse named arguments
 while [[ "$#" -gt 0 ]]; do
