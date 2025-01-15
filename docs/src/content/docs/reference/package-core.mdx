@@ -1,0 +1,154 @@
+---
+title: Core
+prev: false
+next: false
+sidebar:
+  order: -1
+tableOfContents:
+  maxHeadingLevel: 5
+---
+
+import Reference from "~/components/reference.astro";
+
+Genshi's API is designed to be minimal and flexible. The core package provides a lot of features, but the primary focus for consumers is expected to be limited to the `Store` class. This document only covers the APIs of that class.
+
+To create a new store, you can use the `Store` class directly:
+
+```ts title="Example"
+import { Store } from "@genshi/core";
+
+const store = new Store({
+  count: 0,
+});
+```
+
+The `Store` constructor also provides an optional second argument for configuration the name of the store. This is particularly useful for debugging purposes.
+
+```ts title="Example"
+const store = new Store(0, "CounterStore");
+```
+
+---
+
+## Properties
+
+#### id
+
+<Reference type="string" readonly />
+
+- Unique identifier for the store
+- Generated when the store is created
+
+### name
+
+<Reference type="string" readonly />
+
+- Name of the store
+- Only assignable during store creation
+
+### tag
+
+<Reference type="string" readonly />
+
+- The tag is a special identifier that is used to identify the store while debugging
+- The tag is assigned automatically during store creation
+- If a `name` is provided, the tag will be the name otherwise it will be the `id`
+
+---
+
+## Methods
+
+### action
+
+- The `action` method is used to create a new action
+- Action functions are pure functions that take the current state and return a new state
+
+:::tip
+Working with TypeScript? Head over to the [TypeScript](/guides/typescript) section to enable typechecking payloads.
+:::
+
+```ts title="Example"
+const increment = store.action("increment", (state, payload) => {
+  return {
+    count: state.count + payload,
+  };
+});
+```
+
+### effect
+
+- The `effect` method is used to create a new effect
+- Effect functions are impure functions that can perform side effects
+
+:::tip
+Working with TypeScript? Head over to the [TypeScript](/guides/typescript) section to enable typechecking payloads.
+:::
+
+```ts title="Example"
+const log = store.effect("log", (state) => {
+  console.log(state);
+});
+```
+
+### dispatch
+
+- The `dispatch` method is used to dispatch an action or effect
+- The method takes the action or effect function as the first argument and an optional payload as the second argument
+
+:::tip
+Working with TypeScript? Head over to the [TypeScript](/guides/typescript) section to enable typechecking payloads.
+:::
+
+```ts title="Example"
+store.dispatch(increment, 10);
+```
+
+### subscribe
+
+- The `subscribe` method is used to listen to changes in the store
+- It does not provide a way to subscribe to specific events, but only has one callback that is called whenever the store changes
+- Returns a listener with a `remove` method to unsubscribe
+
+```ts title="Example"
+const listener = store.subscribe((state) => {
+  console.log("Store changed:", state.count);
+});
+listener.remove();
+```
+
+### getState
+
+- Get the current state of the store
+- The state is a snapshot of the store's data at the time of the call and is changing it will not affect the store
+
+```ts title="Example"
+const state = store.getState();
+```
+
+### getPreviousStates
+
+- Get a list of previous states
+- The list is ordered from latest to oldest
+- The states returned are all sealed to prevent mutation
+
+```ts title="Example"
+const previousStates = store.getPreviousStates();
+```
+
+### history
+
+- Returns the history of all the actions and effects that have been performed by the store
+- The list is ordered from latest to oldest
+
+```ts title="Example"
+const history = store.history();
+```
+
+### printHistory
+
+- Prints the history to the console in a table
+- Useful for debugging and understanding the sequence of actions and effects
+
+```ts title="Example"
+store.printHistory();
+```

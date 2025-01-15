@@ -1,0 +1,32 @@
+---
+interface Props {
+  type: string;
+  defaultValue: string;
+  required?: boolean;
+}
+
+const { type, defaultValue, required } = Astro.props;
+---
+
+<div
+  class="grid grid-rows-3 grid-cols-1 md:grid-cols-3 md:grid-rows-1 bg-neutral-100 dark:bg-neutral-800 rounded items-center gap-1 text-sm"
+>
+  <div
+    class="!m-0 px-4 py-2 border-b md:border-r md:border-b-0 border-current border-neutral-300 dark:border-neutral-700"
+  >
+    <strong class="mr-2">Required:</strong>
+    <span><code>{required ? "true" : "false"}</code></span>
+  </div>
+
+  <div
+    class="!m-0 px-4 py-2 border-b md:border-r md:border-b-0 border-current border-neutral-300 dark:border-neutral-700"
+  >
+    <strong class="mr-2">Type:</strong>
+    <span><code>{type}</code></span>
+  </div>
+
+  <div class="!m-0 px-4 py-1">
+    <strong class="mr-2">Default:</strong>
+    <span><code>{defaultValue}</code></span>
+  </div>
+</div>

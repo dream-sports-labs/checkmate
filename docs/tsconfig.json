@@ -1,0 +1,22 @@
+{
+  "extends": ["astro/tsconfigs/strict"],
+  "include": ["**/*.ts", "**/*.tsx", ".astro/types.d.ts"],
+  "exclude": ["node_modules", "dist", ".astro"],
+  "files": ["astro.config.ts", "global.d.ts"],
+  "compilerOptions": {
+    "strict": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "composite": false,
+    "target": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "baseUrl": ".",
+    "rootDir": ".",
+    "paths": {
+      "~/*": ["src/*"]
+    }
+  }
+}

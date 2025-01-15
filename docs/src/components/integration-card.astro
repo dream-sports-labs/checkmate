@@ -1,0 +1,49 @@
+---
+import { Icon } from "@astrojs/starlight/components";
+
+import { cn } from "~/utils/cn";
+
+type Props = {
+  name: string;
+  href: string;
+  description: string;
+} & (
+  | {
+      icon: "react" | "svelte" | "vue" | "angular";
+      custom?: false;
+    }
+  | {
+      icon?: never;
+      custom: true;
+    }
+);
+
+const { name, icon, href, custom, description } = Astro.props;
+---
+
+<a
+  href={href}
+  class={cn(
+    "grid",
+    "grid-flow-row",
+    "w-full",
+    "p-6",
+    "no-underline",
+    "rounded-lg",
+    "dark:bg-gray-800",
+    "bg-gray-100",
+    "border",
+    "border-transparent",
+    "hover:border-gray-500/50",
+    "text-inherit",
+    "group",
+    "cursor-pointer",
+    "!text-current",
+  )}
+>
+  <span class="flex items-center gap-2">
+    <Icon name={custom ? "setting" : (`seti:${icon}` as any)} size="24px" />
+    <strong class="text-lg font-semibold">{name}</strong>
+  </span>
+  <p class="pl-8 text-sm text-gray-500">{description}</p>
+</a>

@@ -1,0 +1,134 @@
+---
+title: Using with React
+sidebar:
+  order: -1
+---
+
+import { PackageManagers } from "starlight-package-managers";
+import { Code, TabItem, Tabs } from "@astrojs/starlight/components";
+
+Genshi comes with an official React integration that allows you to use Genshi with React.
+
+## Installation
+
+You can install the React integration using your favorite package manager.
+
+<PackageManagers pkg="@genshi/react" />
+
+## Usage
+
+To use Genshi with React, you need to create a store using the `createStore` function from the `@genshi/react` package.
+
+The React integration provides a single `createStore` function that provides bindings to work with React components and lifecycle. Otherwise, this binding re-exports everything from the core package.
+
+### Creating our store
+
+First, let's create a store with an initial state.
+
+```ts
+import { createStore } from "@genshi/react";
+
+const [store, useStore] = createStore({
+  count: 0,
+});
+```
+
+The `createStore` function returns a tuple with an instance of `Store` class and the `useStore` hook.
+
+Now, we can define our actions and effects.
+
+### Defining actions
+
+The `action` method on the store instance is used to define an action. The action function takes the current state as an argument and returns the new state.
+
+```ts
+const increment = store.action("increment", (state) => ({
+  ...state,
+  count: state.count + 1,
+}));
+```
+
+The above action increments the count by `1`.
+
+### Defining effects
+
+The `effect` method on the store instance is used to define an effect. The effect function provides many properties to ease managing effects. One such property is the `dispatch` method, which can be used to dispatch other effects or actions.
+
+```ts
+const tick = store.effect("tick", ({ dispatch }) => {
+  setInterval(() => {
+    dispatch(increment);
+  }, 1000);
+});
+```
+
+The above effect dispatches the `increment` action every second.
+
+### Using the store in a component
+
+The `createStore` function returns a tuple with an instance of `Store` class and the `useStore` hook. You can use the `useStore` hook to access the store in your components to use the state and dispatch any actions or effects.
+
+```ts {"Get the initial count value from store":2-3} {"Dispatch the tick effect on component mount":5-8} {"Increment the count on button click":10-13}
+function Counter() {
+
+  const [count, dispatch] = useStore((s) => s.count);
+
+
+  useEffect(() => {
+    dispatch(tick);
+  }, []);
+
+
+  const handleIncrement = () => {
+    dispatch(increment);
+  };
+
+  return (
+    <>
+      <button onClick={handleIncrement}>Increment</button>
+      <p>The count is: {count}</p>
+    </>
+  );
+}
+```
+
+### Dealing with payloads
+
+A common use case is to pass a payload to an action or an effect. Genshi comes with first-class support for payloads.
+
+First, let's button and a handler to add `10` to the count in our component.
+
+```diff lang="tsx" collapse={1-10, }
+function Counter() {
+  const [count, dispatch] = useStore((s) => s.count);
+
+  useEffect(() => {
+    dispatch(tick);
+  }, []);
+
+  const handleIncrement = () => {
+    dispatch(increment);
+  };
+
++  const handleAdd = () => {
++    dispatch(add, 10)
++  }
+
+  return (
+    <>
+      <button onClick={handleIncrement}>Increment</button>
++      <button onClick={handleAdd}>Add 10</button>
+      <p>The count is: {count}</p>
+    </>
+  );
+}
+```
+
+Here, we are using the `dispatch` method to dispatch the `add` action with a payload of `10`. We also need to define the `add` action by creating a new definition.
+
+```ts
+const add = store.action("add", (state, payload) => ({
+  ...state,
+  count: state.count + payload,
+}));
+```

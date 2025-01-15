@@ -1,0 +1,44 @@
+---
+title: React
+prev: false
+next: false
+sidebar:
+  order: 0
+---
+
+The React package provides the `createStore` utility function to create a new store and a hook to access the store's state.
+
+To understand how to create actions and effects, refer to the API documentation of the [core package](/docs/reference/package-core). Head over to the [React guide](/docs/guides/react) to learn how to use Genshi with React.
+
+```ts title="Example"
+import { createStore } from "@genshi/react";
+
+export const [store, useStore] = createStore({
+  count: 0,
+});
+```
+
+The `createStore` method also provides an optional second argument for configuration the name of the store. This is particularly useful for debugging purposes.
+
+```ts title="Example"
+const [store, useStore] = createStore(0, "CounterStore");
+```
+
+### `createStore`
+
+- The `createStore` function is used to create a new store
+- It accepts an object with the initial state and returns a tuple with the store and a hook to access the store's state
+
+### `useStore`
+
+- The `useStore` hook is used to access the store's state
+- The hook accepts a selector function which can select a specific property or the entire state itself
+- The hook will re-render the component whenever the selected state changes
+- You can use multiple `useStore` hooks in a single component which can select different parts of the state
+- Since it is a tuple, you can name the hook anything you want
+
+### `store`
+
+- The `store` object is the instance of the store
+- For the complete API of the store, refer to the [core package](/docs/reference/package-core)
+- Since it is a tuple, you can name the store anything you want

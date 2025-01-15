@@ -1,0 +1,26 @@
+---
+title: TypeScript
+prev: false
+sidebar:
+  order: -2
+---
+
+Genshi is written in TypeScript and provides type definitions out of the box. This means that you can use Genshi in your TypeScript project without any additional configuration.
+
+Making your store type-safe is as simple as defining the type of your store state. You can also define the type of the payload of your actions and effects to get the full benefits of auto-completion and type-checking.
+
+### Making payloads type-safe
+
+When defining your actions and effects, you can define the type of the payload that they accept. This will allow TypeScript to check that the payload you pass to the action or effect is of the correct type.
+
+Since the `Store` class provides type definitions for the `action` and `effect` methods, this works across all view libraries that support TypeScript.
+
+```ts {"Pass your payload type to the generic":2-3} del={"This will throw an error":4-5} ins={"This is valid":6-7}
+const store = new Store(0);
+
+const increment = store.action<number>("increment");
+
+store.dispatch(increment);
+
+store.dispatch(increment, 10);
+```

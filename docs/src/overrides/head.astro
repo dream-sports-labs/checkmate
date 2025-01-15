@@ -1,0 +1,56 @@
+---
+import type { Props } from "@astrojs/starlight/props";
+
+import { SITE } from "../constants";
+
+const {
+  entry: { id, data },
+} = Astro.props;
+
+const BASE_TITLE = "Genshi";
+const DESCRIPTION =
+  "Simple, composable and effective state management for JavaScript";
+const META_IMAGE = `${SITE}/banner.png`;
+
+let title = data.title;
+
+if (!id) {
+  title = `${BASE_TITLE} - ${DESCRIPTION}`;
+} else {
+  title = `${title} / ${BASE_TITLE}`;
+}
+---
+
+<!-- HTML Meta Tags -->
+<title>{title}</title>
+<link
+  rel="shortcut icon"
+  href="/favicon.svg"
+  sizes="any"
+  type="image/svg+xml"
+/>
+<link rel="sitemap" href="/sitemap-index.xml" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content={DESCRIPTION} />
+<meta
+  name="keywords"
+  content="javascript, typescript, ui, global state, state management, genshi, react, vue, svelte, redux, zustand, mobx, jotai"
+/>
+
+<!-- Facebook Meta Tags -->
+<meta property="og:url" content={SITE} />
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={DESCRIPTION} />
+<meta property="og:image" content={META_IMAGE} />
+
+<!-- Twitter Meta Tags -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:domain" content="genshi.samrith.dev" />
+<meta property="twitter:url" content={SITE} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={DESCRIPTION} />
+<meta name="twitter:image" content={META_IMAGE} />
+
+<slot />
