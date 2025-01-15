@@ -1,6 +1,6 @@
-# Genshi docs
+# Checkmate docs
 
-The entire documentation of Genshi resides here. It is powered by [Astro Starlight](https://starlight.astro.build/), and [Tailwind](https://tailwindcss.com/).
+The entire documentation of Checkmate resides here. It is powered by [Astro Starlight](https://starlight.astro.build/), and [Tailwind](https://tailwindcss.com/).
 
 This directory is not part of the workspace. To setup, you can simply install the dependencies in this directory:
 

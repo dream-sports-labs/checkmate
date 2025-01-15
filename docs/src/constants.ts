@@ -1,1 +1,2 @@
-export const SITE = "https://genshi.samrith.dev";
+//TODO NAME
+export const SITE = "CHECKMATE";

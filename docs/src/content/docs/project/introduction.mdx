@@ -4,28 +4,74 @@ sidebar:
   order: -1
 ---
 
-Genshi is a state management library for JavaScript that focuses on being simple, effective and composable. It is designed to be easy to use and understand, while providing the flexibility and power needed to build complex applications.
+## Introduction
 
-## Motivation
+This Test Case Management tool is designed to address the challenges faced by teams in managing and executing test cases with the highest level of **availability** and **reliability**. It aims to streamline the testing process, offering robust functionality, seamless integrations, and the ability to handle large-scale operations efficiently.
 
-There are a lot of really amazing state management libraries out there, which have been built over many years. They all have amazing communities and resources out there to help developers achieve their goals.
+## Problem Statement
 
-But with server-side rendering becoming more and more prominent, a lot more of the client logic is moving to the server. This opens up a lot of new possibilities for how we can manage state in our applications a lot simpler.
+In the absence of a reliable Test Case Management tool with **99.99% availability**, teams face significant obstacles that impact release cycles and overall productivity.
 
-We could solve this by hoisting state up to the top of your application. This can work, but it can also be hard to keep track of everything that is going on.
+### Current Issues
 
-We could also use the native state management mechanisms provided by libraries, but they are not often designed for complex applications and can be hard to work with as your application scales.
+- **Application Release Blockers**: The unavailability of the test case management tool infrastructure hinders app releases.
+- **High Downtime**: From **October 2023 to January 2024**, there were **~10 maintenance instances** of Testrail, rendering it unusable.
+- **Impact on Releases**: Approximately **20% of releases** since October 2023 were affected, with manual updates also failing during outages.
+- **Rate Limiting Issues**: Automation suites encounter **API rate limits (180 RPM)**, leading to incomplete test updates and reliability issues.
+- **User Complaints**:
+  - Frequent reports of slow performance.
+  - Multiple bugs in the website impacting usability.
+- **On-Prem Plan Availability**: Testrail lacks an **Enterprise Plan** or **On-Prem Plan** that meets the organizational needs, with an **on-prem setup requiring a year-long wait**.
 
-This is where Genshi comes in.
+## Solution & Scope
 
-## Goals
+To address these challenges, the following metrics were identified as critical for evaluating test case management tools:
 
-Genshi was created to be a simple, yet powerful state management library that can be used in any JavaScript application. It is designed to be easy to use and understand, while providing the flexibility and power needed to build complex applications.
+1. **Rate Limiting**: Support for **1000 RPM** to handle regression and day-to-day needs (**300 RPM** expected).
+2. **Integration & Open APIs**: Seamless integration and API availability for automation.
+3. **Data Migration**: Smooth migration from existing tools without loss of information.
+4. **Core Capabilities**:
+   - Export, Import, and Create Test Runs.
+   - Extensive **DB Storage Capacity** of **100GB**, with scalability options.
+5. **Reports and Metrics**: Comprehensive reporting tools for actionable insights.
 
-It is atomic and composable, meaning that you can build your application in a way that makes sense to you, and you can easily add new features without having to rewrite everything.
+## Strategy & Recommendation
 
-Genshi is also predictable and testable, which means that you can write tests for your application with confidence, and you can be sure that your application will behave as expected.
+After evaluating various tools, including paid and open-source options, the following insights emerged:
 
-## Current status
+- **Testrail Cloud Plans** and **Testrail Server Plans** offer limited scalability and flexibility.
+- **Other Test Case Management Tools** provide varying features but fail to meet all organizational requirements.
 
-Genshi is in active development, which means that while it is stable and production-ready, there are still some features that are missing. We are working hard to add new features and improve the library, so if you have any feedback or suggestions, please let us know!
+### Recommendation
+
+Building an **in-house Test Case Management Tool** is recommended to:
+
+- Tailor the tool to meet all functional and technical requirements.
+- Overcome the limitations of third-party solutions.
+
+## Functional Requirements
+
+The in-house tool should include:
+
+- **User Authentication**: Login and Role-Based Access Control (RBAC).
+- **Organization Management**: Support for multiple organizations and projects.
+- **Project Operations**: Create, Delete, Update, and Manage Projects.
+- **Test Case Management**: Add, Remove, Filter, Sort, Export, and Import Test Cases.
+- **Test Runs**: Execute, filter, and update test case statuses.
+- **APIs**: Enable automation and third-party integrations.
+
+## Technical Evaluation
+
+- **Frontend**: RemixJS, NextJS, or React CRA.
+- **Backend**: NodeJS, Vertx, or Go.
+- **Database**: MySQL for scalable storage.
+- **Platform**: Vision, MSD, Delivr, or an independent platform.
+- **Environments**: Separate staging and production environments.
+
+## Project Plan
+
+The detailed project plan can be found [here](https://dream11.atlassian.net/wiki/spaces/FE/pages/3277029688).
+
+---
+
+This documentation provides a comprehensive overview of the problem, solution, and the path forward for building a reliable Test Case Management Tool. Let me know if you need further edits or additions!

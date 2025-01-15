@@ -6,12 +6,12 @@ import { Card, CardGrid } from "@astrojs/starlight/components";
 
 <StarlightPage
   frontmatter={{
-    title: "Genshi - Simple, composable and effective state management",
+    title: "Checkmate",
     template: "splash",
     hero: {
-      title: "Robust state management for your app that scales with you.",
+      title: "Checkmate",
       tagline:
-        "The state management library for JavaScript that focuses on being <b>simple</b>, <b>effective</b> and <b>composable</b>.",
+        "Streamlining Your Test Case Management",
       actions: [
         {
           text: "Get started",
@@ -23,28 +23,20 @@ import { Card, CardGrid } from "@astrojs/starlight/components";
   }}
 >
   <CardGrid>
-    <Card title="Predictable" icon="approve-check">
-      Genshi is designed to be predictable and easy to understand. It's built on
-      the principle of <strong>predictable state mutations</strong> and <strong
-        >unidirectional data flow</strong
-      >.
+    <Card title="Features" icon="seti:default">
+      <ul class="list-inside">
+        <li>Project-level segregation of tests</li>
+        <li>Create Run</li>
+        <li>Manage Run</li>
+        <li>Download Reports</li>
+        <li>Role-Based Access Control (RBAC)</li>
+      </ul>
     </Card>
 
-    <Card title="Granular" icon="magnifier">
-      No pressure to manage all your state in one place. Genshi allows you to
-      manage state at a granular level, making it easy to manage state in a way
-      that makes sense for your app.
-    </Card>
-
-    <Card title="Composable" icon="list-format">
-      Genshi is designed to be composable. You can use it with your favorite
-      libraries and frameworks.
-    </Card>
-
-    <Card title="Developer experience" icon="star">
-      Genshi is written in TypeScript and provides first-class support for
-      TypeScript. It's designed to be type-safe and provides a great developer
-      experience.
+    <Card title="Open APIs" icon="seti:default">
+      <ul class="list-inside">
+        <li>APIs to integrate it with your automation frameworks</li>
+      </ul>
     </Card>
   </CardGrid>
 </StarlightPage>
