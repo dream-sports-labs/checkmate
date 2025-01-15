@@ -17,7 +17,7 @@ yarn dev:db:setup
 It will create the database container in docker.
 
 - Connect with mysql instance from docker
-- Create database checkmate by ` create database checkmate`
+- Create database checkmate by `create database checkmate`
 - `yarn run db:push` to push the schema to your database
 - `yarn run db:seed` to push the seed data into your database
 
