@@ -16,7 +16,7 @@ import {AuthenticatorRoutes} from '~/services/auth/interfaces'
 import {User} from '~/db/dao/users.dao'
 import {GlobalLoading} from './screens/GlobalLoading'
 import {AppHeader} from '@components/Header/AppHeader'
-import {UPPERCASE_APP_NAME} from './constants'
+import {APP_NAME} from './constants'
 import {version} from '../package.json'
 
 export const links: LinksFunction = () => [{rel: 'stylesheet', href: styles}]
@@ -58,7 +58,7 @@ export function Layout({children}: {children: React.ReactNode}) {
         <meta name="version" content={version ?? 'NA'} />
         <Meta />
         <Links />
-        <title>{UPPERCASE_APP_NAME}</title>
+        <title>{APP_NAME}</title>
       </head>
       <body className={'h-svh'}>
         {showHeader && <AppHeader user={user} />}
