@@ -35,12 +35,15 @@ services:
     env_file:
       - .env
     environment:
-      DB_URL: 'mysql://root:root_password@checkmate-db:3306/checkmate'
-      NODE_ENV: 'production'
+      DB_URL: ${DOCKER_DB_URL}
+      NODE_ENV: ${NODE_ENV}
     ports:
       - 3000:3000
     networks:
       - checkmate-network
+    command: >
+      sh -c "yarn db:init && yarn build && yarn start"
+
 
 volumes:
   checkmate-mysql:
@@ -50,3 +53,4 @@ volumes:
 
 networks:
   checkmate-network:
+    driver: bridge

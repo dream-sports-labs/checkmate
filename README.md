@@ -5,29 +5,49 @@
 1. Docker desktop
 2. yarn v4 installed
 
-## Setup
+## Local Dev Setup
 
 1. Create .env file
-2. To setup the checkmate database
+2. To setup the checkmate database and seed data
 
 ```sh
-yarn dev:db:setup
+yarn dev:setup
 ```
+3. To start the application in dev mode
+```sh 
+yarn dev
+```
+4. App will be started on http://localhost:3000
 
 It will create the database container in docker.
 
-- Connect with mysql instance from docker
-- Create database checkmate by `create database checkmate`
-- `yarn run db:push` to push the schema to your database
-- `yarn run db:seed` to push the seed data into your database
+
+## Docker Setup
+1. Create .env file 
+2. To setup checkmate app and database 
+```sh
+yarn docker:setup
+```
+
+- it will create the database and app container in docker
+
+3. To Setup the checkmate app
+```sh
+yarn docker:app:setup
+```
+
+- it will create the app container in docker
+- it will create the database container only if it is not present
+
+
+4. To setup the checkmate database
+```sh
+yarn docker:db:setup
+```
+- it will create the database container in docker
+
 
 ## Development
-
-Run the Vite dev server:
-
-```shellscript
-yarn dev
-```
 
 Run the drizzle studio to see your database
 

@@ -17,7 +17,6 @@ RUN corepack enable && corepack prepare yarn@4.0.0 --activate
 COPY . .
 RUN yarn install
 
-# RUN yarn db:init
 # # Build the Remix application
 RUN yarn build
 
@@ -25,4 +24,4 @@ RUN yarn build
 EXPOSE 3000
 
 # # Set the default command to start the application
-CMD ["yarn", "start"]
+# CMD ["yarn", "start"]
