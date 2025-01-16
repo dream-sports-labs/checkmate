@@ -15,4 +15,5 @@ export default {
   testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'], // Match test files
   setupFilesAfterEnv: ['<rootDir>/jest/mock.js'], // Custom Jest setup file
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'], // Ignore node_modules except ES modules
+  coverageReporters: ['lcov', ['text'], 'json-summary']
 }
