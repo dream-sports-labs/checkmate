@@ -3,7 +3,7 @@ import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
 import { defineConfig } from "astro/config";
 
-const SITE = "https://github.com/dream-sports-labs/checkmate";
+const SITE = "https://dreamsportslabs.com/checkmate";
 
 export default defineConfig({
   site: SITE,
