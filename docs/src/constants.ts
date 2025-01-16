@@ -1,2 +1,2 @@
 //TODO NAME
-export const SITE = "CHECKMATE";
+export const SITE = "https://github.com/dream-sports-labs/checkmate";

@@ -11,9 +11,6 @@ describe('generateRbacPolicy', () => {
       const policyEntry = rbacPolicy.find(
         (entry) => entry.resource === endpoint.replace(/^api\/v[0-9]+\//, ''),
       )
-      if (endpoint === API.EditRun) {
-        console.log({policyEntry})
-      }
 
       expect(policyEntry).toBeDefined()
       expect(policyEntry?.role).toBeDefined()
