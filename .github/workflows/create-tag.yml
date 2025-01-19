@@ -1,4 +1,4 @@
-name: Create Tag
+name: Create/Update Tag
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
     types: [closed]
 
 jobs:
-  create-tag:
+  create-or-update-tag:
     if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'publish')
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +36,7 @@ jobs:
           VERSION=$(node -pe "require('./app/config.json').version")
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
-      - name: Create Tag
+      - name: Create or Update Tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ env.VERSION }}
