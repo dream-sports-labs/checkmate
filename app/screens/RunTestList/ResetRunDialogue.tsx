@@ -35,13 +35,14 @@ export const ResetRunsDialogue = (param: {
     )
     param.setState(false)
   }
-  if (resetRunFetcher.state === 'submitting') return <Loader />
 
   useEffect(() => {
     if (resetRunFetcher.state === 'idle') {
       param.setState(false) // Ensure dialog is closed when fetcher completes
     }
   }, [resetRunFetcher.state])
+
+  if (resetRunFetcher.state === 'submitting') return <Loader />
 
   return (
     <StateDialog

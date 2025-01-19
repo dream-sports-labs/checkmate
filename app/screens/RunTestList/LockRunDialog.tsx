@@ -37,7 +37,6 @@ export const LockRunDialogue = (param: {
       },
     )
   }
-  if (lockRunFether.state === 'submitting') return <Loader />
 
   useEffect(() => {
     if (lockRunFether.data?.data?.success) {
@@ -52,6 +51,8 @@ export const LockRunDialogue = (param: {
       })
     }
   }, [lockRunFether.data])
+
+  if (lockRunFether.state === 'submitting') return <Loader />
 
   return (
     <Dialog onOpenChange={param.setState} open={param.state}>
