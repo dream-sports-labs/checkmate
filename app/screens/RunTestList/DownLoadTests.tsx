@@ -1,7 +1,8 @@
 import {Tooltip} from '@components/Tooltip/Tooltip'
 import {cn} from '@ui/utils'
-import {Download} from 'lucide-react'
+import {Download, LoaderCircle} from 'lucide-react'
 import {throttle} from '../TestList/utils'
+import {useState} from 'react'
 
 interface IDownLoadTests {
   tooltipText: string
@@ -20,7 +21,10 @@ export const DownLoadTests = ({
   fileName,
   className,
 }: IDownLoadTests) => {
+  const [downloading, setDownloading] = useState<boolean>(false)
+
   const downloadReport = async () => {
+    setDownloading(true)
     const downloadCSV = async () => {
       try {
         const response = await fetch(fetchUrl)
@@ -41,8 +45,10 @@ export const DownLoadTests = ({
         // Clean up
         link.remove()
         URL.revokeObjectURL(url)
+        setDownloading(false)
       } catch (error) {
         console.error('Error downloading CSV:', error)
+        setDownloading(false)
       }
     }
 
@@ -54,12 +60,20 @@ export const DownLoadTests = ({
   return (
     <Tooltip
       anchor={
-        <Download
-          size={style?.size}
-          strokeWidth={style?.strokeWidth}
-          onClick={debouncedDownloadTestsExecution}
-          className={cn('hover:cursor-pointer', className)}
-        />
+        !downloading ? (
+          <Download
+            size={style?.size}
+            strokeWidth={style?.strokeWidth}
+            onClick={debouncedDownloadTestsExecution}
+            className={cn('hover:cursor-pointer', className)}
+          />
+        ) : (
+          <LoaderCircle
+            size={style?.size}
+            strokeWidth={style?.strokeWidth}
+            className={'animate-spin'}
+          />
+        )
       }
       content={tooltipText}
     />
