@@ -37,6 +37,7 @@ import {
   FilterNames,
   PriorityData,
 } from './testTable.interface'
+import {isChecked} from '../RunTestList/utils'
 
 export default function TestList() {
   const resp: any = useLoaderData()
@@ -124,7 +125,11 @@ export default function TestList() {
                 return {
                   id: squad.squadId,
                   optionName: squad.squadName,
-                  checked: false,
+                  checked: isChecked({
+                    searchParams,
+                    filterName: 'squadIds',
+                    filterId: squad.squadId,
+                  }),
                 }
               }),
             },
@@ -169,7 +174,11 @@ export default function TestList() {
                 return {
                   id: label.labelId,
                   optionName: label.labelName,
-                  checked: false,
+                  checked: isChecked({
+                    searchParams,
+                    filterName: 'labelIds',
+                    filterId: label.labelId,
+                  }),
                 }
               }),
             },
@@ -477,7 +486,7 @@ export default function TestList() {
 
   return (
     <div className="flex flex-grow flex-col h-full">
-      <div className={cn('flex', 'gap-2','mb-4', 'flex-row')}>
+      <div className={cn('flex', 'gap-2', 'mb-4', 'flex-row')}>
         <SearchBar
           handlechange={handleSearchChanges}
           placeholdertext={'Search by title or id...'}

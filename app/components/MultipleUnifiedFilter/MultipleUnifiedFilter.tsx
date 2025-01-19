@@ -167,7 +167,7 @@ export const MultipleUnifiedFilter = ({
             </div>
           </div>
         </PopoverContent>
-      </Popover>{' '}
+      </Popover>
     </div>
   )
 }

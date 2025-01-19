@@ -5,7 +5,7 @@ import {
   MultipleUnifiedFilterProps,
   TestListFilter,
 } from '@components/MultipleUnifiedFilter/MultipleUnifiedFilter'
-import {StatusFilter} from '@components/MultipleUnifiedFilter/staticFiltersData'
+import {StatusFilterOptions} from '@components/MultipleUnifiedFilter/staticFiltersData'
 import {Lables, Platforms} from '@components/TestsFilter/SelectLabelsAndSquads'
 import {ToggleColumns} from '@components/ToggleColums'
 import {
@@ -41,6 +41,8 @@ import {FilterNames} from '../TestList/testTable.interface'
 import {DownLoadTests} from './DownLoadTests'
 import {RunActions} from './RunActions'
 import {RunPageTitle} from './RunPageTitle'
+import {isChecked} from './utils'
+import {c} from 'node_modules/vite/dist/node/types.d-aGj9QkWt'
 
 export default function RunTestList() {
   const resp = useLoaderData<RunTestListResponseType>()
@@ -57,7 +59,7 @@ export default function RunTestList() {
   const [testRunsMetaData, setTestRunsMetaData] =
     useState<TestRunSummary | null>(null)
   const [runData, setRunData] = useState<null | RunDetails>(null)
-  const [filter, setFilter] = useState<TestListFilter[]>([StatusFilter])
+  const [filter, setFilter] = useState<TestListFilter[]>([])
   const [sorting, setSorting] = useState<SortingState>([])
   const [textSearch, setSearchString] = useState<string>(
     searchParams.get('textSearch') ?? '',
@@ -95,6 +97,7 @@ export default function RunTestList() {
   const testRunsData = resp.data?.testsList || []
 
   useEffect(() => {
+    console.log('------->>>>>')
     if (testRunsData.length === 0 && Number(searchParams?.get('page')) !== 1) {
       setSearchParams(
         (prev) => {
@@ -105,6 +108,28 @@ export default function RunTestList() {
       )
       resetPageNumber()
     }
+  }, [])
+
+  //Setting Static Filters
+  useEffect(() => {
+    setFilter((prev) => {
+      return [
+        ...prev,
+        {
+          filterName: FilterNames.Status,
+          filterOptions: StatusFilterOptions.map((status) => {
+            return {
+              optionName: status.optionName,
+              checked: isChecked({
+                searchParams,
+                filterName: 'statusArray',
+                filterId: status.optionName,
+              }),
+            }
+          }),
+        },
+      ]
+    })
   }, [])
 
   const totalCount = resp.data.totalCount
@@ -181,7 +206,11 @@ export default function RunTestList() {
                 return {
                   id: squad.squadId,
                   optionName: squad.squadName,
-                  checked: false,
+                  checked: isChecked({
+                    searchParams,
+                    filterName: 'squadIds',
+                    filterId: squad.squadId,
+                  }),
                 }
               }),
             },
@@ -206,7 +235,11 @@ export default function RunTestList() {
                 return {
                   id: label.labelId,
                   optionName: label.labelName,
-                  checked: false,
+                  checked: isChecked({
+                    searchParams,
+                    filterName: 'labelIds',
+                    filterId: label.labelId,
+                  }),
                 }
               }),
             },
@@ -231,7 +264,11 @@ export default function RunTestList() {
                 return {
                   id: platform.platformId,
                   optionName: platform.platformName,
-                  checked: false,
+                  checked: isChecked({
+                    searchParams,
+                    filterName: 'platformIds',
+                    filterId: platform.platformId,
+                  }),
                 }
               }),
             },
