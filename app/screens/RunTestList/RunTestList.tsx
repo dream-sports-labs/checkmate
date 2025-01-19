@@ -28,7 +28,7 @@ import {DataTable} from '~/components/DataTable/DataTable'
 import {SearchBar} from '~/components/SearchBar/SearchBar'
 import {RunTestListResponseType} from '~/routes/project.$projectId.run.$runId._index'
 import {API} from '~/routes/utilities/api'
-import {ORG_ID} from '~/routes/utilities/constants'
+import {MED_PAGE_SIZE, ORG_ID} from '~/routes/utilities/constants'
 import {safeJsonParse} from '~/routes/utilities/utils'
 import {AddResultDialog} from '~/screens/RunTestList/AddResultDialog'
 import {Squad} from '~/screens/RunTestList/interfaces'
@@ -42,7 +42,6 @@ import {DownLoadTests} from './DownLoadTests'
 import {RunActions} from './RunActions'
 import {RunPageTitle} from './RunPageTitle'
 import {isChecked} from './utils'
-import {c} from 'node_modules/vite/dist/node/types.d-aGj9QkWt'
 
 export default function RunTestList() {
   const resp = useLoaderData<RunTestListResponseType>()
@@ -69,20 +68,6 @@ export default function RunTestList() {
   const orgId = ORG_ID
 
   useEffect(() => {
-    if (!searchParams?.get('page') || !searchParams?.get('pageSize')) {
-      setSearchParams(
-        (prev) => {
-          Number(searchParams?.get('page'))
-            ? null
-            : prev.set('page', (1).toString())
-          Number(searchParams?.get('pageSize'))
-            ? null
-            : prev.set('pageSize', (100).toString())
-          return prev
-        },
-        {replace: true},
-      )
-    }
     squadsFetcher.load(`/${API.GetSquads}?projectId=${projectId}`)
     labelsFetcher.load(`/${API.GetLabels}?projectId=${projectId}`)
     runDetailsFetcher.load(
@@ -92,26 +77,24 @@ export default function RunTestList() {
       `/${API.GetRunStateDetail}?runId=${params.runId}`,
     )
     platformFetcher.load(`/${API.GetPlatforms}?orgId=${orgId}`)
-  }, [])
 
-  const testRunsData = resp.data?.testsList || []
-
-  useEffect(() => {
-    console.log('------->>>>>')
     if (testRunsData.length === 0 && Number(searchParams?.get('page')) !== 1) {
+      resetPageNumber()
+    }
+
+    if (!searchParams?.get('page') || !searchParams?.get('pageSize')) {
       setSearchParams(
         (prev) => {
-          prev.set('page', '1')
+          searchParams?.get('page') ? null : prev.set('page', '1')
+          searchParams?.get('pageSize')
+            ? null
+            : prev.set('pageSize', MED_PAGE_SIZE.toString())
           return prev
         },
         {replace: true},
       )
-      resetPageNumber()
     }
-  }, [])
 
-  //Setting Static Filters
-  useEffect(() => {
     setFilter((prev) => {
       return [
         ...prev,
@@ -131,6 +114,8 @@ export default function RunTestList() {
       ]
     })
   }, [])
+
+  const testRunsData = resp.data?.testsList || []
 
   const totalCount = resp.data.totalCount
 
@@ -180,7 +165,7 @@ export default function RunTestList() {
   const resetPageNumber = () => {
     setSearchParams(
       (prev) => {
-        prev.set('page', `${1}`)
+        prev.set('page', '1')
         return prev
       },
       {replace: true},
@@ -301,7 +286,7 @@ export default function RunTestList() {
           setSearchParams(
             (prev) => {
               prev.delete('squadIds')
-              prev.set('page', (1).toString())
+              prev.set('page', '1')
               return prev
             },
             {replace: true},
@@ -310,7 +295,7 @@ export default function RunTestList() {
           setSearchParams(
             (prev) => {
               prev.set('squadIds', JSON.stringify(selectedSquads))
-              prev.set('page', (1).toString())
+              prev.set('page', '1')
               return prev
             },
             {replace: true},
@@ -325,7 +310,7 @@ export default function RunTestList() {
           setSearchParams(
             (prev) => {
               prev.delete('labelIds')
-              prev.set('page', (1).toString())
+              prev.set('page', '1')
               return prev
             },
             {replace: true},
@@ -334,7 +319,7 @@ export default function RunTestList() {
           setSearchParams(
             (prev) => {
               prev.set('labelIds', JSON.stringify(selectedLabels))
-              prev.set('page', (1).toString())
+              prev.set('page', '1')
               return prev
             },
             {replace: true},
@@ -349,7 +334,7 @@ export default function RunTestList() {
           setSearchParams(
             (prev) => {
               prev.delete('platformIds')
-              prev.set('page', (1).toString())
+              prev.set('page', '1')
               return prev
             },
             {replace: true},
@@ -358,7 +343,7 @@ export default function RunTestList() {
           setSearchParams(
             (prev) => {
               prev.set('platformIds', JSON.stringify(selectedPlatforms))
-              prev.set('page', (1).toString())
+              prev.set('page', '1')
               return prev
             },
             {replace: true},
@@ -373,7 +358,7 @@ export default function RunTestList() {
           setSearchParams(
             (prev) => {
               prev.delete('statusArray')
-              prev.set('page', (1).toString())
+              prev.set('page', '1')
               return prev
             },
             {replace: true},
@@ -382,7 +367,7 @@ export default function RunTestList() {
           setSearchParams(
             (prev) => {
               prev.set('statusArray', JSON.stringify(selectedStatus))
-              prev.set('page', (1).toString())
+              prev.set('page', '1')
               return prev
             },
             {replace: true},

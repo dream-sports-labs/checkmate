@@ -15,7 +15,7 @@ interface DialogComponentProps {
   contentComponent?: ReactNode
   footerComponent?: ReactNode
   isDialogTriggerDisabled?: boolean
-  variant?: 'delete' | 'edit' | 'add'
+  variant?: 'delete' | 'edit' | 'add' | 'warn'
   setState: React.Dispatch<React.SetStateAction<boolean>>
   state: boolean
 }
@@ -26,6 +26,7 @@ const dialogVariants = cva('gap-0 border-t-4 border-x-0  border-b-0', {
       delete: 'border-red-600',
       edit: 'border-blue-600',
       add: 'border-green-600',
+      warn: 'border-yellow-600',
       default: '',
     },
     size: {
@@ -49,23 +50,34 @@ export const StateDialog = ({
   state,
 }: DialogComponentProps) => {
   return (
-    <Dialog onOpenChange={setState} open={state}>
-      <DialogTrigger
-        aria-describedby="dialog-trigger"
-        asChild
-        disabled={isDialogTriggerDisabled}>
-        {anchorComponent}
-      </DialogTrigger>
+    <Dialog
+      onOpenChange={(isOpen) => {
+        console.log('Dialog state change:', isOpen) // Debug log
+        setState(isOpen) // Update state
+      }}
+      open={state}>
+      {anchorComponent && (
+        <DialogTrigger
+          aria-describedby="dialog-trigger"
+          asChild
+          disabled={isDialogTriggerDisabled}>
+          {anchorComponent}
+        </DialogTrigger>
+      )}
       <DialogContent
         aria-describedby="dialog content"
         className={cn(dialogVariants({variant}))}>
-        <DialogHeader aria-describedby="dialog-header">
-          {headerComponent}
-        </DialogHeader>
+        {headerComponent && (
+          <DialogHeader aria-describedby="dialog-header">
+            {headerComponent}
+          </DialogHeader>
+        )}
         {contentComponent}
-        <DialogFooter aria-describedby="dialog-footer">
-          {footerComponent}
-        </DialogFooter>
+        {footerComponent && (
+          <DialogFooter aria-describedby="dialog-footer">
+            {footerComponent}
+          </DialogFooter>
+        )}
       </DialogContent>
     </Dialog>
   )

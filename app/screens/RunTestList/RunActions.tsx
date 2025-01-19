@@ -11,11 +11,12 @@ import {
   DropdownMenuTrigger,
 } from '@ui/dropdown-menu'
 import {DeleteIcon, EditIcon, ListRestart, LockIcon} from 'lucide-react'
-import {ReactElement, useState} from 'react'
+import {ReactElement, useMemo, useState} from 'react'
 import {Tests} from './interfaces'
 import {LockRunDialogue} from './LockRunDialog'
 import {RemoveTestsDialogue} from './RemoveTestsDialog'
 import {ResetRunsDialogue} from './ResetRunDialogue'
+import React from 'react'
 
 const ACTION_ITEMS: {
   id: number
@@ -29,18 +30,18 @@ const ACTION_ITEMS: {
   },
   {
     id: 2,
-    action: 'LOCK',
-    icon: <LockIcon size={14} />,
-  },
-  {
-    id: 3,
     action: 'REMOVE TEST',
     icon: <DeleteIcon size={14} />,
   },
   {
-    id: 4,
+    id: 3,
     action: 'RESET RUN',
     icon: <Tooltip anchor={<ListRestart size={14} />} content={'Reset Run'} />,
+  },
+  {
+    id: 4,
+    action: 'LOCK',
+    icon: <LockIcon size={14} />,
   },
 ]
 
@@ -48,8 +49,7 @@ interface IRunActions {
   table: Table<Tests>
   runData: RunDetails
 }
-
-export const RunActions = ({table, runData}: IRunActions) => {
+export const RunActions = React.memo(({table, runData}: IRunActions) => {
   const [resetRunDialog, setResetRunDialog] = useState<boolean>(false)
   const [lockRunDialog, setLockRunDialog] = useState<boolean>(false)
   const [removeTestDialogue, setRemoveTestDialogueDialogue] =
@@ -71,6 +71,22 @@ export const RunActions = ({table, runData}: IRunActions) => {
     else if (action === 'RESET RUN') setResetRunDialog(true)
   }
 
+  const actionItemView = useMemo(() => {
+    return ACTION_ITEMS.map((action) => (
+      <DropdownMenuItem
+        key={action.id}
+        disabled={
+          !(
+            table.getIsSomePageRowsSelected() || table.getIsAllRowsSelected()
+          ) && action.action === 'REMOVE TEST'
+        }
+        className="capitalize"
+        onClick={() => handleRunAction(action.action)}>
+        <span className={'mr-2'}>{action.icon}</span> {action.action}
+      </DropdownMenuItem>
+    ))
+  }, [table.getIsSomePageRowsSelected(), table.getIsAllRowsSelected()])
+
   return (
     <div>
       <DropdownMenu>
@@ -79,33 +95,16 @@ export const RunActions = ({table, runData}: IRunActions) => {
             Actions
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          {ACTION_ITEMS.map((action) => {
-            return (
-              <DropdownMenuItem
-                key={action.id}
-                disabled={
-                  !(
-                    table.getIsSomePageRowsSelected() ||
-                    table.getIsAllRowsSelected()
-                  ) && action.action === 'REMOVE TEST'
-                }
-                className="capitalize"
-                onClick={() => handleRunAction(action.action)}>
-                <span className={'mr-2'}>{action.icon}</span> {action.action}
-              </DropdownMenuItem>
-            )
-          })}
-        </DropdownMenuContent>
+        <DropdownMenuContent align="end">{actionItemView}</DropdownMenuContent>
       </DropdownMenu>
       <ResetRunsDialogue
         state={resetRunDialog}
         setState={setResetRunDialog}
         runData={runData}
       />
-      <LockRunDialogue
+      {/* <LockRunDialogue
         state={lockRunDialog}
-        setState={setResetRunDialog}
+        setState={setLockRunDialog}
         runData={runData}
       />
       <RemoveTestsDialogue
@@ -113,7 +112,7 @@ export const RunActions = ({table, runData}: IRunActions) => {
         setState={setRemoveTestDialogueDialogue}
         runData={runData}
         table={table}
-      />
+      /> */}
     </div>
   )
-}
+})

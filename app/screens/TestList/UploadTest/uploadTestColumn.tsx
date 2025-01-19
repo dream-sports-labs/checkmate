@@ -20,12 +20,16 @@ export const UploadTestTableColumn: ColumnDef<any>[] = [
     header: () => (
       <HeaderComponent heading={TestListingColumns.title} position={'left'} />
     ),
-    cell: ({row}) => {
+    cell: ({row, table}) => {
+      const visibleColumnsCount = table.getVisibleLeafColumns().length
+      const columnWidth = `${100 / visibleColumnsCount}%`
       return (
         <TitleRowComponent
           clickable={false}
           className="text-xs"
           content={row.original.Title}
+          columnWidth={columnWidth}
+          initialWidth="640px"
         />
       )
     },

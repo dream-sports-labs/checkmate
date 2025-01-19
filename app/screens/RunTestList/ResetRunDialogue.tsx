@@ -1,16 +1,16 @@
 import {RunDetails} from '@api/runData'
+import {StateDialog} from '@components/Dialog/StateDialogue'
 import {Loader} from '@components/Loader/Loader'
 import {useFetcher, useParams} from '@remix-run/react'
 import {API} from '@route/utils/api'
 import {Button} from '@ui/button'
 import {
-  Dialog,
-  DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@ui/dialog'
+import {useEffect} from 'react'
 import {RESET_RUN} from '~/constants'
 
 export const ResetRunsDialogue = (param: {
@@ -25,7 +25,6 @@ export const ResetRunsDialogue = (param: {
   const resetRunFetcher = useFetcher<any>()
 
   const resetButtonCLicked = () => {
-    param.setState(false)
     resetRunFetcher.submit(
       {runId: runData?.runId ?? 0, projectId: projectId},
       {
@@ -34,22 +33,36 @@ export const ResetRunsDialogue = (param: {
         encType: 'application/json',
       },
     )
+    param.setState(false)
   }
   if (resetRunFetcher.state === 'submitting') return <Loader />
 
+  useEffect(() => {
+    if (resetRunFetcher.state === 'idle') {
+      param.setState(false) // Ensure dialog is closed when fetcher completes
+    }
+  }, [resetRunFetcher.state])
+
   return (
-    <Dialog onOpenChange={param.setState} open={param.state}>
-      <DialogContent aria-describedby="dialog content">
-        <DialogHeader className="font-bold">
-          <DialogTitle>Reset Run</DialogTitle>{' '}
-        </DialogHeader>
-        <DialogDescription className="text-red-600	">
-          {RESET_RUN}
-        </DialogDescription>
+    <StateDialog
+      variant="delete"
+      state={param.state}
+      setState={param.setState}
+      headerComponent={
+        <>
+          <DialogHeader className="font-bold">
+            <DialogTitle>Reset Run</DialogTitle>{' '}
+          </DialogHeader>
+          <DialogDescription className="text-red-600	">
+            {RESET_RUN}
+          </DialogDescription>
+        </>
+      }
+      footerComponent={
         <DialogFooter>
           <Button onClick={resetButtonCLicked}>Reset Run</Button>
         </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      }
+    />
   )
 }
