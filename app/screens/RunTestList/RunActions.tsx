@@ -52,8 +52,7 @@ interface IRunActions {
 export const RunActions = React.memo(({table, runData}: IRunActions) => {
   const [resetRunDialog, setResetRunDialog] = useState<boolean>(false)
   const [lockRunDialog, setLockRunDialog] = useState<boolean>(false)
-  const [removeTestDialogue, setRemoveTestDialogueDialogue] =
-    useState<boolean>(false)
+  const [removeTestDialogue, setRemoveTestDialogue] = useState<boolean>(false)
 
   const params = useParams()
   const projectId = +(params['projectId'] ?? 0)
@@ -65,7 +64,7 @@ export const RunActions = React.memo(({table, runData}: IRunActions) => {
   ) => {
     if (action === 'LOCK') setLockRunDialog(true)
     else if (action === 'REMOVE TEST') {
-      setRemoveTestDialogueDialogue(true)
+      setRemoveTestDialogue(true)
     } else if (action === 'EDIT')
       navigate(`/project/${projectId}/editRun/${runData?.runId ?? 0}`)
     else if (action === 'RESET RUN') setResetRunDialog(true)
@@ -102,17 +101,17 @@ export const RunActions = React.memo(({table, runData}: IRunActions) => {
         setState={setResetRunDialog}
         runData={runData}
       />
-      {/* <LockRunDialogue
+      <LockRunDialogue
         state={lockRunDialog}
         setState={setLockRunDialog}
         runData={runData}
       />
       <RemoveTestsDialogue
         state={removeTestDialogue}
-        setState={setRemoveTestDialogueDialogue}
+        setState={setRemoveTestDialogue}
         runData={runData}
         table={table}
-      /> */}
+      />
     </div>
   )
 })
