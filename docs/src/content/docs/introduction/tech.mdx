@@ -1,7 +1,68 @@
 ---
-title: TechStackUsed
+title: Tech Stack Used
 ---
 
-##### In Progress
+Checkmate is built on a carefully chosen stack of modern technologies that enable high performance, scalability, and a seamless user experience. Each component of the stack has been selected to address specific requirements, ensuring that the platform is robust, efficient, and future-proof. Here is an in-depth look at the technologies powering Checkmate:
 
 ---
+
+#### **Framework**: Remix
+
+- **Description**: Checkmate's backend and frontend are powered by **Remix**, a full-stack framework designed for building server-rendered React applications. Remix provides a highly optimized server-rendering approach, enabling fast page loads and smooth transitions, even under heavy user traffic. Its built-in features for routing, loaders, and data fetching streamline development and help maintain a clean, modular codebase.
+- **Key Features**:
+  - Server-rendered React for better performance and SEO.
+  - Nested routing and data loaders for efficient state management.
+  - Focused on progressive enhancement for accessibility and performance.
+- **Documentation**: [Remix Documentation](https://remix.run/docs)
+
+---
+
+#### **ORM**: Drizzle
+
+- **Description**: **Drizzle ORM** is a modern, TypeScript-first ORM designed to simplify database interactions. By enabling developers to define schemas in TypeScript, Drizzle ensures type safety and a close integration between the application logic and database layer. It offers both SQL-like syntax and relational data access, making database management intuitive and less error-prone.
+- **Key Features**:
+  - Schema-driven development with TypeScript.
+  - SQL and relational database access in a type-safe manner.
+  - Opt-in tools for migrations and schema management.
+- **Documentation**: [Drizzle ORM Documentation](https://github.com/drizzle-team/drizzle-orm)
+
+---
+
+#### **Design Library**: Shadcn
+
+- **Description**: Checkmate uses **Shadcn** as its design library to create a cohesive and modern user interface. Shadcn provides a robust set of components and design patterns that are both visually appealing and functionally consistent. This ensures that Checkmate delivers a polished and intuitive user experience across all features.
+- **Key Features**:
+  - Pre-built, customizable UI components.
+  - Consistent design language for seamless user experience.
+  - Easy integration into the existing tech stack.
+- **Documentation**: [Shadcn UI Documentation](https://ui.shadcn.dev/)
+
+---
+
+#### **Database**: MySQL
+
+- **Description**: **MySQL** is the backbone of Checkmate’s data layer. Known for its reliability, scalability, and high performance, MySQL is used to store all application data, including test cases, runs, and historical analytics. Its compatibility with Drizzle ORM ensures smooth database operations and schema management.
+- **Key Features**:
+  - Robust ACID-compliant transactions for reliable data handling.
+  - Scalable architecture to handle large volumes of test cases and data.
+  - Extensive support for indexing and optimized queries for performance.
+- **Documentation**: [MySQL Documentation](https://dev.mysql.com/doc/)
+
+---
+
+#### **Authentication**: Google Sign-In
+
+- **Description**: Checkmate integrates **Google Sign-In** to provide secure and seamless authentication for its users. By leveraging Google's OAuth 2.0 and OpenID Connect protocols, Checkmate ensures that user identities are managed securely and efficiently.
+- **Key Features**:
+  - Secure user authentication with minimal friction.
+  - Integration with existing Google accounts for ease of access.
+  - Compliance with modern security protocols.
+- **Documentation**: [Google Sign-In Documentation](https://developers.google.com/identity)
+
+---
+
+### Why This Stack?
+
+This stack was chosen to ensure that Checkmate can handle the complex requirements of modern test case management while offering a smooth user experience. The combination of **Remix** for performance, **Drizzle** for database management, **Shadcn** for design consistency, **MySQL** for scalable data storage, and **Google Sign-In** for secure authentication creates a powerful foundation for Checkmate's capabilities.
+
+By leveraging these technologies, Checkmate is positioned to grow alongside its users' needs, adapting to new challenges and delivering a world-class testing solution.

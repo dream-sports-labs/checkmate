@@ -9,7 +9,7 @@ export default defineConfig({
   site: SITE,
   integrations: [
     starlight({
-      title: "Checkmate",
+      title: "",
       tableOfContents: {
         maxHeadingLevel: 4,
       },
@@ -20,6 +20,7 @@ export default defineConfig({
         dark: "./src/assets/checkmate-dark.svg",
         light: "./src/assets/checkmate-light.svg",
         alt: "Checkmate",
+        replacesTitle: true,
       },
       social: {
         github: "https://github.com/dream-sports-labs/checkmate",
@@ -30,7 +31,14 @@ export default defineConfig({
           items: [
             "introduction/introduction",
             "introduction/application-structure",
-            "introduction/tech",
+            {
+              label: "Tech Stack Used",
+              slug: "introduction/tech",
+              badge: {
+                text: "WIP",
+                variant: "caution",
+              },
+            },
           ],
         },
         {
