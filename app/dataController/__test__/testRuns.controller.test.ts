@@ -1,6 +1,6 @@
 import TestRunsController from '@controllers/testRuns.controller'
 import {TestStatusType} from '@controllers/types'
-import TestRunsDao, {ICreateTestRuns, ITestRunData} from '@dao/testRuns.dao'
+import TestRunsDao, {ITestRunData} from '@dao/testRuns.dao'
 
 jest.mock('@dao/testRuns.dao')
 
