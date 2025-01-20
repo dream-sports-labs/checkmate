@@ -1,0 +1,128 @@
+---
+title: Application Structure
+---
+
+Checkmate is built on a **project-centric approach** to simplify and organize test case management. The Dashboard serves as the central hub, allowing users to browse, manage, and track all testing projects efficiently.
+
+---
+
+### Projects: The Core of Test Case Organization
+
+In Checkmate, test cases are grouped into **projects**. A project represents a set of tests aligned to a common objective, such as a feature, service, or application. Projects provide a framework for organizing test cases and supporting collaboration among teams.
+
+---
+
+### Structuring a Project
+
+In Checkmate, test cases within a project are **classified into categories** based on various properties to ensure clarity, organization, and flexibility. This classification allows for better management and filtering of test cases according to specific requirements.
+
+#### Key Classification Properties:
+
+- **Squads**: Represents different teams or groups working within a project. Squads help organize test cases based on team responsibilities or ownership.
+- **Sections**: Logical divisions within a project to group test cases under specific areas or functionalities. _Each test case must belong to one section_.
+- **Labels**: A flexible property used to group test cases by shared characteristics or purposes. Labels allow for dynamic classification of tests based on criteria such as release readiness, specific feature testing, or business-critical functionality. For example, tests that must be executed before a release can be assigned a specific label to streamline their identification.
+- **Priority**: Defines the importance of a test case. Common priority levels include:
+  - `Critical`
+  - `High`
+  - `Medium`
+  - `Low`
+- **Automation Status**: Indicates whether a test case is:
+  - `Not Automatable`: Cannot be automated.
+  - `Automated`: Already automated.
+  - `Automatable`: Can potentially be automated in the future.
+- **Type**: Classifies the nature of the test case, such as:
+  - `Functional`
+  - `Regression`
+  - `Frontend Test`
+  - `Backend Test`
+- **Platform**: Identifies the platform(s) the test case is applicable to, such as:
+  - `All Platforms`
+  - `Android Only`
+  - `iOS Only`
+  - `Web Only`
+- **Test Covered By**: Indicates the methodology or coverage type of the test case:
+  - `Manual`
+  - `End-to-End`
+  - `Integration`
+  - `Unit Testing`
+  - `Contract Testing`
+
+---
+
+#### Benefits of Classification:
+
+Classifying test cases based on these properties ensures:
+
+- **Efficient Filtering and Organization**: Quickly locate specific test cases using filters for squads, sections, or labels.
+- **Clear Ownership**: Squads and sections provide clarity on team responsibilities.
+- **Flexibility in Grouping**: Dynamic labels and sections allow test cases to adapt to evolving needs.
+- **Streamlined Reporting and Execution**: Test runs can be created and tracked based on classifications like priority, platform, or type.
+
+By leveraging this structured classification, teams can manage their testing efforts with greater precision and effectiveness.
+
+---
+
+### Test Case Properties
+
+Each test case in Checkmate includes detailed properties to ensure comprehensive documentation and traceability:
+
+- **Preconditions**: Describes setup or requirements for the test.
+- **Steps**: Defines detailed steps to execute the test.
+- **Expected Result**: Details the desired outcome of the test.
+- **Additional Groups**: Allows for further custom grouping of test cases.
+- **Jira Ticket**: Reference to the task or issue associated with the test.
+- **Automation ID**: Unique identifier for automated test cases.
+- **Defects**: Tracks any defects related to the test case.
+
+---
+
+### Managing Test Cases
+
+The **Tests List Page** provides a centralized interface for managing test cases:
+
+- View all test cases in a structured list.
+- Filter by properties like section, squad, and label.
+- Sort by attributes such as priority, testId, and title.
+- Search for test cases by name or ID.
+- Add, edit, or delete test cases as required.
+- Dynamically create and manage **sections**, **squads**, and **labels**.
+- Create test runs based on defined filters and criteria.
+- Bulk upload or download test cases for streamlined management.
+
+---
+
+### Test Runs
+
+A **run** is a collection of test cases organized for execution, enabling streamlined progress tracking, efficient testing, and comprehensive reporting. Test runs are an essential feature for managing the execution phase of your testing lifecycle.
+
+#### Key Features of Test Runs:
+
+- **Flexible Creation**: Easily create test runs by filtering test cases based on squads, labels, sections, or other classification properties. This ensures that only the relevant tests are included in each run.
+
+- **Real-Time Monitoring**: Track the progress of a test run in real time, with clear visibility into the status of each test case, including those completed, in progress, or pending execution.
+
+- **Dynamic Modifications**: Update test runs as needed by adding or removing test cases, ensuring flexibility to adapt to evolving requirements or changes in scope.
+
+- **Seamless Execution**: Execute test runs with intuitive workflows, enabling smooth collaboration and coordination among team members.
+
+- **Detailed Reporting**: Generate and download comprehensive reports summarizing the results of a test run. These reports provide valuable insights into success rates, failures, and areas that need attention.
+
+#### Benefits of Test Runs:
+
+- **Enhanced Focus**: By grouping related test cases, test runs help teams focus on specific objectives, such as release readiness or feature validation.
+
+- **Informed Decision-Making**: Real-time progress tracking and detailed reporting provide actionable insights to guide decision-making during and after execution.
+
+- **Efficient Management**: The ability to modify runs dynamically ensures that testing efforts remain aligned with project goals, even as requirements evolve.
+
+By leveraging test runs in Checkmate, teams can execute, monitor, and analyze their tests with precision, ensuring that quality goals are consistently achieved.
+
+---
+
+### Open API Support
+
+Checkmate supports Open API integration, enabling teams to automate and extend their test management workflows programmatically.
+
+---
+
+By structuring test case management within organized projects, Checkmate ensures streamlined collaboration, enhanced traceability, and efficient execution of testing operations.

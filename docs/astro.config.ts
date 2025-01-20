@@ -27,7 +27,11 @@ export default defineConfig({
       sidebar: [
         {
           label: "Introduction",
-          items: ["introduction/introduction", "introduction/tech"],
+          items: [
+            "introduction/introduction",
+            "introduction/application-structure",
+            "introduction/tech",
+          ],
         },
         {
           label: "Guides",
