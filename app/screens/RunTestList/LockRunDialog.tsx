@@ -1,11 +1,9 @@
-import {RunDetails} from '@api/runData'
+import {StateDialog} from '@components/Dialog/StateDialogue'
 import {Loader} from '@components/Loader/Loader'
 import {useFetcher, useParams} from '@remix-run/react'
 import {API} from '@route/utils/api'
 import {Button} from '@ui/button'
 import {
-  Dialog,
-  DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
@@ -16,20 +14,19 @@ import {useEffect} from 'react'
 import {LOCK_RUN} from '~/constants'
 
 export const LockRunDialogue = (param: {
-  runData: null | RunDetails
+  runId: number
   state: boolean
   setState: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const params = useParams()
   const projectId = +(params['projectId'] ?? 0)
-  const runData = param.runData
 
   const lockRunFether = useFetcher<any>()
 
   const resetButtonCLicked = () => {
     param.setState(false)
     lockRunFether.submit(
-      {runId: runData?.runId ?? 0, projectId: projectId},
+      {runId: param.runId, projectId: projectId},
       {
         method: 'PUT',
         action: `/${API.RunLock}`,
@@ -55,18 +52,25 @@ export const LockRunDialogue = (param: {
   if (lockRunFether.state === 'submitting') return <Loader />
 
   return (
-    <Dialog onOpenChange={param.setState} open={param.state}>
-      <DialogContent aria-describedby="dialog content">
-        <DialogHeader className="font-bold">
-          <DialogTitle>Lock Run</DialogTitle>{' '}
-        </DialogHeader>
-        <DialogDescription className="text-red-600	">
-          {LOCK_RUN}
-        </DialogDescription>
+    <StateDialog
+      variant="delete"
+      state={param.state}
+      setState={param.setState}
+      headerComponent={
+        <>
+          <DialogHeader className="font-bold">
+            <DialogTitle>Lock Run</DialogTitle>{' '}
+          </DialogHeader>
+          <DialogDescription className="text-red-600	">
+            {LOCK_RUN}
+          </DialogDescription>
+        </>
+      }
+      footerComponent={
         <DialogFooter>
           <Button onClick={resetButtonCLicked}>Lock Run</Button>
         </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      }
+    />
   )
 }

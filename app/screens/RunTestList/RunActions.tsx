@@ -99,12 +99,12 @@ export const RunActions = React.memo(({table, runData}: IRunActions) => {
       <ResetRunsDialogue
         state={resetRunDialog}
         setState={setResetRunDialog}
-        runData={runData}
+        runId={runData?.runId ?? 0}
       />
       <LockRunDialogue
         state={lockRunDialog}
         setState={setLockRunDialog}
-        runData={runData}
+        runId={runData?.runId ?? 0}
       />
       <RemoveTestsDialogue
         state={removeTestDialogue}

@@ -16,6 +16,7 @@ import {toast} from '@ui/use-toast'
 import {useEffect} from 'react'
 import {REMOVE_TEST} from '~/constants'
 import {Tests} from './interfaces'
+import {StateDialog} from '@components/Dialog/StateDialogue'
 
 export const RemoveTestsDialogue = (param: {
   runData: null | RunDetails
@@ -75,18 +76,25 @@ export const RemoveTestsDialogue = (param: {
   if (removeTestsFetcher.state === 'submitting') return <Loader />
 
   return (
-    <Dialog onOpenChange={param.setState} open={param.state}>
-      <DialogContent aria-describedby="dialog content">
-        <DialogHeader className="font-bold">
-          <DialogTitle>Remove Tests</DialogTitle>
-        </DialogHeader>
-        <DialogDescription className="text-red-600	">
-          {REMOVE_TEST}
-        </DialogDescription>
+    <StateDialog
+      variant="delete"
+      state={param.state}
+      setState={param.setState}
+      headerComponent={
+        <>
+          <DialogHeader className="font-bold">
+            <DialogTitle>Remove Tests</DialogTitle>
+          </DialogHeader>
+          <DialogDescription className="text-red-600	">
+            {REMOVE_TEST}
+          </DialogDescription>
+        </>
+      }
+      footerComponent={
         <DialogFooter>
           <Button onClick={resetButtonCLicked}>Remove Tests</Button>
         </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      }
+    />
   )
 }
