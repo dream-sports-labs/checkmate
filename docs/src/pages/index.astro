@@ -2,26 +2,19 @@
 import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
 
 import { Card, CardGrid } from "@astrojs/starlight/components";
+
+title: "Checkmate"
+template: "splash"
+hero:
+  title: "Checkmate"
+  tagline: "Streamlining Your Test Case Management"
+  actions:
+    - text: "Get started"
+      link: "/introduction/introduction"
+      icon: "right-arrow"
 ---
 
-<StarlightPage
-  frontmatter={{
-    title: "Checkmate",
-    template: "splash",
-    hero: {
-      title: "Checkmate",
-      tagline:
-        "Streamlining Your Test Case Management",
-      actions: [
-        {
-          text: "Get started",
-          link: "/introduction/introduction",
-          icon: "right-arrow",
-        },
-      ],
-    },
-  }}
->
+<StarlightPage frontmatter={frontmatter}>
   <CardGrid>
     <Card title="Features" icon="seti:default">
       <ul class="list-inside">
