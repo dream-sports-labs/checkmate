@@ -6,10 +6,6 @@ on:
     paths:
       - 'docs/**'
   workflow_dispatch:
-  # Remove for master merge
-  pull_request:
-    branches:
-      - master
 
 permissions:
   contents: read
