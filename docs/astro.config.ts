@@ -3,7 +3,7 @@ import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
 import { defineConfig } from "astro/config";
 
-const SITE = "https://dreamsportslabs.com/checkmate";
+const SITE = "https://checkmate.dreamsportslabs.com";
 
 export default defineConfig({
   site: SITE,
@@ -33,12 +33,13 @@ export default defineConfig({
             "introduction/application-structure",
             {
               label: "TechStack Used",
-              slug: "introduction/tech",
+              slug: "introduction/techstack",
               badge: {
                 text: "WIP",
                 variant: "caution",
               },
             },
+            "introduction/rbac",
           ],
         },
         {

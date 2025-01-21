@@ -61,8 +61,9 @@ Checkmate is built on a carefully chosen stack of modern technologies that enabl
 
 ---
 
-### Why This Stack?
+#### **RBAC**: Casbin
 
-This stack was chosen to ensure that Checkmate can handle the complex requirements of modern test case management while offering a smooth user experience. The combination of **Remix** for performance, **Drizzle** for database management, **Shadcn** for design consistency, **MySQL** for scalable data storage, and **Google Sign-In** for secure authentication creates a powerful foundation for Checkmate's capabilities.
+- Casbin is an authorization library that can be used in flows where we want a certain object or entity to be accessed by a specific user or subject. The type of access, i.e. action, can be read, write, delete, or any other action as set by the developer. This is how Casbin is most widely used, and it's called the "standard" or classic `{ subject, object, action }` flow.
+- **Documentation**: [Casbin Documentation](https://casbin.org/docs/overview)
 
-By leveraging these technologies, Checkmate is positioned to grow alongside its users' needs, adapting to new challenges and delivering a world-class testing solution.
+---
