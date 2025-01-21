@@ -1,15 +1,17 @@
 import {Filter, RotateCcw} from 'lucide-react'
 
 interface IFilterIconShuffle {
+  filterType: string
   searchParams: URLSearchParams
   resetFilter: () => void
 }
 
 export const FilterIconShuffle = ({
+  filterType,
   searchParams,
   resetFilter,
 }: IFilterIconShuffle) => {
-  return searchParams.has('filterType') ? (
+  return searchParams.has(filterType) ? (
     <RotateCcw
       color="#ff3c00"
       className={'self-center cursor-pointer mx-2'}

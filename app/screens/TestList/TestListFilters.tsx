@@ -68,6 +68,7 @@ export const TestListFilters = ({
       <Tooltip
         anchor={
           <FilterIconShuffle
+            filterType="filterType"
             searchParams={searchParams}
             resetFilter={resetFilter}
           />

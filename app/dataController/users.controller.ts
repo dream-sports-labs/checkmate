@@ -1,15 +1,23 @@
 import UsersDao, {TGetUserArgs} from '~/db/dao/users.dao'
 import {GoogleProfile} from 'remix-auth-google'
+import {userType} from '~/screens/AdminPanel/UserTypeFilter'
 
 export interface IUpdateUserRole {
   userId: number
   newRole: 'reader' | 'user' | 'admin'
   updatedBy: number
 }
+export enum UserRole {
+  Reader = 'reader',
+  User = 'user',
+  Admin = 'admin',
+}
 
 export interface IGetAllUser {
   page: number
   pageSize: number
+  textSearch?: string
+  userRoles?: UserRole[]
 }
 
 const UsersController = {
