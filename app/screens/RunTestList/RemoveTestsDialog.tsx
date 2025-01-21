@@ -1,12 +1,11 @@
 import {RunDetails} from '@api/runData'
+import {StateDialog} from '@components/Dialog/StateDialogue'
 import {Loader} from '@components/Loader/Loader'
 import {useFetcher, useParams} from '@remix-run/react'
 import {API} from '@route/utils/api'
 import {Table} from '@tanstack/react-table'
 import {Button} from '@ui/button'
 import {
-  Dialog,
-  DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
@@ -16,7 +15,6 @@ import {toast} from '@ui/use-toast'
 import {useEffect} from 'react'
 import {REMOVE_TEST} from '~/constants'
 import {Tests} from './interfaces'
-import {StateDialog} from '@components/Dialog/StateDialogue'
 
 export const RemoveTestsDialogue = (param: {
   runData: null | RunDetails
