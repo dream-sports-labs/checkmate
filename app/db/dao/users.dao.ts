@@ -39,7 +39,7 @@ const UsersDao = {
     try {
       const whereClauses: any[] = []
       if (textSearch) {
-        whereClauses.push(or(like(users.userName, `%${textSearch}%`)))
+        whereClauses.push(like(users.userName, `%${textSearch.toLowerCase()}%`))
       }
 
       if (userRoles) {

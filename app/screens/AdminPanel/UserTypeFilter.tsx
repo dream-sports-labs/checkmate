@@ -18,23 +18,6 @@ export interface UserTypeFilterInterface {
   containerClassName?: string
 }
 
-export class userType {
-  private id: number
-  private isVisible: boolean
-  constructor(public type: string) {
-    this.id = Math.random()
-    this.isVisible = true
-  }
-
-  getIsVisible() {
-    return this.isVisible
-  }
-
-  toggleVisibility(visibility: boolean) {
-    this.isVisible = visibility
-  }
-}
-
 export const UserTypeFilter = ({
   containerClassName,
 }: UserTypeFilterInterface) => {
@@ -112,12 +95,33 @@ export const UserTypeFilter = ({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Button className={cn(containerClassName)}>
-          <Filter size={16} className="mr-1" />
-          UserType
-        </Button>
-      </DropdownMenuTrigger>
+      <Button
+        variant={'outline'}
+        className={cn(
+          'flex flex-row rounded-lg border-neutral-200 p-0',
+          containerClassName,
+        )}>
+        <Tooltip
+          anchor={
+            <FilterIconShuffle
+              filterType="userRoles"
+              searchParams={searchParams}
+              resetFilter={resetUserFilter}
+            />
+          }
+          content={searchParams.has('userRoles') ? 'Reset Filters' : 'Filter'}
+        />
+        <Separator orientation="vertical" className="my-2 h-5" />
+        <DropdownMenuTrigger>
+          <span
+            className={cn(
+              'flex flex-row rounded-lg border-neutral-200 mr-2 font-semibold',
+              containerClassName,
+            )}>
+            Role
+          </span>
+        </DropdownMenuTrigger>
+      </Button>
       <DropdownMenuContent align="end">
         {userTypes?.map((userType, index) => {
           return (
@@ -133,34 +137,16 @@ export const UserTypeFilter = ({
             </DropdownMenuCheckboxItem>
           )
         })}
-        <Button
-          variant={'outline'}
-          className={cn(
-            'flex flex-row rounded-lg border-neutral-200 p-0',
-            containerClassName,
-          )}>
-          <Tooltip
-            anchor={
-              <FilterIconShuffle
-                filterType="userRoles"
-                searchParams={searchParams}
-                resetFilter={resetUserFilter}
-              />
-            }
-            content={searchParams.has('userRoles') ? 'Reset Filters' : 'Filter'}
-          />
-
-          <Separator orientation="vertical" className="my-2 h-5" />
+        <div className="flex justify-center">
           <Button
-            variant={'outline'}
             className={cn(
-              'flex flex-row rounded-lg border-neutral-200 p-2',
-              containerClassName,
+              'flex flex-row justify-centre rounded-lg border-neutral-200 w-full w-24',
             )}
+            size={'sm'}
             onClick={applyUserSelection}>
             Apply
           </Button>
-        </Button>
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   )
