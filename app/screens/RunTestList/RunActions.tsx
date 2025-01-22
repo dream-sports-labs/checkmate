@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@ui/dropdown-menu'
 import {DeleteIcon, EditIcon, ListRestart, LockIcon} from 'lucide-react'
-import {ReactElement, useMemo, useState} from 'react'
+import {ReactElement, useMemo, useRef, useState} from 'react'
 import {Tests} from './interfaces'
 import {LockRunDialogue} from './LockRunDialog'
 import {RemoveTestsDialogue} from './RemoveTestsDialog'
@@ -58,29 +58,33 @@ export const RunActions = React.memo(({table, runData}: IRunActions) => {
   const projectId = +(params['projectId'] ?? 0)
 
   const navigate = useCustomNavigate()
+  const [dd, setDD] = useState(false)
 
   const handleRunAction = (
     action: 'EDIT' | 'LOCK' | 'REMOVE TEST' | 'RESET RUN',
   ) => {
+    setDD(false)
     if (action === 'LOCK') setLockRunDialog(true)
     else if (action === 'REMOVE TEST') {
       setRemoveTestDialogue(true)
     } else if (action === 'EDIT')
       navigate(`/project/${projectId}/editRun/${runData?.runId ?? 0}`)
-    else if (action === 'RESET RUN') setResetRunDialog(true)
+    else if (action === 'RESET RUN') {
+      setResetRunDialog(true)
+    }
   }
 
   const actionItemView = useMemo(() => {
     return ACTION_ITEMS.map((action) => (
       <DropdownMenuItem
+        onSelect={() => handleRunAction(action.action)}
         key={action.id}
         disabled={
           !(
             table.getIsSomePageRowsSelected() || table.getIsAllRowsSelected()
           ) && action.action === 'REMOVE TEST'
         }
-        className="capitalize"
-        onClick={() => handleRunAction(action.action)}>
+        className="capitalize">
         <span className={'mr-2'}>{action.icon}</span> {action.action}
       </DropdownMenuItem>
     ))
@@ -88,9 +92,12 @@ export const RunActions = React.memo(({table, runData}: IRunActions) => {
 
   return (
     <div>
-      <DropdownMenu>
+      <DropdownMenu open={dd}>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="ml-auto">
+          <Button
+            variant="outline"
+            className="ml-auto"
+            onClick={() => setDD(true)}>
             Actions
           </Button>
         </DropdownMenuTrigger>
@@ -101,7 +108,7 @@ export const RunActions = React.memo(({table, runData}: IRunActions) => {
         setState={setResetRunDialog}
         runId={runData?.runId ?? 0}
       />
-      <LockRunDialogue
+      {/* <LockRunDialogue
         state={lockRunDialog}
         setState={setLockRunDialog}
         runId={runData?.runId ?? 0}
@@ -111,7 +118,7 @@ export const RunActions = React.memo(({table, runData}: IRunActions) => {
         setState={setRemoveTestDialogue}
         runData={runData}
         table={table}
-      />
+      /> */}
     </div>
   )
 })

@@ -55,7 +55,6 @@ export const StateDialog = ({
         console.log('Dialog state change:', isOpen) // Debug log
         setState(isOpen) // Update state
       }}
-      defaultOpen={true}
       open={state}>
       {anchorComponent && (
         <DialogTrigger
