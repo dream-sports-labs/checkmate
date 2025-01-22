@@ -6,10 +6,17 @@ export interface IUpdateUserRole {
   newRole: 'reader' | 'user' | 'admin'
   updatedBy: number
 }
+export enum UserRole {
+  Reader = 'reader',
+  User = 'user',
+  Admin = 'admin',
+}
 
 export interface IGetAllUser {
   page: number
   pageSize: number
+  textSearch?: string
+  userRoles?: UserRole[]
 }
 
 const UsersController = {

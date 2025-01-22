@@ -1,11 +1,14 @@
 import {IGetAllUser, IUpdateUserRole} from '@controllers/users.controller'
 import {getEnforcer} from '@services/rbac/enforcer'
-import {and, count, eq} from 'drizzle-orm/sql'
+import {and, count, eq, inArray, like, or} from 'drizzle-orm/sql'
 import {GoogleProfile} from 'remix-auth-google'
 import {logger, LogType} from '~/utils/logger'
 import {dbClient} from '../client'
 import {users} from '../schema/users'
 import {errorHandling, generateToken} from './utils'
+import {text} from 'stream/consumers'
+import {tests} from '@schema/tests'
+import {MySqlColumn} from 'drizzle-orm/mysql-core'
 
 type TInsertUserArgs = {
   userName: string
@@ -32,8 +35,17 @@ export interface User {
 }
 
 const UsersDao = {
-  async getAll({page, pageSize}: IGetAllUser) {
+  async getAll({page, pageSize, textSearch, userRoles}: IGetAllUser) {
     try {
+      const whereClauses: any[] = []
+      if (textSearch) {
+        whereClauses.push(like(users.userName, `%${textSearch.toLowerCase()}%`))
+      }
+
+      if (userRoles) {
+        whereClauses.push(inArray(users.role, userRoles))
+      }
+
       const usersData = await dbClient
         .select({
           userId: users.userId,
@@ -43,6 +55,7 @@ const UsersDao = {
         })
         .from(users)
         .limit(pageSize)
+        .where(and(...whereClauses))
         .offset(pageSize * (page - 1))
 
       return usersData
