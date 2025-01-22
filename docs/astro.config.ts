@@ -29,17 +29,20 @@ export default defineConfig({
         {
           label: "Introduction",
           items: [
-            "introduction/introduction",
-            "introduction/application-structure",
+            "project/introduction",
+            "project/application-structure",
             {
               label: "TechStack Used",
-              slug: "introduction/techstack",
+              slug: "project/techstack",
               badge: {
                 text: "WIP",
                 variant: "caution",
               },
             },
-            "introduction/rbac",
+            {
+              label: "RBAC",
+              slug: "project/rbac",
+            },
           ],
         },
         {
