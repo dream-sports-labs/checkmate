@@ -1,6 +1,5 @@
 import UsersDao, {TGetUserArgs} from '~/db/dao/users.dao'
 import {GoogleProfile} from 'remix-auth-google'
-import {userType} from '~/screens/AdminPanel/UserTypeFilter'
 
 export interface IUpdateUserRole {
   userId: number
