@@ -12,6 +12,9 @@ import {
 import React, {useEffect, useState} from 'react'
 import {AdminPanelColumnConfig} from './AdminPanelColumnConfig'
 import {AuthErrorBoundary} from '@components/ErrorBoundry/AuthErrorBoundary'
+import {SearchBar} from '@components/SearchBar/SearchBar'
+import {cn} from '@ui/utils'
+import {UserTypeFilter} from './UserTypeFilter'
 
 export default function UserTable() {
   const loaderData: {data: GetAllUsersResponseType} = useLoaderData()
@@ -38,7 +41,6 @@ export default function UserTable() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-
   const table = useReactTable({
     data: userData,
     columns: AdminPanelColumnConfig,
@@ -54,9 +56,7 @@ export default function UserTable() {
     },
     initialState: {
       pagination: {
-        pageSize: Number(searchParams?.get('pageSize'))
-          ? Number(searchParams?.get('pageSize'))
-          : 25,
+        pageSize: Number(searchParams?.get('pageSize')) || 25,
         pageIndex: Number(searchParams?.get('page'))
           ? Number(searchParams?.get('page')) - 1
           : 0,
@@ -89,17 +89,46 @@ export default function UserTable() {
     return <AuthErrorBoundary />
   }
 
+  const handleSearchChanges = (value: string) => {
+    setSearchParams(
+      (prev) => {
+        if (value === '') {
+          prev.delete('textSearch')
+          prev.set('page', '1')
+          return prev
+        }
+        prev.set('textSearch', value)
+        prev.set('page', '1')
+        return prev
+      },
+      {replace: true},
+    )
+  }
+
   return (
-    <DataTable
-      table={table}
-      onPageChange={onPageChange}
-      onPageSizeChange={onPageSizeChange}
-      pageSizeOptions={[25, 50, 100]}
-      hideScrollBar={true}
-      isConcise={true}
-      columnStyle={{
-        actions: 'sticky right-0',
-      }}
-    />
+    <div className="flex flex-grow flex-col h-full">
+      <div className={cn('flex', 'gap-2', 'mb-4', 'flex-row')}>
+        <SearchBar
+          handlechange={handleSearchChanges}
+          placeholdertext={'Search by title or id...'}
+          searchstring={searchParams.get('textSearch') ?? ''}
+        />
+
+        <UserTypeFilter containerClassName="ml-2" />
+      </div>
+      <div className="min-h-full overflow-hidden">
+        <DataTable
+          table={table}
+          onPageChange={onPageChange}
+          onPageSizeChange={onPageSizeChange}
+          pageSizeOptions={[25, 50, 100]}
+          hideScrollBar={true}
+          isConcise={true}
+          columnStyle={{
+            actions: 'sticky right-0',
+          }}
+        />
+      </div>
+    </div>
   )
 }

@@ -3,13 +3,14 @@ import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
 import { defineConfig } from "astro/config";
 
-const SITE = "https://dreamsportslabs.com/checkmate";
+const SITE = "https://checkmate.dreamsportslabs.com";
 
 export default defineConfig({
   site: SITE,
   integrations: [
     starlight({
       title: "Checkmate",
+      favicon: "./public/favicon.svg",
       tableOfContents: {
         maxHeadingLevel: 4,
       },
@@ -27,7 +28,23 @@ export default defineConfig({
       sidebar: [
         {
           label: "Introduction",
-          items: ["introduction/introduction", "introduction/tech"],
+          items: [
+            "project/introduction",
+            "project/application-structure",
+            "project/setup",
+            {
+              label: "TechStack Used",
+              slug: "project/techstack",
+              badge: {
+                text: "WIP",
+                variant: "caution",
+              },
+            },
+            {
+              label: "RBAC",
+              slug: "project/rbac",
+            },
+          ],
         },
         {
           label: "Guides",

@@ -196,14 +196,26 @@ const SearchParams = {
     const url = new URL(request.url)
     const page = Number(url.searchParams.get('page')) || 1
     const pageSize = Number(url.searchParams.get('pageSize')) || SMALL_PAGE_SIZE
+    const textSearch = url.searchParams.get('textSearch') || ''
+    const userRoles = url.searchParams.get('userRoles')
+      ? jsonParseWithError(url.searchParams.get('userRoles'), 'userRoles')
+      : undefined
     if (!page || !pageSize)
       throw new Error('Invalid page or pageSize, provide valid entry', {
         cause: ErrorCause.INVALID_PARAMS,
       })
 
+    userRoles?.forEach((role: string) => {
+      if (!['admin', 'user', 'reader'].includes(role)) {
+        throw new Error('Invalid user role', {cause: ErrorCause.INVALID_PARAMS})
+      }
+    })
+
     return {
       page,
       pageSize,
+      textSearch,
+      userRoles,
     }
   },
 }

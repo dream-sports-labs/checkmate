@@ -14,4 +14,4 @@ To run the development server, you can run:
 yarn dev
 ```
 
-The docs are hosted on Vercel, and any commit made to the `main` branch will automatically deploy.
+Any commit made to the `master` branch will automatically deploy.

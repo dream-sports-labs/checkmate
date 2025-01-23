@@ -6,9 +6,6 @@ on:
     paths:
       - 'docs/**'
   workflow_dispatch:
-  pull_request:
-    branches:
-      - master
 
 permissions:
   contents: read
