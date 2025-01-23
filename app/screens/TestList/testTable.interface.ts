@@ -52,3 +52,10 @@ export interface ProjectData {
   orgId: number
   status: string
 }
+
+export enum ProjectActions {
+  AddTest = 'Test',
+  AddLabel = 'Label',
+  AddSquad = 'Squad',
+  CreateRun = 'Run',
+}

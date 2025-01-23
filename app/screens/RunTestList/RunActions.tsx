@@ -59,7 +59,7 @@ export const RunActions = React.memo(({table, runData}: IRunActions) => {
   const projectId = +(params['projectId'] ?? 0)
 
   const navigate = useCustomNavigate()
-  const [actionDD, setActionDD] = useState(false)
+  const [actionDD, setActionDD] = useState<boolean>(false)
 
   const handleRunAction = (
     action: 'EDIT' | 'LOCK' | 'REMOVE TEST' | 'RESET RUN',

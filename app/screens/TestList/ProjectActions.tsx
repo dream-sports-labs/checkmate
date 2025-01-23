@@ -4,7 +4,7 @@ import {PlusCircledIcon} from '@radix-ui/react-icons'
 import {useFetcher, useParams} from '@remix-run/react'
 import {Button} from '@ui/button'
 import {toast} from '@ui/use-toast'
-import {MouseEvent, useEffect, useState} from 'react'
+import {MouseEvent, ReactElement, useEffect, useMemo, useState} from 'react'
 import {useSearchParams} from 'react-router-dom'
 import {Loader} from '~/components/Loader/Loader'
 import {API} from '~/routes/utilities/api'
@@ -12,14 +12,58 @@ import {safeJsonParse} from '~/routes/utilities/utils'
 import {Popover, PopoverContent, PopoverTrigger} from '~/ui/popover'
 import {cn} from '~/ui/utils'
 import {AddSquadsLabelsDialogue} from './AddSquadsLabelsDialogue'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@ui/dropdown-menu'
+import {c} from 'node_modules/vite/dist/node/types.d-aGj9QkWt'
 
-export const ProjectAddition = () => {
+enum Actions {
+  AddTest = 'Test',
+  AddLabel = 'Label',
+  AddSquad = 'Squad',
+  CreateRun = 'Run',
+}
+
+const ACTION_ITEMS: {
+  id: number
+  action: Actions
+  icon: ReactElement
+}[] = [
+  {
+    id: 1,
+    action: Actions.AddTest,
+    icon: <Button variant="outline">{Actions.AddTest}</Button>,
+  },
+  {
+    id: 2,
+    action: Actions.AddLabel,
+    icon: <Button variant="outline">{Actions.AddLabel}</Button>,
+  },
+  {
+    id: 3,
+    action: Actions.AddSquad,
+    icon: <Button variant="outline">{Actions.AddSquad}</Button>,
+  },
+  {
+    id: 4,
+    action: Actions.CreateRun,
+    icon: <Button variant="outline">{Actions.CreateRun}</Button>,
+  },
+]
+
+export const ProjectActions = () => {
   const navigate = useCustomNavigate()
-  const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false)
   const projectId = useParams().projectId ? Number(useParams().projectId) : 0
   const saveChanges = useFetcher<any>()
   const [searchParams, _] = useSearchParams()
   const createRun = useFetcher<any>()
+  const [actionDD, setActionDD] = useState<boolean>(false)
+  const [addSquadDialogue, setAddSquadDialogue] = useState<boolean>(false)
+  const [addLabelDialogue, setAddLabelDialogue] = useState<boolean>(false)
+  const [addRunDialogue, setAddRunDialogue] = useState<boolean>(false)
 
   useEffect(() => {
     if (saveChanges.data?.error === null) {
@@ -54,10 +98,17 @@ export const ProjectAddition = () => {
     }
   }, [createRun.data])
 
-  const handleTestClick = (
+  const handleActionClick = (
+    action: Actions,
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
   ) => {
-    navigate(`/project/${projectId}/tests/createTest`, {}, e)
+    setActionDD(false)
+
+    if (action === Actions.AddLabel) setAddLabelDialogue(true)
+    else if (action === Actions.AddSquad) setAddSquadDialogue(true)
+    else if (action === Actions.CreateRun) setAddRunDialogue(true)
+    else if (action === Actions.AddTest)
+      navigate(`/project/${projectId}/tests/createTest`, {}, e)
   }
 
   const handleSaveChangesLabels = (value: string) => {
@@ -106,36 +157,45 @@ export const ProjectAddition = () => {
 
   return (
     <div>
-      {' '}
-      <Popover>
-        <PopoverTrigger>
+      <DropdownMenu open={actionDD} onOpenChange={setActionDD}>
+        <DropdownMenuTrigger asChild>
           <div className={cn('flex-row', 'flex', 'cursor-pointer')}>
             <PlusCircledIcon
+              onClick={() => setActionDD(!actionDD)}
               strokeWidth={1.5}
               className={cn('size-8', 'mx-2')}
             />
           </div>
-        </PopoverTrigger>
-        <PopoverContent className="w-54">
-          <div className="flex flex-col gap-2">
-            <Button variant="outline" onClick={handleTestClick}>
-              Test
-            </Button>
-            <AddSquadsLabelsDialogue
-              heading="Label"
-              handleSaveChanges={handleSaveChangesLabels}
-            />
-            <AddSquadsLabelsDialogue
-              heading="Squad"
-              handleSaveChanges={handleSaveChangesSquads}
-            />
-            <AddSquadsLabelsDialogue
-              heading="Run"
-              handleSaveChanges={handleSaveChangesRuns}
-            />
-          </div>
-        </PopoverContent>
-      </Popover>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          {ACTION_ITEMS.map((action) => (
+            <DropdownMenuItem
+              onSelect={(e: any) => handleActionClick(action.action, e)}
+              key={action.id}
+              className="capitalize">
+              <span className={'mr-2 mx-2'}>{action.icon}</span>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <AddSquadsLabelsDialogue
+        heading={Actions.AddLabel}
+        handleSaveChanges={handleSaveChangesLabels}
+        state={addLabelDialogue}
+        setState={setAddLabelDialogue}
+      />
+      <AddSquadsLabelsDialogue
+        heading={Actions.AddSquad}
+        handleSaveChanges={handleSaveChangesSquads}
+        state={addSquadDialogue}
+        setState={setAddSquadDialogue}
+      />
+      <AddSquadsLabelsDialogue
+        heading={Actions.CreateRun}
+        handleSaveChanges={handleSaveChangesRuns}
+        state={addRunDialogue}
+        setState={setAddRunDialogue}
+      />
       {createRun.state !== 'idle' && <Loader />}
     </div>
   )

@@ -1,29 +1,36 @@
 import {CustomDialog} from '@components/Dialog/Dialog'
+import {InputsSpacing} from '@components/Forms/InputsSpacing'
 import {DialogDescription, DialogTitle} from '@radix-ui/react-dialog'
 import {Button} from '@ui/button'
 import {DialogClose} from '@ui/dialog'
 import {Input} from '@ui/input'
-import {Label} from '@ui/label'
-import {useState} from 'react'
+import {SetStateAction, useState} from 'react'
 import {InputLabels} from './InputLabels'
-import {InputsSpacing} from '@components/Forms/InputsSpacing'
+import {StateDialog} from '@components/Dialog/StateDialogue'
+import {s} from 'node_modules/vite/dist/node/types.d-aGj9QkWt'
 
 interface AddSquadsLabelsDialogueProps {
   heading: string
   handleSaveChanges: (value: string, description?: string) => void
+  state: boolean
+  setState: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const AddSquadsLabelsDialogue = ({
   heading,
   handleSaveChanges,
+  state,
+  setState,
 }: AddSquadsLabelsDialogueProps) => {
   const [value, setValue] = useState<string>('')
   const [description, setDescription] = useState<string>('')
 
+  console.log('-->>', state)
   return (
-    <CustomDialog
-      variant={'edit'}
-      anchorComponent={<Button variant="outline">{heading}</Button>}
+    <StateDialog
+      variant={'add'}
+      setState={setState}
+      state={state}
       headerComponent={
         <>
           <DialogTitle className="font-semibold text-lg">{`Add ${heading}`}</DialogTitle>

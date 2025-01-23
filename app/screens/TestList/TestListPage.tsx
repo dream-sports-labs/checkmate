@@ -6,7 +6,7 @@ import {useEffect, useState} from 'react'
 import {Loader} from '~/components/Loader/Loader'
 import {API} from '~/routes/utilities/api'
 import {cn} from '~/ui/utils'
-import {ProjectAddition} from './ProjectAddition'
+import {ProjectActions} from './ProjectActions'
 import TestList from './TestList'
 import {UploadDownloadButton} from './UploadDownloadButton'
 import {createTestAddedMessage} from './utils'
@@ -95,7 +95,7 @@ export default function TestListPage() {
 
         <div className="flex flex-row">
           <UploadDownloadButton projectName={projectName ?? ''} />
-          <ProjectAddition />
+          <ProjectActions />
         </div>
       </div>
       <div className={cn('h-5/6')}>
