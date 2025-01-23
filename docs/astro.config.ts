@@ -31,6 +31,7 @@ export default defineConfig({
           items: [
             "project/introduction",
             "project/application-structure",
+            "project/setup",
             {
               label: "TechStack Used",
               slug: "project/techstack",
