@@ -1,0 +1,40 @@
+---
+type Props = {
+  title: string;
+  type:
+    | string
+    | {
+        value: string;
+        href: string;
+      };
+  readonly?: boolean;
+};
+
+const { type, readonly } = Astro.props;
+---
+
+<div
+  class="bg-neutral-100 dark:bg-neutral-800 rounded-lg items-center justify-between gap-2 text-sm px-4 py-2 flex"
+>
+  <span class="flex items-center gap-2">
+    <small class="inline">Type:</small>
+    <span>
+      {
+        typeof type === "string" ? (
+          <code dir="auto">{type}</code>
+        ) : (
+          <a href={type.href} class="text-primary-500 dark:text-primary-400">
+            {type.value}
+          </a>
+        )
+      }
+    </span>
+  </span>
+  {
+    readonly && (
+      <span class="text-xs text-neutral-500 dark:text-neutral-400 uppercase rounded px-1 py-0.5">
+        Readonly
+      </span>
+    )
+  }
+</div>

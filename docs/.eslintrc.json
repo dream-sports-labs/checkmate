@@ -1,0 +1,33 @@
+{
+  "root": true,
+  "extends": ["../.eslintrc.json", "plugin:astro/recommended"],
+  "parserOptions": {
+    "extraFileExtensions": [".json"]
+  },
+  "overrides": [
+    {
+      "files": ["*.astro"],
+      "parser": "astro-eslint-parser",
+      "parserOptions": {
+        "parser": "@typescript-eslint/parser",
+        "extraFileExtensions": [".astro"]
+      },
+      "rules": {
+        "import-x/no-unresolved": "off",
+        "@typescript-eslint/no-explicit-any": "off"
+      }
+    }
+  ],
+  "settings": {
+    "import-x/core-modules": ["astro:content", "@astrojs/starlight"],
+    "import-x/extensions": [
+      ".ts",
+      ".tsx",
+      ".js",
+      ".jsx",
+      ".astro",
+      ".md",
+      ".json"
+    ]
+  }
+}

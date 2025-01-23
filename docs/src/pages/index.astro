@@ -1,0 +1,43 @@
+---
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+
+import { Card, CardGrid } from "@astrojs/starlight/components";
+---
+
+<StarlightPage
+  frontmatter={{
+    title: "Checkmate - Simple, composable and effective state management",
+    template: "splash",
+    hero: {
+      title: "Checkmate",
+      tagline: "Streamlining Your Test Case Management",
+      actions: [
+        {
+          text: "Get started",
+          link: "/project/introduction",
+          icon: "right-arrow",
+        },
+      ],
+    },
+  }}
+>
+  <CardGrid>
+    <Card title="Features" icon="seti:default">
+      <ul class="list-inside">
+        <li>Project-level segregation of tests</li>
+        <li>Create Run</li>
+        <li>Manage Run</li>
+        <li>Download Reports</li>
+        <li>Role-Based Access Control (RBAC)</li>
+      </ul>
+    </Card>
+
+    <Card title="APIs" icon="seti:default">
+      <ul class="list-inside">
+        <li>Streamline the entire testing lifecycle</li>
+        <li>Integrate Checkmate with your testing systems</li>
+        <li>Create runs and update status</li>
+      </ul>
+    </Card>
+  </CardGrid>
+</StarlightPage>

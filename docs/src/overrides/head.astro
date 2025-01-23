@@ -1,0 +1,41 @@
+---
+import type { Props } from "@astrojs/starlight/props";
+
+import { SITE } from "../constants";
+
+const {
+  entry: { id, data },
+} = Astro.props;
+
+const BASE_TITLE = "Checkmate";
+const DESCRIPTION =
+  "Test Case Managemenet Application";
+
+let title = data.title;
+
+if (!id) {
+  title = `${BASE_TITLE}`;
+} else {
+  title = `${title} / ${BASE_TITLE}`;
+}
+---
+
+<!-- HTML Meta Tags -->
+<title>{title}</title>
+<link
+  rel="shortcut icon"
+  href="/favicon.svg"
+  sizes="any"
+  type="image/svg+xml"
+/>
+<link rel="sitemap" href="/sitemap-index.xml" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content={DESCRIPTION} />
+<meta property="og:title" content={title} />
+<meta
+  name="keywords"
+  content="javascript, typescript, checkmate, tesct case, test case management,"
+/>
+
+<slot />

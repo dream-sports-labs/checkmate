@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+Add additional Tailwind styles to this file, for example with @layer:
+https://tailwindcss.com/docs/adding-custom-styles#using-css-and-layer
+*/
+
+:root {
+  --sl-font: "Inter Variable", sans-serif;
+}
+
+html {
+  @apply scroll-smooth;
+}
+
+.hero {
+  display: block;
+
+  .sl-flex {
+    justify-content: center;
+    align-items: center;
+
+    & h1 {
+      font-weight: 900;
+      @apply max-w-4xl mt-10 text-4xl text-center md:mt-0 md:text-5xl;
+    }
+
+    & .tagline {
+      @apply text-center;
+    }
+  }
+}
+
+header.header {
+  @apply border-b border-b-gray-500 border-opacity-20 bg-transparent;
+
+  .site-title {
+    img {
+      @apply h-8;
+    }
+  }
+}
+
+#starlight__sidebar {
+  @apply border-r-0 md:border-r border-r-gray-500 border-opacity-20;
+  background-color: var(--sl-color-bg);
+}
+
+.header,
+[aria-labelledby="starlight__on-this-page--mobile"] {
+  @apply backdrop-blur;
+}
+
+[aria-labelledby="starlight__on-this-page--mobile"] {
+  @apply shadow-none;
+  background-color: color-mix(in srgb, var(--sl-color-bg-nav) 70%, transparent);
+}
+
+.sl-steps {
+  & > li {
+    @apply pt-12;
+
+    &:after,
+    &:before {
+      @apply mt-12;
+    }
+
+    &:after {
+      height: calc(100% - var(--bullet-size) - var(--bullet-margin));
+    }
+
+    &:last-of-type:after {
+      display: none;
+    }
+  }
+}
+
+.expressive-code {
+  .ec-line.mark {
+    @apply !bg-gray-700/50;
+  }
+}
+
+.expressive-code figure.frame {
+  @apply border-none rounded-lg shadow-none overflow-hidden;
+
+  pre {
+    @apply rounded-lg;
+  }
+}
+
+aside {
+  @apply rounded-lg;
+}
+
+.sl-link-button {
+  @apply !rounded-xl;
+}
+
+.card {
+  @apply !rounded-xl;
+}
+
+.main-pane,
+main.main-pane {
+  @apply !w-full;
+
+  .sl-container {
+    @apply mx-auto;
+  }
+}
+
+.starlight-aside {
+  @apply text-sm;
+}
+
+h1#_top {
+  @apply !font-extrabold;
+}
+
+code[dir="auto"] {
+  @apply rounded;
+}

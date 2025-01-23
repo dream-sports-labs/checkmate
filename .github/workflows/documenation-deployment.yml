@@ -1,0 +1,39 @@
+name: Docs Deployment
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'docs/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Enable Corepack and Set up Yarn 4.0.0
+        run: corepack enable && corepack prepare yarn@4.0.0 --activate
+
+      - name: Build and Upload Checkmate Docs
+        uses: withastro/action@v3
+        with:
+          path: docs
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy Checkmate Docs to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
