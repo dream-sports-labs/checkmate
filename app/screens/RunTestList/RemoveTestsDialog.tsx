@@ -1,12 +1,11 @@
 import {RunDetails} from '@api/runData'
+import {StateDialog} from '@components/Dialog/StateDialogue'
 import {Loader} from '@components/Loader/Loader'
 import {useFetcher, useParams} from '@remix-run/react'
 import {API} from '@route/utils/api'
 import {Table} from '@tanstack/react-table'
 import {Button} from '@ui/button'
 import {
-  Dialog,
-  DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
@@ -22,6 +21,9 @@ export const RemoveTestsDialogue = (param: {
   state: boolean
   setState: React.Dispatch<React.SetStateAction<boolean>>
   table: Table<Tests>
+  setResponse: React.Dispatch<
+    React.SetStateAction<{success: boolean; message: string} | null>
+  >
 }) => {
   const params = useParams()
   const projectId = +(params['projectId'] ?? 0)
@@ -60,14 +62,19 @@ export const RemoveTestsDialogue = (param: {
 
   useEffect(() => {
     if (removeTestsFetcher.data?.data?.success) {
-      toast({
-        variant: 'success',
-        description: removeTestsFetcher.data.data.message ?? '',
+      param.setResponse({
+        success: true,
+        message: removeTestsFetcher.data?.data.message,
       })
-    } else if (removeTestsFetcher.data?.error) {
-      toast({
-        variant: 'destructive',
-        description: removeTestsFetcher.data?.error,
+    } else if (
+      removeTestsFetcher.data?.data?.success === false ||
+      removeTestsFetcher.data?.error
+    ) {
+      param.setResponse({
+        success: false,
+        message:
+          removeTestsFetcher.data?.error ??
+          removeTestsFetcher.data?.data?.message,
       })
     }
   }, [removeTestsFetcher.data])
@@ -75,18 +82,27 @@ export const RemoveTestsDialogue = (param: {
   if (removeTestsFetcher.state === 'submitting') return <Loader />
 
   return (
-    <Dialog onOpenChange={param.setState} open={param.state}>
-      <DialogContent aria-describedby="dialog content">
-        <DialogHeader className="font-bold">
-          <DialogTitle>Remove Tests</DialogTitle>
-        </DialogHeader>
-        <DialogDescription className="text-red-600	">
-          {REMOVE_TEST}
-        </DialogDescription>
-        <DialogFooter>
-          <Button onClick={resetButtonCLicked}>Remove Tests</Button>
+    <StateDialog
+      variant="delete"
+      state={param.state}
+      setState={param.setState}
+      headerComponent={
+        <>
+          <DialogHeader className="font-bold">
+            <DialogTitle>Remove Tests</DialogTitle>
+          </DialogHeader>
+          <DialogDescription className="text-destructive pt-2">
+            {REMOVE_TEST}
+          </DialogDescription>
+        </>
+      }
+      footerComponent={
+        <DialogFooter className="mt-4">
+          <Button variant={'destructive'} onClick={resetButtonCLicked}>
+            Remove Tests
+          </Button>
         </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      }
+    />
   )
 }

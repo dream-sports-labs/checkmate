@@ -46,13 +46,20 @@ export const SideDrawer = () => {
           </div>
         </div>
         <div className="h-3/4 flex flex-col">
-          <div className="mt-auto">
+          <div className="flex flex-col gap-2 mt-auto">
             <a
-              href="https://docs.google.com/your-doc-link-here" // Replace with your Google Docs link
+              href="https://checkmate.dreamsportslabs.com" // Replace with your Google Docs link
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-500 hover:text-pale-blue font-bold">
               Documentation
+            </a>
+            <a
+              href="https://github.com/dream-sports-labs/checkmate/issues/new?template=Blank+issue" // Replace with your Google Docs link
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:text-pale-blue font-bold">
+              Report Issues
             </a>
           </div>
         </div>

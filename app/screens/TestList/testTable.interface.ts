@@ -1,3 +1,5 @@
+import {ReactNode} from 'react'
+
 export interface ITestListTable {
   section: ReactNode
   sectionHierarchy: ReactNode

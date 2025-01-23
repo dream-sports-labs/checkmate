@@ -29,11 +29,6 @@ export const action = async ({request}: ActionFunctionArgs) => {
 
     const queryParam = await getRequestParams(request, LockRunRequestSchema)
 
-    const data = await RunsController.lockRun({
-      ...queryParam,
-      userId: user?.userId ?? 0,
-    })
-
     const runInfo = await RunsController.getRunInfo({runId: queryParam.runId})
 
     if (!runInfo?.length) {
@@ -49,6 +44,11 @@ export const action = async ({request}: ActionFunctionArgs) => {
         status: 200,
       })
     }
+
+    const data = await RunsController.lockRun({
+      ...queryParam,
+      userId: user?.userId ?? 0,
+    })
 
     return responseHandler({
       data: {

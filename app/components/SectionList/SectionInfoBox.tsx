@@ -23,6 +23,10 @@ export const SectionInfoBox = () => {
       description:
         'Clicking on a section or ">" will toggle its subsections view.',
     },
+    {
+      description:
+        'Tests belonging to any of the selected sections will be shown.',
+    },
   ]
 
   return (

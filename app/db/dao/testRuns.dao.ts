@@ -28,7 +28,6 @@ export type ICreateTestRuns = {
   runId: number
   testId: number
   projectId: number
-  updatedBy: number
 }
 
 interface IUpdateTestStatus {

@@ -5,6 +5,7 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 import {API, API_RESOLUTION_PATHS, CLOSED_API} from './app/routes/utilities/api'
 
 installGlobals()
+const isProd = process.env.NODE_ENV === 'production'
 
 export default defineConfig({
   plugins: [
@@ -34,6 +35,7 @@ export default defineConfig({
   },
   build: {
     target: 'es2022',
+    sourcemap: true,
   },
   server: {
     port: 1200,

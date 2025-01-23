@@ -5,7 +5,7 @@ import {
   MultipleUnifiedFilterProps,
   TestListFilter,
 } from '@components/MultipleUnifiedFilter/MultipleUnifiedFilter'
-import {StatusFilter} from '@components/MultipleUnifiedFilter/staticFiltersData'
+import {StatusFilterOptions} from '@components/MultipleUnifiedFilter/staticFiltersData'
 import {Lables, Platforms} from '@components/TestsFilter/SelectLabelsAndSquads'
 import {ToggleColumns} from '@components/ToggleColums'
 import {
@@ -28,7 +28,7 @@ import {DataTable} from '~/components/DataTable/DataTable'
 import {SearchBar} from '~/components/SearchBar/SearchBar'
 import {RunTestListResponseType} from '~/routes/project.$projectId.run.$runId._index'
 import {API} from '~/routes/utilities/api'
-import {ORG_ID} from '~/routes/utilities/constants'
+import {MED_PAGE_SIZE, ORG_ID} from '~/routes/utilities/constants'
 import {safeJsonParse} from '~/routes/utilities/utils'
 import {AddResultDialog} from '~/screens/RunTestList/AddResultDialog'
 import {Squad} from '~/screens/RunTestList/interfaces'
@@ -41,6 +41,7 @@ import {FilterNames} from '../TestList/testTable.interface'
 import {DownLoadTests} from './DownLoadTests'
 import {RunActions} from './RunActions'
 import {RunPageTitle} from './RunPageTitle'
+import {isChecked} from './utils'
 
 export default function RunTestList() {
   const resp = useLoaderData<RunTestListResponseType>()
@@ -57,7 +58,21 @@ export default function RunTestList() {
   const [testRunsMetaData, setTestRunsMetaData] =
     useState<TestRunSummary | null>(null)
   const [runData, setRunData] = useState<null | RunDetails>(null)
-  const [filter, setFilter] = useState<TestListFilter[]>([StatusFilter])
+  const [filter, setFilter] = useState<TestListFilter[]>([
+    {
+      filterName: FilterNames.Status,
+      filterOptions: StatusFilterOptions.map((status) => {
+        return {
+          optionName: status.optionName,
+          checked: isChecked({
+            searchParams,
+            filterName: 'statusArray',
+            filterId: status.optionName,
+          }),
+        }
+      }),
+    },
+  ])
   const [sorting, setSorting] = useState<SortingState>([])
   const [textSearch, setSearchString] = useState<string>(
     searchParams.get('textSearch') ?? '',
@@ -67,20 +82,6 @@ export default function RunTestList() {
   const orgId = ORG_ID
 
   useEffect(() => {
-    if (!searchParams?.get('page') || !searchParams?.get('pageSize')) {
-      setSearchParams(
-        (prev) => {
-          Number(searchParams?.get('page'))
-            ? null
-            : prev.set('page', (1).toString())
-          Number(searchParams?.get('pageSize'))
-            ? null
-            : prev.set('pageSize', (100).toString())
-          return prev
-        },
-        {replace: true},
-      )
-    }
     squadsFetcher.load(`/${API.GetSquads}?projectId=${projectId}`)
     labelsFetcher.load(`/${API.GetLabels}?projectId=${projectId}`)
     runDetailsFetcher.load(
@@ -90,22 +91,26 @@ export default function RunTestList() {
       `/${API.GetRunStateDetail}?runId=${params.runId}`,
     )
     platformFetcher.load(`/${API.GetPlatforms}?orgId=${orgId}`)
-  }, [])
 
-  const testRunsData = resp.data?.testsList || []
-
-  useEffect(() => {
     if (testRunsData.length === 0 && Number(searchParams?.get('page')) !== 1) {
+      resetPageNumber()
+    }
+
+    if (!searchParams?.get('page') || !searchParams?.get('pageSize')) {
       setSearchParams(
         (prev) => {
-          prev.set('page', '1')
+          searchParams?.get('page') ? null : prev.set('page', '1')
+          searchParams?.get('pageSize')
+            ? null
+            : prev.set('pageSize', MED_PAGE_SIZE.toString())
           return prev
         },
         {replace: true},
       )
-      resetPageNumber()
     }
   }, [])
+
+  const testRunsData = resp.data?.testsList || []
 
   const totalCount = resp.data.totalCount
 
@@ -155,7 +160,7 @@ export default function RunTestList() {
   const resetPageNumber = () => {
     setSearchParams(
       (prev) => {
-        prev.set('page', `${1}`)
+        prev.set('page', '1')
         return prev
       },
       {replace: true},
@@ -181,7 +186,11 @@ export default function RunTestList() {
                 return {
                   id: squad.squadId,
                   optionName: squad.squadName,
-                  checked: false,
+                  checked: isChecked({
+                    searchParams,
+                    filterName: 'squadIds',
+                    filterId: squad.squadId,
+                  }),
                 }
               }),
             },
@@ -206,7 +215,11 @@ export default function RunTestList() {
                 return {
                   id: label.labelId,
                   optionName: label.labelName,
-                  checked: false,
+                  checked: isChecked({
+                    searchParams,
+                    filterName: 'labelIds',
+                    filterId: label.labelId,
+                  }),
                 }
               }),
             },
@@ -231,7 +244,11 @@ export default function RunTestList() {
                 return {
                   id: platform.platformId,
                   optionName: platform.platformName,
-                  checked: false,
+                  checked: isChecked({
+                    searchParams,
+                    filterName: 'platformIds',
+                    filterId: platform.platformId,
+                  }),
                 }
               }),
             },
@@ -264,7 +281,7 @@ export default function RunTestList() {
           setSearchParams(
             (prev) => {
               prev.delete('squadIds')
-              prev.set('page', (1).toString())
+              prev.set('page', '1')
               return prev
             },
             {replace: true},
@@ -273,7 +290,7 @@ export default function RunTestList() {
           setSearchParams(
             (prev) => {
               prev.set('squadIds', JSON.stringify(selectedSquads))
-              prev.set('page', (1).toString())
+              prev.set('page', '1')
               return prev
             },
             {replace: true},
@@ -288,7 +305,7 @@ export default function RunTestList() {
           setSearchParams(
             (prev) => {
               prev.delete('labelIds')
-              prev.set('page', (1).toString())
+              prev.set('page', '1')
               return prev
             },
             {replace: true},
@@ -297,7 +314,7 @@ export default function RunTestList() {
           setSearchParams(
             (prev) => {
               prev.set('labelIds', JSON.stringify(selectedLabels))
-              prev.set('page', (1).toString())
+              prev.set('page', '1')
               return prev
             },
             {replace: true},
@@ -312,7 +329,7 @@ export default function RunTestList() {
           setSearchParams(
             (prev) => {
               prev.delete('platformIds')
-              prev.set('page', (1).toString())
+              prev.set('page', '1')
               return prev
             },
             {replace: true},
@@ -321,7 +338,7 @@ export default function RunTestList() {
           setSearchParams(
             (prev) => {
               prev.set('platformIds', JSON.stringify(selectedPlatforms))
-              prev.set('page', (1).toString())
+              prev.set('page', '1')
               return prev
             },
             {replace: true},
@@ -336,7 +353,7 @@ export default function RunTestList() {
           setSearchParams(
             (prev) => {
               prev.delete('statusArray')
-              prev.set('page', (1).toString())
+              prev.set('page', '1')
               return prev
             },
             {replace: true},
@@ -345,7 +362,7 @@ export default function RunTestList() {
           setSearchParams(
             (prev) => {
               prev.set('statusArray', JSON.stringify(selectedStatus))
-              prev.set('page', (1).toString())
+              prev.set('page', '1')
               return prev
             },
             {replace: true},

@@ -1,6 +1,7 @@
 export const ORG_ID = 1
 
 export const SMALL_PAGE_SIZE = 25
+export const MED_PAGE_SIZE = 100
 export const LARGE_PAGE_SIZE = 250
 
 export const LOGOUT_ERROR_MESSAGE = 'Authentication Error'

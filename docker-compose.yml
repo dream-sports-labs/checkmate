@@ -36,14 +36,13 @@ services:
       - .env
     environment:
       DB_URL: ${DOCKER_DB_URL}
-      NODE_ENV: ${NODE_ENV}
+      NODE_ENV: production
     ports:
       - 3000:3000
     networks:
       - checkmate-network
     command: >
       sh -c "yarn db:init && yarn build && yarn start"
-
 
 volumes:
   checkmate-mysql:

@@ -9,8 +9,9 @@ import { Card, CardGrid } from "@astrojs/starlight/components";
     title: "Checkmate - Simple, composable and effective state management",
     template: "splash",
     hero: {
-      title: "Checkmate",
-      tagline: "Streamlining Your Test Case Management",
+      title: "Streamline Your Test Case Management",
+      tagline:
+        "Empowering your testing pipeline with a feature-rich, Remix-powered platform offering reports and run management.",
       actions: [
         {
           text: "Get started",
@@ -22,21 +23,37 @@ import { Card, CardGrid } from "@astrojs/starlight/components";
   }}
 >
   <CardGrid>
-    <Card title="Features" icon="seti:default">
+    <Card title="Test Management" icon="seti:default">
       <ul class="list-inside">
-        <li>Project-level segregation of tests</li>
-        <li>Create Run</li>
-        <li>Manage Run</li>
-        <li>Download Reports</li>
-        <li>Role-Based Access Control (RBAC)</li>
+        <li>Organize tests with project-level segregation</li>
+        <li>Create and manage test runs effortlessly</li>
+        <li>Track and monitor test progress in real-time</li>
+        <li>Effortlessly migrate by uploading .csv's</li>
       </ul>
     </Card>
 
-    <Card title="APIs" icon="seti:default">
+    <Card title="Integration APIs" icon="seti:default">
       <ul class="list-inside">
         <li>Streamline the entire testing lifecycle</li>
-        <li>Integrate Checkmate with your testing systems</li>
-        <li>Create runs and update status</li>
+        <li>Integrate with your automation systems</li>
+        <li>Create and update test runs programmatically</li>
+      </ul>
+    </Card>
+
+    <Card title="Reporting & Analytics" icon="seti:default">
+      <ul class="list-inside">
+        <li>Generate detailed test run reports</li>
+        <li>Download and share results</li>
+        <li>Analyze test data for actionable insights</li>
+        <li>Download Tests in .csv format</li>
+      </ul>
+    </Card>
+
+    <Card title="Access Control & Security" icon="seti:default">
+      <ul class="list-inside">
+        <li>Role-Based Access Control (RBAC) for secure usage</li>
+        <li>Granular permissions for teams and individuals</li>
+        <li>Secure handling of sensitive test data</li>
       </ul>
     </Card>
   </CardGrid>

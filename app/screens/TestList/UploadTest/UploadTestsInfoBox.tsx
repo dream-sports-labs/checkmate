@@ -45,7 +45,7 @@ export const ImportTestInfoBox = () => {
         <a
           style={{color: 'rgb(37 99 235)', marginTop: '10px'}}
           href={
-            'https://dream11.atlassian.net/wiki/spaces/FE/pages/3514925149/Bulk+Addition+of+test+cases+to+chekmate'
+            'https://checkmate.dreamsportslabs.com/guides/tests/bulk-addition'
           }
           target="_blank"
           rel="noopener noreferrer">

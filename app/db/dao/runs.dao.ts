@@ -137,7 +137,6 @@ const RunsDao = {
             projectId: projectId,
             runId: runId,
             testId: testData,
-            updatedBy: createdBy,
           })
         }
 
