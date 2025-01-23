@@ -16,7 +16,7 @@ async function insertSquadsData() {
         projectId: PROJECT_ID,
       })
       .catch((e) => {
-        console.log(`Error in inserting squad ${squad}`, e)
+        console.log(`⛔️ Error in inserting squad ${squad}`, e)
       })
 
     // Push each insert promise into the array
@@ -25,7 +25,7 @@ async function insertSquadsData() {
 
   // Execute all insert promises concurrently
   await Promise.all(insertPromises)
-  console.log('SQUADS DATA INSERTED SUCCESSFULLY')
+  console.log('🚀  SQUADS DATA INSERTED SUCCESSFULLY')
 }
 
 // Execute the function and ensure the client connection is closed
@@ -34,6 +34,6 @@ insertSquadsData()
     client.end()
   })
   .catch((err) => {
-    console.error('Error during squad data insertion:', err)
+    console.error('⛔️ Error during squad data insertion:', err)
     client.end()
   })

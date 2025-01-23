@@ -42,10 +42,10 @@ for (let item of sectionsData) {
       })
       // console.log(`Inserted data for ${sectionName}`)
     } catch (e) {
-      console.log(`Error in inserting data for ${sectionName}`, e)
+      console.log(`⛔️ Error in inserting data for ${sectionName}`, e)
     }
   }
 }
 
-console.log('SECTIONS DATA INSERTED SUCCESSFULLY')
+console.log('🚀 SECTIONS DATA INSERTED SUCCESSFULLY')
 client.end()

@@ -33,6 +33,8 @@ export const ImportTestInfoBox = () => {
           <li>Description</li>
           <li>Additional Groups</li>
           <li>Automation Id</li>
+          <li>Section Description</li>
+          <li>Automation Status</li>
         </ul>
         <div className="text-xs flex flex-col mt-2 text-red-600">
           <span>*Make sure either all contain ID or none contains it</span>

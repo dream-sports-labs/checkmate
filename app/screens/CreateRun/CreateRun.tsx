@@ -63,9 +63,9 @@ export const CreateRun = (props: CreateRunProps) => {
   const [selectedFilterType, setSelectedFilterType] = useState<
     'and' | 'or' | null | undefined
   >('and')
-
+  const params = useParams()
   const navigate = useCustomNavigate()
-  const projectId = Number(useParams().projectId) ?? 0
+  const projectId = Number(params?.projectId) ?? 0
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

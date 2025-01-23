@@ -119,7 +119,13 @@ const RenderSections = memo(
                         <span className="text-xs truncate">{section.name}</span>
                       </div>
                     }
-                    content={<div className="text-sm">{section.name}</div>}
+                    content={
+                      <div className="text-sm">{`${
+                        parentSectionHeirarchy
+                          ? parentSectionHeirarchy + ' > '
+                          : ''
+                      }${section.name}`}</div>
+                    }
                   />
                 </div>
                 <div className="flex flex-row items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 absolute top-1/2 left-full transform -translate-y-1/2 ml-2">

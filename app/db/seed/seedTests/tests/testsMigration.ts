@@ -41,11 +41,8 @@ Papa.parse(csvFileContent, {
     for (const obj of jsonObj) {
       const test: any = {}
 
-      // console.log(obj)
-      // process.exit(1)
-
-      if (obj['Suite']) {
-        test['suite'] = obj['Suite']?.trim()
+      if (obj['Label']) {
+        test['label'] = obj['Label']?.trim()
       }
       if (obj['ID']) test['testId'] = Number(obj['ID'].match(/(\d+)/)[0])
       if (obj['Created By']) test['createdByName'] = obj['Created By']?.trim()

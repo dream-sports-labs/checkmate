@@ -17,7 +17,6 @@ export const TestRequestSchema = z.object({
   automationStatus: z.string().optional(),
   steps: z.string().optional().nullable(),
   preConditions: z.string().optional(),
-  testStatus: z.string().optional(),
   expectedResult: z.string().optional(),
   sectionName: z.string(),
   sectionHierarchy: z.string(),
