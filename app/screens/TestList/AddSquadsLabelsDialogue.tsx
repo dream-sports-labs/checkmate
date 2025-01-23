@@ -13,7 +13,7 @@ interface AddSquadsLabelsDialogueProps {
   handleSaveChanges: (value: string, description?: string) => void
 }
 
-export const AddProjectMetaData = ({
+export const AddSquadsLabelsDialogue = ({
   heading,
   handleSaveChanges,
 }: AddSquadsLabelsDialogueProps) => {

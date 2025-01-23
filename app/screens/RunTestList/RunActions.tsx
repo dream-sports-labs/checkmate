@@ -59,12 +59,12 @@ export const RunActions = React.memo(({table, runData}: IRunActions) => {
   const projectId = +(params['projectId'] ?? 0)
 
   const navigate = useCustomNavigate()
-  const [dd, setDD] = useState(false)
+  const [actionDD, setActionDD] = useState(false)
 
   const handleRunAction = (
     action: 'EDIT' | 'LOCK' | 'REMOVE TEST' | 'RESET RUN',
   ) => {
-    setDD(false)
+    setActionDD(false)
     if (action === 'LOCK') setLockRunDialog(true)
     else if (action === 'REMOVE TEST') {
       setRemoveTestDialogue(true)
@@ -112,12 +112,12 @@ export const RunActions = React.memo(({table, runData}: IRunActions) => {
 
   return (
     <div>
-      <DropdownMenu open={dd}>
+      <DropdownMenu open={actionDD} onOpenChange={setActionDD}>
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
             className="ml-auto"
-            onClick={() => setDD(true)}>
+            onClick={() => setActionDD(true)}>
             Actions
           </Button>
         </DropdownMenuTrigger>

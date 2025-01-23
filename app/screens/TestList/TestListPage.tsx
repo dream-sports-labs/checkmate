@@ -1,24 +1,15 @@
-import {getInitialSelectedSections} from '@components/SectionList/utils'
-import {Tooltip} from '@components/Tooltip/Tooltip'
 import {useCustomNavigate} from '@hooks/useCustomNavigate'
-import {PlusCircledIcon} from '@radix-ui/react-icons'
 import {useFetcher, useLocation, useParams} from '@remix-run/react'
-import {Button} from '@ui/button'
-import {Separator} from '@ui/separator'
 import {Skeleton} from '@ui/skeleton'
 import {useToast} from '@ui/use-toast'
-import {Upload} from 'lucide-react'
-import {MouseEvent, useEffect, useState} from 'react'
-import {useSearchParams} from 'react-router-dom'
+import {useEffect, useState} from 'react'
 import {Loader} from '~/components/Loader/Loader'
 import {API} from '~/routes/utilities/api'
-import {safeJsonParse} from '~/routes/utilities/utils'
-import {Popover, PopoverContent, PopoverTrigger} from '~/ui/popover'
 import {cn} from '~/ui/utils'
-import {DownLoadTests} from '../RunTestList/DownLoadTests'
-import {AddProjectMetaData} from './AddSquadsLabelsDialogue'
+import {ProjectAddition} from './ProjectAddition'
 import TestList from './TestList'
-import {createTestAddedMessage, throttle} from './utils'
+import {UploadDownloadButton} from './UploadDownloadButton'
+import {createTestAddedMessage} from './utils'
 
 export default function TestListPage() {
   const projectId = useParams().projectId ? Number(useParams().projectId) : 0
@@ -30,7 +21,6 @@ export default function TestListPage() {
   const navigate = useCustomNavigate()
   const saveChanges = useFetcher<any>()
   const createRun = useFetcher<any>()
-  const [searchParams, _] = useSearchParams()
 
   useEffect(() => {
     projectNameFetcher.load(`/${API.GetProjectDetail}?projectId=${projectId}`)
@@ -58,56 +48,6 @@ export default function TestListPage() {
       setProjectName(projectNameFetcher?.data?.data[0]?.projectName)
     }
   }, [projectNameFetcher.data])
-
-  const handleTestClick = (
-    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
-  ) => {
-    navigate(`/project/${projectId}/tests/createTest`, {}, e)
-  }
-
-  const handleSaveChangesLabels = (value: string) => {
-    const labels = value
-      .split(',')
-      .map((val) => val.trim())
-      .filter((val) => val !== '')
-    const postData = {labels, projectId}
-    saveChanges.submit(postData, {
-      method: 'POST',
-      action: `/${API.AddLabels}`,
-      encType: 'application/json',
-    })
-  }
-
-  const handleSaveChangesSquads = (value: string) => {
-    const squads = value
-      .split(',')
-      .map((val) => val.trim())
-      .filter((val) => val !== '')
-    const postData = {squads, projectId}
-    saveChanges.submit(postData, {
-      method: 'POST',
-      action: `/${API.AddSquads}`,
-      encType: 'application/json',
-    })
-  }
-
-  const handleSaveChangesRuns = (value: string, description?: string) => {
-    const data = {
-      runName: value,
-      runDescription: description ? description : null,
-      squadIds: safeJsonParse(searchParams.get('squadIds') as string),
-      labelIds: safeJsonParse(searchParams.get('labelIds') as string),
-      sectionIds: getInitialSelectedSections(searchParams),
-      projectId,
-      filterType: searchParams.get('filterType'),
-    }
-
-    createRun.submit(data, {
-      method: 'POST',
-      action: `/${API.AddRun}`,
-      encType: 'application/json',
-    })
-  }
 
   useEffect(() => {
     if (saveChanges.data?.error === null) {
@@ -154,61 +94,8 @@ export default function TestListPage() {
         )}
 
         <div className="flex flex-row">
-          <div className="flex flex-row border border-input bg-background shadow-sm rounded-md	w-20	h-8 justify-between ml-4 mr-2 px-2">
-            <Tooltip
-              anchor={
-                <Upload
-                  strokeWidth={1.5}
-                  size={20}
-                  className={'self-center cursor-pointer'}
-                  onClick={(e) =>
-                    navigate(`/project/${projectId}/uploadTests`, {}, e)
-                  }
-                />
-              }
-              content={'Upload Test'}
-            />
-
-            <Separator orientation="vertical" className="my-2 h-5" />
-
-            <DownLoadTests
-              style={{size: 20, strokeWidth: 1.5}}
-              className={'self-center cursor-pointer'}
-              tooltipText={'Download Tests'}
-              fetchUrl={`/${API.DownloadTests}?projectId=${projectId}&${searchParams}`}
-              fileName={`${projectName}-project`}
-            />
-          </div>
-
-          <Popover>
-            <PopoverTrigger>
-              <div className={cn('flex-row', 'flex', 'cursor-pointer')}>
-                <PlusCircledIcon
-                  strokeWidth={1.5}
-                  className={cn('size-8', 'mx-2')}
-                />
-              </div>
-            </PopoverTrigger>
-            <PopoverContent className="w-54">
-              <div className="flex flex-col gap-2">
-                <Button variant="outline" onClick={handleTestClick}>
-                  Test
-                </Button>
-                <AddProjectMetaData
-                  heading="Label"
-                  handleSaveChanges={handleSaveChangesLabels}
-                />
-                <AddProjectMetaData
-                  heading="Squad"
-                  handleSaveChanges={handleSaveChangesSquads}
-                />
-                <AddProjectMetaData
-                  heading="Run"
-                  handleSaveChanges={handleSaveChangesRuns}
-                />
-              </div>
-            </PopoverContent>
-          </Popover>
+          <UploadDownloadButton projectName={projectName ?? ''} />
+          <ProjectAddition />
         </div>
       </div>
       <div className={cn('h-5/6')}>

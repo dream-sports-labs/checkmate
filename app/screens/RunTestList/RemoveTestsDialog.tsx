@@ -11,7 +11,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@ui/dialog'
-import {toast} from '@ui/use-toast'
 import {useEffect} from 'react'
 import {REMOVE_TEST} from '~/constants'
 import {Tests} from './interfaces'
