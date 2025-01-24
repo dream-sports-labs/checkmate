@@ -41,7 +41,6 @@ import {isChecked} from '../RunTestList/utils'
 
 export default function TestList() {
   const resp: any = useLoaderData()
-  const {state} = useNavigation()
 
   const testsData = resp.data?.testData
   const testsCount = resp.data?.count?.count
@@ -527,8 +526,6 @@ export default function TestList() {
           }}
         />
       </div>
-
-      {state !== 'idle' ? <Loader /> : null}
     </div>
   )
 }

@@ -25,7 +25,6 @@ export const AddSquadsLabelsDialogue = ({
   const [value, setValue] = useState<string>('')
   const [description, setDescription] = useState<string>('')
 
-  console.log('-->>', state)
   return (
     <StateDialog
       variant={'add'}
