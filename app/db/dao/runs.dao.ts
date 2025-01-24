@@ -103,7 +103,7 @@ const RunsDao = {
         })
 
         const runId = addRunsResp[0].insertId
-        const requiredWhereClauses: any[] = [
+        const andWhereCluase: any[] = [
           eq(tests.projectId, projectId),
           eq(tests.status, 'Active'),
         ]
@@ -113,7 +113,7 @@ const RunsDao = {
           whereClauses.push(inArray(labelTestMap.labelId, labelIds))
 
         if (sectionIds && sectionIds.length > 0)
-          requiredWhereClauses.push(inArray(tests.sectionId, sectionIds))
+          andWhereCluase.push(inArray(tests.sectionId, sectionIds))
 
         if (squadIds && squadIds.length > 0)
           whereClauses.push(inArray(tests.squadId, squadIds))
@@ -124,9 +124,7 @@ const RunsDao = {
           .select({testId: tests.testId})
           .from(tests)
           .leftJoin(labelTestMap, eq(tests.testId, labelTestMap.testId))
-          .where(
-            and(and(...requiredWhereClauses), conditionType(...whereClauses)),
-          )
+          .where(and(and(...andWhereCluase), conditionType(...whereClauses)))
           .groupBy(tests.testId)
 
         const testIdsSet = new Set(testIds.map((x) => x.testId))

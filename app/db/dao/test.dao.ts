@@ -46,10 +46,11 @@ const TestsDao = {
       status = 'Active',
       sortBy,
       sortOrder,
+      platformIds,
     } = params
 
     try {
-      const requiredWhereClauses: any[] = [
+      const andWhereCluase: any[] = [
         eq(tests.projectId, projectId),
         eq(tests.status, status),
       ]
@@ -62,6 +63,13 @@ const TestsDao = {
           throw new Error('Empty labelIds provided', {
             cause: ErrorCause.INVALID_PARAMS,
           })
+      if (platformIds)
+        if (platformIds.length > 0)
+          whereClauses.push(inArray(tests.platformId, platformIds))
+        else
+          throw new Error('Empty platformIds provided', {
+            cause: ErrorCause.INVALID_PARAMS,
+          })
 
       if (squadIds)
         if (squadIds.length > 0)
@@ -72,7 +80,7 @@ const TestsDao = {
           })
 
       if (textSearch) {
-        requiredWhereClauses.push(
+        andWhereCluase.push(
           or(
             like(tests.testId, `%${textSearch}%`),
             like(tests.title, `%${textSearch.toLowerCase()}%`),
@@ -81,7 +89,7 @@ const TestsDao = {
       }
 
       if (sectionIds && sectionIds?.length)
-        requiredWhereClauses.push(inArray(tests.sectionId, sectionIds))
+        andWhereCluase.push(inArray(tests.sectionId, sectionIds))
 
       const conditionType = filterType === 'or' ? or : and
 
@@ -124,9 +132,7 @@ const TestsDao = {
           eq(tests.testCoveredById, testCoveredBy.testCoveredById),
         )
         .leftJoin(platform, eq(tests.platformId, platform.platformId))
-        .where(
-          and(and(...requiredWhereClauses), conditionType(...whereClauses)),
-        )
+        .where(and(and(...andWhereCluase), conditionType(...whereClauses)))
         .groupBy(tests.testId)
         .orderBy(orderByClause)
         .limit(pageSize)
@@ -153,15 +159,16 @@ const TestsDao = {
     status = 'Active',
     textSearch,
     sectionIds,
+    platformIds,
   }: ITestsCountController) {
     try {
-      const requiredWhereClauses: any[] = [
+      const andWhereCluase: any[] = [
         eq(tests.projectId, projectId),
         eq(tests.status, status),
       ]
 
       if (sectionIds && sectionIds.length > 0) {
-        requiredWhereClauses.push(inArray(tests.sectionId, sectionIds))
+        andWhereCluase.push(inArray(tests.sectionId, sectionIds))
       }
 
       let whereClauses: any[] = []
@@ -174,6 +181,14 @@ const TestsDao = {
             cause: ErrorCause.INVALID_PARAMS,
           })
 
+      if (platformIds)
+        if (platformIds.length > 0)
+          whereClauses.push(inArray(tests.platformId, platformIds))
+        else
+          throw new Error('Empty platformIds provided', {
+            cause: ErrorCause.INVALID_PARAMS,
+          })
+
       if (squadIds)
         if (squadIds.length > 0)
           whereClauses.push(inArray(tests.squadId, squadIds))
@@ -183,7 +198,7 @@ const TestsDao = {
           })
 
       if (textSearch) {
-        requiredWhereClauses.push(
+        andWhereCluase.push(
           or(
             like(tests.testId, `%${textSearch}%`),
             like(tests.title, `%${textSearch.toLowerCase()}%`),
@@ -199,9 +214,7 @@ const TestsDao = {
         })
         .from(tests)
         .leftJoin(labelTestMap, eq(tests.testId, labelTestMap.testId))
-        .where(
-          and(and(...requiredWhereClauses), conditionType(...whereClauses)),
-        )
+        .where(and(and(...andWhereCluase), conditionType(...whereClauses)))
         .groupBy(tests.testId)
 
       const countQuery = dbClient
@@ -531,7 +544,7 @@ const TestsDao = {
     } = params
 
     try {
-      const requiredWhereClauses: any[] = [
+      const andWhereCluase: any[] = [
         eq(tests.projectId, projectId),
         eq(tests.status, status),
       ]
@@ -555,7 +568,7 @@ const TestsDao = {
           })
 
       if (textSearch) {
-        requiredWhereClauses.push(
+        andWhereCluase.push(
           or(
             like(tests.testId, `%${textSearch}%`),
             like(tests.title, `%${textSearch.toLowerCase()}%`),
@@ -564,7 +577,7 @@ const TestsDao = {
       }
 
       if (sectionIds && sectionIds?.length)
-        requiredWhereClauses.push(inArray(tests.sectionId, sectionIds))
+        andWhereCluase.push(inArray(tests.sectionId, sectionIds))
 
       const conditionType = filterType === 'or' ? or : and
 
@@ -606,9 +619,7 @@ const TestsDao = {
           eq(tests.testCoveredById, testCoveredBy.testCoveredById),
         )
         .leftJoin(platform, eq(tests.platformId, platform.platformId))
-        .where(
-          and(and(...requiredWhereClauses), conditionType(...whereClauses)),
-        )
+        .where(and(and(...andWhereCluase), conditionType(...whereClauses)))
         .groupBy(tests.testId)
         .orderBy(orderByClause)
         .$dynamic()

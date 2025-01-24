@@ -23,6 +23,7 @@ import {TestStatusType} from '~/dataController/types'
 import {logger, LogType} from '~/utils/logger'
 import {dbClient} from '../client'
 import {errorHandling, sortingFunction} from './utils'
+import {ErrorCause} from '~/constants'
 
 export type ICreateTestRuns = {
   runId: number
@@ -50,6 +51,7 @@ export type ITestRunData = {
   sectionIds?: number[]
   assignedTo?: string
   priorityIds?: number[]
+  platformIds?: number[]
   automationStatusIds?: number[]
   pageSize: number
   page: number
@@ -77,30 +79,41 @@ const TestRunsDao = {
         sortOrder,
         filterType,
         labelIds,
+        platformIds,
       } = params
 
-      const requiredWhereClauses: any[] = [
+      const andWhereCluase: any[] = [
         eq(testRunMap.runId, runId),
         eq(testRunMap.isIncluded, true),
       ]
 
       const whereClauses: any[] = []
 
-      if (projectId)
-        requiredWhereClauses.push(eq(testRunMap.projectId, projectId))
+      if (projectId) andWhereCluase.push(eq(testRunMap.projectId, projectId))
 
       if (squadIds?.length) whereClauses.push(inArray(tests.squadId, squadIds))
 
-      if (labelIds?.length) {
-        whereClauses.push(inArray(labelTestMap.labelId, labelIds))
-      }
+      if (labelIds)
+        if (labelIds.length > 0)
+          whereClauses.push(inArray(labelTestMap.labelId, labelIds))
+        else
+          throw new Error('Empty labelIds provided', {
+            cause: ErrorCause.INVALID_PARAMS,
+          })
 
       if (statusArray?.length)
         whereClauses.push(inArray(testRunMap.status, statusArray))
 
       if (sectionIds?.length)
-        requiredWhereClauses.push(inArray(tests.sectionId, sectionIds))
+        andWhereCluase.push(inArray(tests.sectionId, sectionIds))
 
+      if (platformIds)
+        if (platformIds.length > 0)
+          whereClauses.push(inArray(tests.platformId, platformIds))
+        else
+          throw new Error('Empty platformIds provided', {
+            cause: ErrorCause.INVALID_PARAMS,
+          })
       if (priorityIds?.length)
         whereClauses.push(inArray(tests.priorityId, priorityIds))
 
@@ -110,7 +123,7 @@ const TestRunsDao = {
         )
 
       if (textSearch) {
-        requiredWhereClauses.push(
+        andWhereCluase.push(
           or(
             like(tests.testId, `%${textSearch.toLowerCase()}%`),
             like(tests.title, `%${textSearch.toLowerCase()}%`),
@@ -161,9 +174,7 @@ const TestRunsDao = {
         .leftJoin(platformTable, eq(tests.platformId, platformTable.platformId))
         .leftJoin(labelTestMap, eq(testRunMap.testId, labelTestMap.testId))
         .leftJoin(labels, eq(labelTestMap.labelId, labels.labelId))
-        .where(
-          and(and(...requiredWhereClauses), conditionType(...whereClauses)),
-        )
+        .where(and(and(...andWhereCluase), conditionType(...whereClauses)))
         .groupBy(testRunMap.testId)
         .orderBy(orderByClause)
         .limit(pageSize)
@@ -183,9 +194,7 @@ const TestRunsDao = {
           automationTable,
           eq(tests.automationStatusId, automationTable.automationStatusId),
         )
-        .where(
-          and(and(...requiredWhereClauses), conditionType(...whereClauses)),
-        )
+        .where(and(and(...andWhereCluase), conditionType(...whereClauses)))
         .groupBy(testRunMap.testId)
         .$dynamic()
 

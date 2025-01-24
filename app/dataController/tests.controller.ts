@@ -22,6 +22,7 @@ export interface ITestsController {
   labelIds?: number[]
   squadIds?: number[]
   sectionIds?: number[]
+  platformIds?: number[]
   page: number
   pageSize: number
   textSearch?: string
@@ -40,6 +41,7 @@ export interface ITestsCountController {
   status?: 'Active' | 'Archived' | 'Deleted'
   textSearch?: string
   sectionIds?: number[]
+  platformIds?: number[]
 }
 
 export interface IUpdateTests {

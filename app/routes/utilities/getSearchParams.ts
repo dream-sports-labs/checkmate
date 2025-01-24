@@ -33,6 +33,9 @@ const SearchParams = {
     const labelIds = searchParams.labelIds
       ? jsonParseWithError(searchParams.labelIds, 'labelIds')
       : undefined
+    const platformIds = searchParams.platformIds
+      ? jsonParseWithError(searchParams.platformIds, 'platformIds')
+      : undefined
     const page = Number(url.searchParams.get('page')) || 1
     const pageSize = Number(url.searchParams.get('pageSize')) || 250
     const filterType = searchParams.filterType ? searchParams.filterType : 'and'
@@ -69,6 +72,7 @@ const SearchParams = {
       sectionIds: sectionIds?.length ? sectionIds : undefined,
       sortBy,
       sortOrder: sortOrder as ITestRunData['sortOrder'],
+      platformIds,
     }
   },
 
@@ -113,6 +117,9 @@ const SearchParams = {
     const labelIds = searchParams.labelIds
       ? jsonParseWithError(searchParams.labelIds, 'labelIds')
       : undefined
+    const platformIds = searchParams.platformIds
+      ? jsonParseWithError(searchParams.platformIds, 'platformIds')
+      : undefined
     const page = Number(url.searchParams.get('page')) || 1
     const pageSize = Number(url.searchParams.get('pageSize')) || 100
     const filterType = searchParams.filterType ? searchParams.filterType : 'and'
@@ -151,6 +158,7 @@ const SearchParams = {
       })
 
     return {
+      platformIds,
       runId,
       projectId,
       statusArray,
