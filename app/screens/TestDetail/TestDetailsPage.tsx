@@ -11,6 +11,7 @@ import {InputLabels} from '../TestList/InputLabels'
 import {LinkContent, OptionContent, TextContent} from './Contents'
 import {TestStatusHistroyDialog} from './TestStatusHistroyDialog'
 import {shortDate2} from '~/utils/getDate'
+import {Tooltip} from '@components/Tooltip/Tooltip'
 
 export default function TestDetailsPage({
   pageType,
@@ -88,23 +89,9 @@ export default function TestDetailsPage({
             <InputLabels labelName={'Id'} />
             <div style={infoTextStyle}>{data?.testId}</div>
           </div>
-          {data?.createdBy && (
-            <div className="w-full items-center text-nowrap">
-              <InputLabels labelName={'Created By'} />
-              <div style={infoTextStyle}>{data?.createdBy}</div>
-              <div style={infoTextStyle}>{shortDate2(data?.createdOn)}</div>
-            </div>
-          )}
-          {data?.updatedBy && (
-            <div className="w-full items-center text-nowrap">
-              <InputLabels labelName={'Updated By'} />
-              <div style={infoTextStyle}>{data?.updatedBy}</div>
-              <div style={infoTextStyle}>{shortDate2(data?.updatedOn)}</div>
-            </div>
-          )}
         </div>
         <div className="w-full items-center">
-          <InputLabels className="" labelName={'Title'} />
+          <InputLabels labelName={'Title'} />
           <div style={infoTextStyle}>{data?.title}</div>
         </div>
         {data?.description && (
@@ -116,6 +103,26 @@ export default function TestDetailsPage({
         <div className="w-full items-center">
           <InputLabels labelName={'Section'} />
           <div style={infoTextStyle}>{data?.sectionHierarchy}</div>
+        </div>
+        <div className="flex flex-row gap-12">
+          {data?.createdBy && (
+            <div className="w-full items-center text-nowrap">
+              <InputLabels labelName={'Created By'} />
+              <Tooltip
+                anchor={<div style={infoTextStyle}>{data?.createdBy}</div>}
+                content={shortDate2(data?.createdOn)}
+              />
+            </div>
+          )}
+          {data?.updatedBy && (
+            <div className="w-full items-center text-nowrap">
+              <InputLabels labelName={'Updated By'} />
+              <Tooltip
+                anchor={<div style={infoTextStyle}>{data?.updatedBy}</div>}
+                content={shortDate2(data?.updatedOn)}
+              />
+            </div>
+          )}
         </div>
       </div>
       <InputsSpacing />

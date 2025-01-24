@@ -79,13 +79,13 @@ export const LinkContent = ({
   data: string | undefined
   heading: string
 }) => {
-  const infoTextStyle = {fontSize: 14, color: 'rgb(31 41 55)', paddingTop: 2}
+  const infoTextStyle = {fontSize: 14, color: 'rgb(37 99 235)', paddingTop: 9}
   return (
     data && (
       <div className="flex flex-col">
         <InputLabels labelName={heading} />
         <a
-          style={{...infoTextStyle, color: 'rgb(37 99 235)'}}
+          style={{...infoTextStyle}}
           href={data}
           target="_blank"
           rel="noopener noreferrer">
