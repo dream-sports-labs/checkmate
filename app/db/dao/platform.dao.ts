@@ -1,4 +1,7 @@
-import {IGetAllPlatform} from '@controllers/platform.controller'
+import {
+  ICreatePlatform,
+  IGetAllPlatform,
+} from '@controllers/platform.controller'
 import {platform} from '@schema/tests'
 import {eq} from 'drizzle-orm/sql'
 import {logger, LogType} from '~/utils/logger'
@@ -17,6 +20,19 @@ const PlatformDao = {
       logger({
         type: LogType.SQL_ERROR,
         tag: 'Error while fetching platforms',
+        message: error,
+      })
+      errorHandling(error)
+    }
+  },
+  createPlatform: async (param: ICreatePlatform) => {
+    try {
+      return await dbClient.insert(platform).values(param)
+    } catch (error: any) {
+      // FOR DEV PURPOSES
+      logger({
+        type: LogType.SQL_ERROR,
+        tag: 'Error while creating platform',
         message: error,
       })
       errorHandling(error)

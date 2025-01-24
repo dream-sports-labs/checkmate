@@ -14,14 +14,16 @@ import {ORG_ID} from '@route/utils/constants'
 import {APP_NAME} from '~/constants'
 import {Button} from '@ui/button'
 import {useCustomNavigate} from '@hooks/useCustomNavigate'
+import {useState} from 'react'
 
 export const SideDrawer = () => {
   const orgId = ORG_ID
   const navigate = useCustomNavigate()
+  const [sideDrawerOpen, setSideDrawerOpen] = useState<boolean>(false)
 
   return (
-    <Sheet key="left">
-      <SheetTrigger>
+    <Sheet open={sideDrawerOpen} onOpenChange={setSideDrawerOpen} key="left">
+      <SheetTrigger onClick={() => setSideDrawerOpen(true)}>
         <img
           className="flex items-center space-x-4 cursor-pointer my-2"
           src={logo}
@@ -42,6 +44,7 @@ export const SideDrawer = () => {
             <SheetClose asChild>
               <Button
                 onClick={(e) => {
+                  setSideDrawerOpen(false)
                   navigate(`/projects?orgId=${orgId}&page=1&pageSize=10`, {}, e)
                 }}
                 className="font-semibold p-0"
@@ -54,6 +57,7 @@ export const SideDrawer = () => {
         <div className="h-3/4 flex flex-col">
           <div className="flex flex-col gap-2 mt-auto">
             <a
+              onClick={() => setSideDrawerOpen(false)}
               href="https://checkmate.dreamsportslabs.com" // Replace with your Google Docs link
               target="_blank"
               rel="noopener noreferrer"
@@ -61,6 +65,7 @@ export const SideDrawer = () => {
               Documentation
             </a>
             <a
+              onClick={() => setSideDrawerOpen(false)}
               href="https://discord.com/channels/1317172052179943504/1329754684730380340" // Replace with your Google Docs link
               target="_blank"
               rel="noopener noreferrer"
@@ -68,6 +73,7 @@ export const SideDrawer = () => {
               Ask Question
             </a>
             <a
+              onClick={() => setSideDrawerOpen(false)}
               href="https://github.com/dream-sports-labs/checkmate/issues/new?template=Blank+issue" // Replace with your Google Docs link
               target="_blank"
               rel="noopener noreferrer"
