@@ -30,27 +30,22 @@ enum Actions {
 const ACTION_ITEMS: {
   id: number
   action: Actions
-  icon: ReactElement
 }[] = [
   {
     id: 1,
     action: Actions.AddTest,
-    icon: <Button variant="outline">{Actions.AddTest}</Button>,
   },
   {
     id: 2,
     action: Actions.AddLabel,
-    icon: <Button variant="outline">{Actions.AddLabel}</Button>,
   },
   {
     id: 3,
     action: Actions.AddSquad,
-    icon: <Button variant="outline">{Actions.AddSquad}</Button>,
   },
   {
     id: 4,
     action: Actions.CreateRun,
-    icon: <Button variant="outline">{Actions.CreateRun}</Button>,
   },
 ]
 
@@ -167,13 +162,18 @@ export const ProjectActions = () => {
             />
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
+        <DropdownMenuContent className="w-fit">
           {ACTION_ITEMS.map((action) => (
             <DropdownMenuItem
               onSelect={(e: any) => handleActionClick(action.action, e)}
               key={action.id}
               className="capitalize">
-              <span className={'mr-2 mx-2'}>{action.icon}</span>
+              <Button
+                variant={'outline'}
+                size={'sm'}
+                className={'w-full text-sm font-semibold'}>
+                {action.action}
+              </Button>
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
