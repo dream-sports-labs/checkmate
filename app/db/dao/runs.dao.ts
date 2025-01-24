@@ -91,6 +91,7 @@ const RunsDao = {
     squadIds,
     filterType,
     sectionIds,
+    platformIds,
   }: ICreateRuns) => {
     try {
       const resp = await dbClient.transaction(async (trx) => {
@@ -109,13 +110,16 @@ const RunsDao = {
         ]
 
         let whereClauses: any[] = []
-        if (labelIds && labelIds.length > 0)
+        if (labelIds?.length)
           whereClauses.push(inArray(labelTestMap.labelId, labelIds))
 
-        if (sectionIds && sectionIds.length > 0)
+        if (platformIds?.length)
+          whereClauses.push(inArray(tests.platformId, platformIds))
+
+        if (sectionIds?.length)
           andWhereCluase.push(inArray(tests.sectionId, sectionIds))
 
-        if (squadIds && squadIds.length > 0)
+        if (squadIds?.length)
           whereClauses.push(inArray(tests.squadId, squadIds))
 
         const conditionType = filterType === 'or' ? or : and
@@ -127,7 +131,7 @@ const RunsDao = {
           .where(and(and(...andWhereCluase), conditionType(...whereClauses)))
           .groupBy(tests.testId)
 
-        const testIdsSet = new Set(testIds.map((x) => x.testId))
+        const testIdsSet = new Set(testIds.map((test) => test.testId))
         const testRunsData: ICreateTestRuns[] = []
 
         for (let testData of testIdsSet) {

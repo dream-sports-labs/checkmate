@@ -21,6 +21,7 @@ export interface ICreateRuns {
   sectionIds?: number[]
   createdBy: number
   filterType?: 'and' | 'or'
+  platformIds?: number[]
 }
 
 export interface IUpdateRun {
@@ -39,8 +40,7 @@ const RunsController = {
     RunsDao.deleteRun(param),
   lockRun: (param: {runId: number; projectId: number; userId: number}) =>
     RunsDao.lockRun(param),
-  updateRun: (param: IUpdateRun) =>
-    RunsDao.updateRun(param),
+  updateRun: (param: IUpdateRun) => RunsDao.updateRun(param),
 }
 
 export default RunsController

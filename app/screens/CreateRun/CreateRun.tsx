@@ -27,6 +27,7 @@ import {SubmitHandler, useForm} from 'react-hook-form'
 import {z} from 'zod'
 import {Squad} from '~/screens/RunTestList/interfaces'
 import {FILTER_TEST_CASES, INCLUDE_ALL_TEST_CASES} from '~/constants'
+import {Skeleton} from '@ui/skeleton'
 
 const formSchema = z.object({
   runName: z
@@ -53,12 +54,14 @@ export const CreateRun = (props: CreateRunProps) => {
   const updateRunFetcher = useFetcher<any>()
   const squadsFetcher = useFetcher<{data: Squad[]}>()
   const labelsFetcher = useFetcher<{data: Lables[]}>()
+  const projectNameFetcher = useFetcher<any>()
 
   const [testsCount, setTestsCount] = useState<number | undefined>(undefined)
   const [testCreationError, setTestCreationError] = useState<string>()
 
   const [squadsList, setSquadsList] = useState<IDropdownMenuCheckboxes[]>([])
   const [labelsList, setLabelsList] = useState<IDropdownMenuCheckboxes[]>([])
+  const [projectName, setProjectName] = useState<string | null>(null)
 
   const [selectedFilterType, setSelectedFilterType] = useState<
     'and' | 'or' | null | undefined
@@ -81,7 +84,14 @@ export const CreateRun = (props: CreateRunProps) => {
   useEffect(() => {
     squadsFetcher.load(`/${API.GetSquads}/?projectId=${projectId}`)
     labelsFetcher.load(`/${API.GetLabels}?projectId=${projectId}`)
+    projectNameFetcher.load(`/${API.GetProjectDetail}?projectId=${projectId}`)
   }, [])
+
+  useEffect(() => {
+    if (projectNameFetcher?.data?.data[0]?.projectName) {
+      setProjectName(projectNameFetcher?.data?.data[0]?.projectName)
+    }
+  }, [projectNameFetcher.data])
 
   useEffect(() => {
     if (testCreationError) {
@@ -276,9 +286,13 @@ export const CreateRun = (props: CreateRunProps) => {
           'shadow-lg shadow-gray-200	',
         )}>
         <div className={cn('flex', 'items-center', 'py-4')}>
-          <span className={cn('flex', 'text-2xl', 'center')}>
-            {'ProjectName'}
-          </span>
+          {projectName ? (
+            <span className={cn('flex', 'text-2xl', 'center')}>
+              Add Run in {projectName}
+            </span>
+          ) : (
+            <Skeleton className={cn('w-3/6', 'h-8')} />
+          )}
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -296,15 +310,11 @@ export const CreateRun = (props: CreateRunProps) => {
                     <FormControl id="run-input">
                       <>
                         <Textarea
-                          // className={cn('min-h-[36px]', 'resize-none')}
                           style={{
-                            // backgroundColor: 'red',
                             height: 200,
                             maxHeight: '2px',
                             resize: 'none',
-                            // fontSize: '1rem',
                           }}
-                          // defaultValue={'UI Testing'}
                           placeholder="Run Name"
                           {...field}
                         />

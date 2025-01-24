@@ -30,7 +30,7 @@ import {Squad} from '../RunTestList/interfaces'
 import {AddProperty, PropertyListFilter} from './AddPropertyDialog'
 import {DeleteTests} from './DeleteTests'
 import {TestListColumnConfig} from './TestColumnConfig'
-import {TestListFilters} from './TestListFilters'
+import {TestsFilters} from './TestListFilters'
 import {
   AutomationStatusData,
   EditableProperties,
@@ -537,7 +537,7 @@ export default function TestList() {
           propertiesArray={editableProperty}
         />
 
-        <TestListFilters
+        <TestsFilters
           filter={filter}
           setFilter={setFilter}
           onFilterApply={onFilterApply}

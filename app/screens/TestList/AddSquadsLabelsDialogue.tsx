@@ -82,8 +82,8 @@ export const AddSquadsLabelsDialogue = ({
             />
             <div className="text-xs flex flex-col mt-4 text-red-600">
               <span>
-                *Run will be created with applied[Squads, Labels, Sections]
-                filter.
+                *Run will be created with applied[Squads, Labels, Sections,
+                Platform] filter.
               </span>
             </div>
           </div>

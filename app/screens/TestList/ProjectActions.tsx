@@ -138,6 +138,7 @@ export const ProjectActions = () => {
       runDescription: description ? description : null,
       squadIds: safeJsonParse(searchParams.get('squadIds') as string),
       labelIds: safeJsonParse(searchParams.get('labelIds') as string),
+      platformIds: safeJsonParse(searchParams.get('platformIds') as string),
       sectionIds: getInitialSelectedSections(searchParams),
       projectId,
       filterType: searchParams.get('filterType'),

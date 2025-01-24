@@ -36,7 +36,7 @@ import {RunMetaData} from '~/screens/RunTestList/RunMetaData'
 import {RunTestListColumnConfig} from '~/screens/RunTestList/RunTestListColumnConfig'
 import {Skeleton} from '~/ui/skeleton'
 import {cn} from '~/ui/utils'
-import {TestListFilters} from '../TestList/TestListFilters'
+import {TestsFilters} from '../TestList/TestListFilters'
 import {FilterNames} from '../TestList/testTable.interface'
 import {DownLoadTests} from './DownLoadTests'
 import {RunActions} from './RunActions'
@@ -539,7 +539,7 @@ export default function RunTestList() {
             />
           )}
 
-          <TestListFilters
+          <TestsFilters
             filter={filter}
             setFilter={setFilter}
             onFilterApply={onFilterApply}

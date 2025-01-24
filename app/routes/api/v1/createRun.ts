@@ -20,6 +20,7 @@ const CreateRunRequestSchema = z.object({
   squadIds: z.array(z.number()).optional(),
   sectionIds: z.array(z.number()).optional(),
   filterType: z.enum(['and', 'or']).optional().nullable(),
+  platformIds: z.array(z.number()).optional(),
 })
 
 export type CreateRunRequestAPIType = z.infer<typeof CreateRunRequestSchema>
