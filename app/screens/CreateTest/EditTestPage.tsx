@@ -38,9 +38,7 @@ export default function EditTestPage({
   source: 'testDetail' | 'testList' | 'addTest'
 }) {
   const projectId = Number(useParams().projectId)
-
   const testId = Number(useParams().testId)
-
   const squadsFetcher = useFetcher<{data: Squad[]}>()
   const labelsFetcher = useFetcher<{data: Lables[]}>()
   const sectionFetcher = useFetcher<{data: Sections[]}>()
@@ -51,9 +49,7 @@ export default function EditTestPage({
   const testCoveredByFetcher = useFetcher<{data: TestCoveredBy[]}>()
   const testDetailsFetcher = useFetcher<{data: TestDetailsFormDataValue}>()
   const [isAddAndNext, setIsAddAndNext] = useState(false)
-
   const orgId = ORG_ID
-
   const navigate = useCustomNavigate()
 
   useEffect(() => {
@@ -93,55 +89,65 @@ export default function EditTestPage({
 
   useEffect(() => {
     if (testDetailsFetcher.data) {
-      const sectionId =
-        sectionFetcher.data?.data?.find((section) => {
-          return (
-            section.sectionName === testDetailsFetcher.data?.data.section &&
-            section.sectionHierarchy ===
-              testDetailsFetcher.data?.data.sectionHierarchy
-          )
-        })?.sectionId || 0
-      const squadId =
-        squadsFetcher.data?.data?.find((squad) => {
-          return squad.squadName === testDetailsFetcher.data?.data.squad
-        })?.squadId ?? null
-      const priorityId =
-        priorityFetcher.data?.data?.find(
-          (priority) =>
-            priority.priorityName === testDetailsFetcher.data?.data.priority,
-        )?.priorityId ?? 0
+      const sectionId = formData.sectionId
+        ? formData.sectionId
+        : sectionFetcher.data?.data?.find((section) => {
+            return (
+              section.sectionName === testDetailsFetcher.data?.data.section &&
+              section.sectionHierarchy ===
+                testDetailsFetcher.data?.data.sectionHierarchy
+            )
+          })?.sectionId || 0
+      const squadId = formData.squadId
+        ? formData.squadId
+        : squadsFetcher.data?.data?.find((squad) => {
+            return squad.squadName === testDetailsFetcher.data?.data.squad
+          })?.squadId ?? null
+      const priorityId = formData.priorityId
+        ? formData.priorityId
+        : priorityFetcher.data?.data?.find(
+            (priority) =>
+              priority.priorityName === testDetailsFetcher.data?.data.priority,
+          )?.priorityId ?? 0
 
-      const automationStatusId =
-        automationStatusFetcher.data?.data?.find(
-          (automationStatus) =>
-            automationStatus.automationStatusName ===
-            testDetailsFetcher.data?.data.automationStatus,
-        )?.automationStatusId || null
+      const automationStatusId = formData.automationStatusId
+        ? formData.automationStatusId
+        : automationStatusFetcher.data?.data?.find(
+            (automationStatus) =>
+              automationStatus.automationStatusName ===
+              testDetailsFetcher.data?.data.automationStatus,
+          )?.automationStatusId || null
 
-      const platformId =
-        platformFetcher.data?.data?.find(
-          (platform) =>
-            platform.platformName === testDetailsFetcher.data?.data.platform,
-        )?.platformId ?? 0
+      const platformId = formData.platformId
+        ? formData.platformId
+        : platformFetcher.data?.data?.find(
+            (platform) =>
+              platform.platformName === testDetailsFetcher.data?.data.platform,
+          )?.platformId ?? 0
 
-      const testCoveredById =
-        testCoveredByFetcher.data?.data?.find(
-          (testCoveredBy) =>
-            testCoveredBy.testCoveredByName ===
-            testDetailsFetcher.data?.data.testCoveredBy,
-        )?.testCoveredById ?? null
+      const testCoveredById = formData.testCoveredById
+        ? formData.testCoveredById
+        : testCoveredByFetcher.data?.data?.find(
+            (testCoveredBy) =>
+              testCoveredBy.testCoveredByName ===
+              testDetailsFetcher.data?.data.testCoveredBy,
+          )?.testCoveredById ?? null
       const labelNameArray =
         testDetailsFetcher.data?.data.labelNames?.split(',')
-      const labelIdArray = labelsFetcher.data?.data
+      const labelIdArray = formData.labelIds
+        ? formData.labelIds
+        : labelsFetcher.data?.data
         ? labelsFetcher.data.data
             .filter((label) => labelNameArray?.includes(label.labelName))
             .map((label) => label.labelId)
         : []
 
-      const typeId =
-        typeFetcher.data?.data?.find(
-          (type) => type.typeName === testDetailsFetcher.data?.data.type,
-        )?.typeId ?? null
+      const typeId = formData.typeId
+        ? formData.typeId
+        : typeFetcher.data?.data?.find(
+            (type) => type.typeName === testDetailsFetcher.data?.data.type,
+          )?.typeId ?? null
+
       setFormData({
         title: testDetailsFetcher.data?.data?.title ?? '',
         preConditions: testDetailsFetcher.data?.data?.preConditions ?? null,

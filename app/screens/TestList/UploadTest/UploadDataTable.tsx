@@ -70,7 +70,7 @@ export const UploadDataTable = ({data}: {data: any[]}) => {
 
   return (
     <div className="flex flex-grow flex-col h-full">
-      <ToggleColumns table={table} />
+      <ToggleColumns containerClassName={'w-28 mb-1'} table={table} />
       <div className="flex-grow overflow-auto max-h-full">
         <DataTable
           table={table}

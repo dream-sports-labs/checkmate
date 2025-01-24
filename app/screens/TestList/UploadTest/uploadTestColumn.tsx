@@ -9,11 +9,9 @@ export const UploadTestTableColumn: ColumnDef<any>[] = [
     header: () => (
       <HeaderComponent heading={TestListingColumns.testId} position={'left'} />
     ),
-    cell: ({row}) => (
-      <div className="flex flex-grow text-left">
-        {row.original.ID?.match(/(\d+)/)?.[0] ?? ''}
-      </div>
-    ),
+    cell: ({row}) => {
+      return <div className="flex flex-grow text-left">{row.original?.ID}</div>
+    },
   },
   {
     accessorKey: TestListingColumns.title,
@@ -34,47 +32,6 @@ export const UploadTestTableColumn: ColumnDef<any>[] = [
       )
     },
     enableHiding: false,
-  },
-  {
-    accessorKey: TestListingColumns.steps,
-    header: () => (
-      <HeaderComponent heading={TestListingColumns.steps} position={'left'} />
-    ),
-    cell: ({row}) => (
-      <Tooltip
-        anchor={
-          <div className="text-center text-xs max-w-28 truncate">
-            {row.original.Steps ? row.original.Steps : '-'}
-          </div>
-        }
-        content={row.original.Steps ? row.original.Steps : '-'}
-      />
-    ),
-  },
-  {
-    accessorKey: TestListingColumns.expectedResult,
-    header: () => (
-      <HeaderComponent
-        heading={TestListingColumns.expectedResult}
-        position={'left'}
-      />
-    ),
-    cell: ({row}) => (
-      <Tooltip
-        anchor={
-          <div className="text-center text-xs max-w-28 truncate min-w-20">
-            {row.original['Expected Result']
-              ? row.original['Expected Result']
-              : '-'}
-          </div>
-        }
-        content={
-          row.original['Expected Result']
-            ? row.original['Expected Result']
-            : '-'
-        }
-      />
-    ),
   },
   {
     accessorKey: TestListingColumns.section,
@@ -146,6 +103,47 @@ export const UploadTestTableColumn: ColumnDef<any>[] = [
         </span>
       )
     },
+  },
+  {
+    accessorKey: TestListingColumns.steps,
+    header: () => (
+      <HeaderComponent heading={TestListingColumns.steps} position={'left'} />
+    ),
+    cell: ({row}) => (
+      <Tooltip
+        anchor={
+          <div className="text-center text-xs max-w-28 truncate">
+            {row.original.Steps ? row.original.Steps : '-'}
+          </div>
+        }
+        content={row.original.Steps ? row.original.Steps : '-'}
+      />
+    ),
+  },
+  {
+    accessorKey: TestListingColumns.expectedResult,
+    header: () => (
+      <HeaderComponent
+        heading={TestListingColumns.expectedResult}
+        position={'left'}
+      />
+    ),
+    cell: ({row}) => (
+      <Tooltip
+        anchor={
+          <div className="text-center text-xs max-w-28 truncate min-w-20">
+            {row.original['Expected Result']
+              ? row.original['Expected Result']
+              : '-'}
+          </div>
+        }
+        content={
+          row.original['Expected Result']
+            ? row.original['Expected Result']
+            : '-'
+        }
+      />
+    ),
   },
   {
     accessorKey: TestListingColumns.platform,

@@ -54,12 +54,27 @@ export const RunActions = React.memo(({table, runData}: IRunActions) => {
   const [resetRunDialog, setResetRunDialog] = useState<boolean>(false)
   const [lockRunDialog, setLockRunDialog] = useState<boolean>(false)
   const [removeTestDialogue, setRemoveTestDialogue] = useState<boolean>(false)
-
   const params = useParams()
   const projectId = +(params['projectId'] ?? 0)
-
   const navigate = useCustomNavigate()
   const [actionDD, setActionDD] = useState<boolean>(false)
+  const [apiResponse, setApiResponse] = useState<{
+    success: boolean
+    message: string
+  } | null>(null)
+  useEffect(() => {
+    if (apiResponse && apiResponse?.success) {
+      toast({
+        variant: 'success',
+        description: apiResponse?.message,
+      })
+    } else if (apiResponse && !apiResponse?.success) {
+      toast({
+        variant: 'destructive',
+        description: apiResponse?.message,
+      })
+    }
+  }, [apiResponse])
 
   const handleRunAction = (
     action: 'EDIT' | 'LOCK' | 'REMOVE TEST' | 'RESET RUN',
@@ -90,25 +105,6 @@ export const RunActions = React.memo(({table, runData}: IRunActions) => {
       </DropdownMenuItem>
     ))
   }, [table.getIsSomePageRowsSelected(), table.getIsAllRowsSelected()])
-
-  const [apiResponse, setApiResponse] = useState<{
-    success: boolean
-    message: string
-  } | null>(null)
-
-  useEffect(() => {
-    if (apiResponse && apiResponse?.success) {
-      toast({
-        variant: 'success',
-        description: apiResponse?.message,
-      })
-    } else if (apiResponse && !apiResponse?.success) {
-      toast({
-        variant: 'destructive',
-        description: apiResponse?.message,
-      })
-    }
-  }, [apiResponse])
 
   return (
     <div>

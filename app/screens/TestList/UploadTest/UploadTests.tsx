@@ -181,10 +181,11 @@ export default function UploadTests() {
       </div>
       {data.length ? (
         <>
-          <div className="flex  min-w-fit mb-4 ">
-            <span className="self-center">{`Total number of test cases: ${data.length}`}</span>
+          <div className="flex  min-w-fit mb-4 gap-2">
+            <span className="self-center text-nowrap font-semibold">{`Total number of test cases:`}</span>
+            <span className="self-center text-nowrap text-blue-700 font-bold">{` ${data.length}`}</span>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="labels" className="text-right">
+              <Label htmlFor="labels" className="text-right font-semibold">
                 Labels
               </Label>
               <DropdownMenuCheckboxes

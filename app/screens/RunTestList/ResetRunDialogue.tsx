@@ -22,7 +22,6 @@ export const ResetRunsDialogue = (param: {
 }) => {
   const params = useParams()
   const projectId = +(params['projectId'] ?? 0)
-
   const resetRunFetcher = useFetcher<any>()
 
   const resetButtonCLicked = () => {
