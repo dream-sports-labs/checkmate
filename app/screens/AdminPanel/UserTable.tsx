@@ -1,7 +1,7 @@
 import {GetAllUsersResponseType} from '@api/getAllUser'
 import {DataTable} from '@components/DataTable/DataTable'
 import {useLoaderData, useSearchParams} from '@remix-run/react'
-import {SMALL_PAGE_SIZE} from '@route/utils/constants'
+import {MED_PAGE_SIZE} from '@route/utils/constants'
 import {
   getCoreRowModel,
   getPaginationRowModel,
@@ -30,7 +30,7 @@ export default function UserTable() {
             : prev.set('page', (1).toString())
           Number(searchParams?.get('pageSize'))
             ? null
-            : prev.set('pageSize', SMALL_PAGE_SIZE.toString())
+            : prev.set('pageSize', MED_PAGE_SIZE.toString())
           return prev
         },
         {replace: true},

@@ -5,7 +5,7 @@ import {
 } from '@controllers/tests.controller'
 import {ITestRunData} from '@dao/testRuns.dao'
 import {ErrorCause} from '~/constants'
-import {SMALL_PAGE_SIZE} from './constants'
+import {MED_PAGE_SIZE} from './constants'
 import {
   checkForProjectId,
   checkForRunId,
@@ -203,7 +203,7 @@ const SearchParams = {
   getAllUsers: ({params, request}: ISearchParams) => {
     const url = new URL(request.url)
     const page = Number(url.searchParams.get('page')) || 1
-    const pageSize = Number(url.searchParams.get('pageSize')) || SMALL_PAGE_SIZE
+    const pageSize = Number(url.searchParams.get('pageSize')) || MED_PAGE_SIZE
     const textSearch = url.searchParams.get('textSearch') || ''
     const userRoles = url.searchParams.get('userRoles')
       ? jsonParseWithError(url.searchParams.get('userRoles'), 'userRoles')

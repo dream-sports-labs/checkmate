@@ -1,25 +1,27 @@
-import {Link, useLocation, useParams} from '@remix-run/react'
-
+import {useLocation, useParams} from '@remix-run/react'
+import {useCustomNavigate} from '@hooks/useCustomNavigate'
+import {LARGE_PAGE_SIZE, ORG_ID, SMALL_PAGE_SIZE} from '@route/utils/constants'
+import {useState} from 'react'
+import {APP_NAME} from '~/constants'
 import {Separator} from '~/ui/separator'
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from '~/ui/sheet'
 import logo from '../../assets/logo.png'
-import {ORG_ID} from '@route/utils/constants'
-import {APP_NAME} from '~/constants'
-import {Button} from '@ui/button'
-import {useCustomNavigate} from '@hooks/useCustomNavigate'
-import {useState} from 'react'
+import {ContentComponent, FooterComponent} from './SideDrawrComponents'
 
 export const SideDrawer = () => {
   const orgId = ORG_ID
   const navigate = useCustomNavigate()
   const [sideDrawerOpen, setSideDrawerOpen] = useState<boolean>(false)
+  const {projectId} = useParams()
+  const location = useLocation()
+  const containsRun = location.pathname.includes('run')
+  const containsRuns = location.pathname.includes('runs')
 
   return (
     <Sheet open={sideDrawerOpen} onOpenChange={setSideDrawerOpen} key="left">
@@ -41,45 +43,49 @@ export const SideDrawer = () => {
         <Separator className="my-4" />
         <div className="flex flex-col justify-between h-16 mt-8">
           <div className="items-center">
-            <SheetClose asChild>
-              <Button
-                onClick={(e) => {
-                  setSideDrawerOpen(false)
-                  navigate(`/projects?orgId=${orgId}&page=1&pageSize=10`, {}, e)
-                }}
-                className="font-semibold p-0"
-                variant={'link'}>
-                <text className="text-lg">Projects</text>
-              </Button>
-            </SheetClose>
+            <ContentComponent
+              setSideDrawerOpen={setSideDrawerOpen}
+              text="Projects"
+              navigateTo={`/projects?orgId=${orgId}&page=1&pageSize=${SMALL_PAGE_SIZE}`}
+            />
+
+            {projectId && (
+              <div className="flex flex-col items-start">
+                {!containsRuns && (
+                  <ContentComponent
+                    setSideDrawerOpen={setSideDrawerOpen}
+                    text="Runs List"
+                    navigateTo={`/project/${projectId}/runs?page=1&pageSize=${SMALL_PAGE_SIZE}&status=Active`}
+                  />
+                )}
+                {containsRun && (
+                  <ContentComponent
+                    setSideDrawerOpen={setSideDrawerOpen}
+                    text="Tests"
+                    navigateTo={`/project/${projectId}/tests?page=1&pageSize=${LARGE_PAGE_SIZE}`}
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
         <div className="h-3/4 flex flex-col">
           <div className="flex flex-col gap-2 mt-auto">
-            <a
-              onClick={() => setSideDrawerOpen(false)}
-              href="https://checkmate.dreamsportslabs.com" // Replace with your Google Docs link
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:text-pale-blue font-semibold">
-              Documentation
-            </a>
-            <a
-              onClick={() => setSideDrawerOpen(false)}
-              href="https://discord.com/channels/1317172052179943504/1329754684730380340" // Replace with your Google Docs link
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:text-pale-blue font-semibold">
-              Ask Question
-            </a>
-            <a
-              onClick={() => setSideDrawerOpen(false)}
-              href="https://github.com/dream-sports-labs/checkmate/issues/new?template=Blank+issue" // Replace with your Google Docs link
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:text-pale-blue font-semibold">
-              Report Issue
-            </a>
+            <FooterComponent
+              href="https://checkmate.dreamsportslabs.com"
+              setSideDrawerOpen={setSideDrawerOpen}
+              text="Documentation"
+            />
+            <FooterComponent
+              href="https://discord.com/channels/1317172052179943504/1329754684730380340"
+              setSideDrawerOpen={setSideDrawerOpen}
+              text="Ask Question"
+            />
+            <FooterComponent
+              href="https://github.com/dream-sports-labs/checkmate/issues/new?template=Blank+issue"
+              setSideDrawerOpen={setSideDrawerOpen}
+              text="Report Issue"
+            />
           </div>
         </div>
       </SheetContent>

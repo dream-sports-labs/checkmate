@@ -15,6 +15,7 @@ import {Label} from '~/ui/label'
 import {cn} from '~/ui/utils'
 import {getDateDetail} from '~/utils/getDate'
 import {HeaderComponent} from '../TestList/TestListRowColumns'
+import {LARGE_PAGE_SIZE, SMALL_PAGE_SIZE} from '@route/utils/constants'
 
 export interface IProjectItem {
   projectId: number
@@ -72,7 +73,7 @@ export const PROJECT_LIST_COLUMN_CONFIG: ColumnDef<IProjectItem>[] = [
               <div
                 onClick={(e) => {
                   navigate(
-                    `/project/${row.original.projectId}/tests?page=1&pageSize=250`,
+                    `/project/${row.original.projectId}/tests?page=1&pageSize=${LARGE_PAGE_SIZE}`,
                     {},
                     e,
                   )
@@ -150,7 +151,7 @@ export const PROJECT_LIST_COLUMN_CONFIG: ColumnDef<IProjectItem>[] = [
         <Button
           onClick={(event) => {
             navigate(
-              `/project/${row.original.projectId}/runs?page=1&pageSize=10&status=Active`,
+              `/project/${row.original.projectId}/runs?page=1&pageSize=${SMALL_PAGE_SIZE}&status=Active`,
               {},
               event,
             )
@@ -278,7 +279,10 @@ export const PROJECT_LIST_COLUMN_CONFIG: ColumnDef<IProjectItem>[] = [
           }
           footerComponent={
             <DialogClose asChild>
-              <Button type="submit" onClick={handleSaveChanges}>
+              <Button
+                type="submit"
+                className="mt-2"
+                onClick={handleSaveChanges}>
                 Save changes
               </Button>
             </DialogClose>
