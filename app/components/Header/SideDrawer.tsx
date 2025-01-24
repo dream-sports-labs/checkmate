@@ -12,9 +12,12 @@ import {
 import logo from '../../assets/logo.png'
 import {ORG_ID} from '@route/utils/constants'
 import {APP_NAME} from '~/constants'
+import {Button} from '@ui/button'
+import {useCustomNavigate} from '@hooks/useCustomNavigate'
 
 export const SideDrawer = () => {
   const orgId = ORG_ID
+  const navigate = useCustomNavigate()
 
   return (
     <Sheet key="left">
@@ -37,11 +40,14 @@ export const SideDrawer = () => {
         <div className="flex flex-col justify-between h-16 mt-8">
           <div className="items-center">
             <SheetClose asChild>
-              <Link
-                to={`/projects?orgId=${orgId}&page=1&pageSize=10`}
-                className="text-black hover:text-pale-blue font-medium">
-                <span>Projects List</span>
-              </Link>
+              <Button
+                onClick={(e) => {
+                  navigate(`/projects?orgId=${orgId}&page=1&pageSize=10`, {}, e)
+                }}
+                className="font-semibold p-0"
+                variant={'link'}>
+                {'Projects'}
+              </Button>
             </SheetClose>
           </div>
         </div>
@@ -51,15 +57,22 @@ export const SideDrawer = () => {
               href="https://checkmate.dreamsportslabs.com" // Replace with your Google Docs link
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-500 hover:text-pale-blue font-bold">
+              className="text-blue-500 hover:text-pale-blue font-semibold">
               Documentation
+            </a>
+            <a
+              href="https://discord.com/channels/1317172052179943504/1329754684730380340" // Replace with your Google Docs link
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:text-pale-blue font-semibold">
+              Ask Question
             </a>
             <a
               href="https://github.com/dream-sports-labs/checkmate/issues/new?template=Blank+issue" // Replace with your Google Docs link
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-500 hover:text-pale-blue font-bold">
-              Report Issues
+              className="text-blue-500 hover:text-pale-blue font-semibold">
+              Report Issue
             </a>
           </div>
         </div>
