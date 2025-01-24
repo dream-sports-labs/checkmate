@@ -98,11 +98,13 @@ export default function EditTestPage({
                 testDetailsFetcher.data?.data.sectionHierarchy
             )
           })?.sectionId || 0
+
       const squadId = formData.squadId
         ? formData.squadId
         : squadsFetcher.data?.data?.find((squad) => {
             return squad.squadName === testDetailsFetcher.data?.data.squad
           })?.squadId ?? null
+
       const priorityId = formData.priorityId
         ? formData.priorityId
         : priorityFetcher.data?.data?.find(
@@ -132,8 +134,10 @@ export default function EditTestPage({
               testCoveredBy.testCoveredByName ===
               testDetailsFetcher.data?.data.testCoveredBy,
           )?.testCoveredById ?? null
+
       const labelNameArray =
         testDetailsFetcher.data?.data.labelNames?.split(',')
+
       const labelIdArray = formData.labelIds
         ? formData.labelIds
         : labelsFetcher.data?.data
@@ -149,16 +153,33 @@ export default function EditTestPage({
           )?.typeId ?? null
 
       setFormData({
-        title: testDetailsFetcher.data?.data?.title ?? '',
-        preConditions: testDetailsFetcher.data?.data?.preConditions ?? null,
-        steps: testDetailsFetcher.data?.data?.steps ?? null,
-        expectedResult: testDetailsFetcher.data?.data?.expectedResult ?? null,
-        jiraTicket: testDetailsFetcher.data?.data?.jiraTicket ?? null,
-        defects: testDetailsFetcher.data?.data?.defects ?? null,
-        additionalGroups:
-          testDetailsFetcher.data?.data?.additionalGroups ?? null,
-        automationId: testDetailsFetcher.data?.data?.automationId ?? null,
-        description: testDetailsFetcher.data?.data?.description ?? null,
+        title: formData.title
+          ? formData.title
+          : testDetailsFetcher.data?.data?.title ?? '',
+        preConditions: formData.preConditions
+          ? formData.preConditions
+          : testDetailsFetcher.data?.data?.preConditions ?? null,
+        steps: formData.steps
+          ? formData.steps
+          : testDetailsFetcher.data?.data?.steps ?? null,
+        expectedResult: formData.expectedResult
+          ? formData.expectedResult
+          : testDetailsFetcher.data?.data?.expectedResult ?? null,
+        jiraTicket: formData.jiraTicket
+          ? formData.jiraTicket
+          : testDetailsFetcher.data?.data?.jiraTicket ?? null,
+        defects: formData.defects
+          ? formData.defects
+          : testDetailsFetcher.data?.data?.defects ?? null,
+        additionalGroups: formData.additionalGroups
+          ? formData.additionalGroups
+          : testDetailsFetcher.data?.data?.additionalGroups ?? null,
+        automationId: formData.automationId
+          ? formData.automationId
+          : testDetailsFetcher.data?.data?.automationId ?? null,
+        description: formData.description
+          ? formData.description
+          : testDetailsFetcher.data?.data?.description ?? null,
         sectionId,
         squadId,
         priorityId,
@@ -265,8 +286,6 @@ export default function EditTestPage({
           variant: 'destructive',
           description: data?.error ?? 'Something went wrong',
         })
-
-        setFormData((prevFormData) => ({...prevFormData}))
       } else {
         if (source === 'testList')
           navigate(`/project/${projectId}/tests?page=1&pageSize=${PAGE_SIZE}`, {
