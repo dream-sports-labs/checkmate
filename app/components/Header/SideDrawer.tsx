@@ -49,7 +49,7 @@ export const SideDrawer = () => {
                 }}
                 className="font-semibold p-0"
                 variant={'link'}>
-                {'Projects'}
+                <text className="text-lg">Projects</text>
               </Button>
             </SheetClose>
           </div>
