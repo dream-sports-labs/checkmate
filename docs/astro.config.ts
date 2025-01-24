@@ -12,7 +12,7 @@ export default defineConfig({
       title: "Checkmate",
       favicon: "./public/favicon.svg",
       tableOfContents: {
-        maxHeadingLevel: 4,
+        maxHeadingLevel: 5,
       },
       pagination: true,
       titleDelimiter: "/",

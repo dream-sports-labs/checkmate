@@ -16,21 +16,21 @@ import { Steps } from "@astrojs/starlight/components";
 <Steps>
 
 1. Clone the repo
-   ```sh
+   ```sh frame="none"
    git clone git@github.com:dream-sports-labs/checkmate.git
    ```
 2. Install dependencies using
-   ```sh
+   ```sh frame="none"
    yarn install
    ```
 3. Create .env file, take reference from .env.example
 4. To setup the checkmate database and seed data
-   ```sh
+   ```sh frame="none"
    yarn dev:setup
    ```
-   It will create the database container in docker.
+   It will create the database container in docker, and seed the data in it.
 5. To start the application in dev mode
-   ```sh
+   ```sh frame="none"
    yarn dev
    ```
 6. App will be started on http://localhost:3000
@@ -43,11 +43,11 @@ import { Steps } from "@astrojs/starlight/components";
 
 1. Create .env file
 2. Install dependencies using
-   ```sh
+   ```sh frame="none"
    yarn install
    ```
 3. To setup checkmate application and database
-   ```sh
+   ```sh frame="none"
    yarn docker:setup
    ```
    - It will create the database and application container in docker
@@ -59,30 +59,28 @@ import { Steps } from "@astrojs/starlight/components";
 Application running in docker is in **production** mode
 :::
 
-#### More Scripts
+#### Development Scripts
 
-1. To setup the checkmate application in docker with existing database of docker
-   ```sh
+1. To setup the checkmate application in docker with existing database of docker, to visualise the production mode behaviour
+   ```sh frame="none"
    yarn docker:app:setup
    ```
-   - It will create the application container in docker
-   - It will create the database container only if it is not present
+   - This will create the application container in docker, and create the database container only if it is not present
 2. To setup the checkmate database
    - To create database only
-     ```sh
+     ```sh frame="none"
      yarn docker:db:setup
      ```
    - To insert data in it
-     ```sh
+     ```sh frame="none"
      yarn db:init
      ```
-   - It will create the database container in docker
-3. Run the drizzle studio to monitor your database
-   ```sh
+3. Run the [drizzle](https://orm.drizzle.team/docs/overview) studio to monitor your database
+   ```sh frame="none"
    yarn db:studio
    ```
-4. Create sql file for the database
-   ```sh
+4. Generate sql file from the drizzle schema
+   ```sh frame="none"
    yarn db:generate
    ```
-   - It will generate sql file in drizzle folder at root
+   - This will generate sql file in drizzle folder at root

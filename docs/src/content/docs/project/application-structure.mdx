@@ -6,21 +6,21 @@ Checkmate is built on a **project-centric approach** to simplify and organize te
 
 ---
 
-### Projects: The Core of Test Case Organization
+## Projects
 
-In Checkmate, test cases are grouped into **projects**. A project represents a set of tests aligned to a common objective, such as a feature, service, or application. Projects provide a framework for organizing test cases and supporting collaboration among teams.
+In Checkmate, on higher level test cases are grouped into **projects**. A project represents a set of tests aligned to a common objective, such as a feature, service, or application. Projects provide a framework for organizing test cases and supporting collaboration among teams.
 
 ---
 
-### Structuring a Project
+##### Structure
 
-In Checkmate, test cases within a project are **classified into categories** based on various properties to ensure clarity, organization, and flexibility. This classification allows for better management and filtering of test cases according to specific requirements.
+In Checkmate, test cases within a project are **classified into categories** based on various attributes to ensure clarity, organization, and flexibility. This classification allows for better management and filtering of test cases according to specific requirements.
 
-#### Key Classification Properties:
+##### Key Attributes
 
 - **Squads**: Represents different teams or groups working within a project. Squads help organize test cases based on team responsibilities or ownership.
 - **Sections**: Logical divisions within a project to group test cases under specific areas or functionalities. _Each test case must belong to one section_.
-- **Labels**: A flexible property used to group test cases by shared characteristics or purposes. Labels allow for dynamic classification of tests based on criteria such as release readiness, specific feature testing, or business-critical functionality. For example, tests that must be executed before a release can be assigned a specific label to streamline their identification.
+- **Labels**: A flexible attribute used to group test cases by shared characteristics or purposes. Labels allow for dynamic classification of tests based on criteria such as release readiness, specific feature testing, or business-critical functionality. For example, tests that must be executed before a release can be assigned a specific label to streamline their identification.
 - **Priority**: Defines the importance of a test case. Common priority levels include:
   - `Critical`
   - `High`
@@ -30,11 +30,6 @@ In Checkmate, test cases within a project are **classified into categories** bas
   - `Not Automatable`: Cannot be automated.
   - `Automated`: Already automated.
   - `Automatable`: Can potentially be automated in the future.
-- **Type**: Classifies the nature of the test case, such as:
-  - `Functional`
-  - `Regression`
-  - `Frontend Test`
-  - `Backend Test`
 - **Platform**: Identifies the platform(s) the test case is applicable to, such as:
   - `All Platforms`
   - `Android Only`
@@ -49,22 +44,22 @@ In Checkmate, test cases within a project are **classified into categories** bas
 
 ---
 
-#### Benefits of Classification:
+##### Benefits of Attributes
 
-Classifying test cases based on these properties ensures:
+Classifying test cases based on these attributes ensures:
 
 - **Efficient Filtering and Organization**: Quickly locate specific test cases using filters for squads, sections, or labels.
 - **Clear Ownership**: Squads and sections provide clarity on team responsibilities.
 - **Flexibility in Grouping**: Dynamic labels and sections allow test cases to adapt to evolving needs.
-- **Streamlined Reporting and Execution**: Test runs can be created and tracked based on classifications like priority, platform, or type.
+- **Streamlined Reporting and Execution**: Test runs can be created and tracked based on classifications like sections, squads and labels.
 
 By leveraging this structured classification, teams can manage their testing efforts with greater precision and effectiveness.
 
 ---
 
-### Test Case Properties
+### More Test Case Attributes
 
-Each test case in Checkmate includes detailed properties to ensure comprehensive documentation and traceability:
+Each test case in Checkmate includes detailed attributes to ensure comprehensive documentation and traceability:
 
 - **Preconditions**: Describes setup or requirements for the test.
 - **Steps**: Defines detailed steps to execute the test.
@@ -76,12 +71,12 @@ Each test case in Checkmate includes detailed properties to ensure comprehensive
 
 ---
 
-### Managing Test Cases
+### Visualise Test Cases
 
-The **Tests List Page** provides a centralized interface for managing test cases:
+The **Tests List Page** provides a centralized interface for visualising test cases:
 
 - View all test cases in a structured list.
-- Filter by properties like section, squad, and label.
+- Filter by attributes like section, squad, and label.
 - Sort by attributes such as priority, testId, and title.
 - Search for test cases by name or ID.
 - Add, edit, or delete test cases as required.
@@ -95,24 +90,18 @@ The **Tests List Page** provides a centralized interface for managing test cases
 
 A **run** is a collection of test cases organized for execution, enabling streamlined progress tracking, efficient testing, and comprehensive reporting. Test runs are an essential feature for managing the execution phase of your testing lifecycle.
 
-#### Key Features of Test Runs:
+##### Key Features of Test Runs:
 
-- **Flexible Creation**: Easily create test runs by filtering test cases based on squads, labels, sections, or other classification properties. This ensures that only the relevant tests are included in each run.
-
+- **Flexible Creation**: Easily create test runs by filtering test cases based on squads, labels, sections, or other classification attributes. This ensures that only the relevant tests are included in each run.
 - **Real-Time Monitoring**: Track the progress of a test run in real time, with clear visibility into the status of each test case, including those completed, in progress, or pending execution.
-
-- **Dynamic Modifications**: Update test runs as needed by adding or removing test cases, ensuring flexibility to adapt to evolving requirements or changes in scope.
-
+- **Dynamic Modifications**: Update test runs as needed by removing test cases, ensuring flexibility to adapt to evolving requirements or changes in scope.
 - **Seamless Execution**: Execute test runs with intuitive workflows, enabling smooth collaboration and coordination among team members.
-
 - **Detailed Reporting**: Generate and download comprehensive reports summarizing the results of a test run. These reports provide valuable insights into success rates, failures, and areas that need attention.
 
-#### Benefits of Test Runs:
+##### Benefits of Test Runs:
 
 - **Enhanced Focus**: By grouping related test cases, test runs help teams focus on specific objectives, such as release readiness or feature validation.
-
 - **Informed Decision-Making**: Real-time progress tracking and detailed reporting provide actionable insights to guide decision-making during and after execution.
-
 - **Efficient Management**: The ability to modify runs dynamically ensures that testing efforts remain aligned with project goals, even as requirements evolve.
 
 By leveraging test runs in Checkmate, teams can execute, monitor, and analyze their tests with precision, ensuring that quality goals are consistently achieved.
