@@ -100,74 +100,72 @@ export const MultipleUnifiedFilter = ({
   }
 
   return (
-    <div>
-      <Popover>
-        <PopoverTrigger asChild>
-          <div className="px-4">Filter</div>
-        </PopoverTrigger>
-        <PopoverContent className="w-80">
-          <div className={cn('flex', 'flex-col')}>
-            <div className={cn('flex', 'flex-wrap', 'justify-between pr-8')}>
-              {selectedFilters.map((filter, index) => {
-                return (
-                  <div key={index} className="flex flex-row">
-                    <DropDownFilterView
-                      key={filter.filterName}
-                      filter={filter}
-                      handleCheckboxChange={handleCheckboxChange}
+    <Popover>
+      <PopoverTrigger asChild>
+        <div className="px-4">Filter</div>
+      </PopoverTrigger>
+      <PopoverContent className="w-80">
+        <div className={cn('flex', 'flex-col')}>
+          <div className={cn('flex', 'flex-wrap', 'justify-between pr-8')}>
+            {selectedFilters.map((filter, index) => {
+              return (
+                <div key={index} className="flex flex-row">
+                  <DropDownFilterView
+                    key={filter.filterName}
+                    filter={filter}
+                    handleCheckboxChange={handleCheckboxChange}
+                  />
+                  {!!filter.filterOptions.some((option) => option.checked) ? (
+                    <RotateCcw
+                      color="#ff3c00"
+                      className={'self-center cursor-pointer -ml-1'}
+                      size={16}
+                      strokeWidth={2}
+                      onClick={() => resetFilter(filter.filterName)}
                     />
-                    {!!filter.filterOptions.some((option) => option.checked) ? (
-                      <RotateCcw
-                        color="#ff3c00"
-                        className={'self-center cursor-pointer -ml-1'}
-                        size={16}
-                        strokeWidth={2}
-                        onClick={() => resetFilter(filter.filterName)}
-                      />
-                    ) : (
-                      <div className="w-4 h-4" />
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-
-            <RadioGroup
-              className="mt-4"
-              defaultValue={filterType}
-              onValueChange={(value) => {
-                setSelectedType(value)
-              }}>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="and" id="and" />
-                <Label className="text-xs" htmlFor="and">
-                  {AND_SELECTION}
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="or" id="or" />
-                <Label className="text-xs" htmlFor="or">
-                  {OR_SELECTION}
-                </Label>
-              </div>
-            </RadioGroup>
-
-            <PopoverClose className={'flex w-full'}>
-              <Button
-                className={
-                  'flex bg-blue-600 hover:bg-blue-800 self-center w-full mt-4 disabled:bg-gray-500'
-                }
-                onClick={applyFilterClick}>
-                Apply
-              </Button>
-            </PopoverClose>
-            <div className="text-xs flex flex-col mt-4 text-red-600">
-              <span>{NONE_SELECTED}</span>
-              <span>{MULTIPLE_SELECTED}</span>
-            </div>
+                  ) : (
+                    <div className="w-4 h-4" />
+                  )}
+                </div>
+              )
+            })}
           </div>
-        </PopoverContent>
-      </Popover>
-    </div>
+
+          <RadioGroup
+            className="mt-4"
+            defaultValue={filterType}
+            onValueChange={(value) => {
+              setSelectedType(value)
+            }}>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="and" id="and" />
+              <Label className="text-xs" htmlFor="and">
+                {AND_SELECTION}
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="or" id="or" />
+              <Label className="text-xs" htmlFor="or">
+                {OR_SELECTION}
+              </Label>
+            </div>
+          </RadioGroup>
+
+          <PopoverClose className={'flex w-full'}>
+            <Button
+              className={
+                'flex bg-blue-600 hover:bg-blue-800 self-center w-full mt-4 disabled:bg-gray-500'
+              }
+              onClick={applyFilterClick}>
+              Apply
+            </Button>
+          </PopoverClose>
+          <div className="text-xs flex flex-col mt-4 text-red-600">
+            <span>{NONE_SELECTED}</span>
+            <span>{MULTIPLE_SELECTED}</span>
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
   )
 }

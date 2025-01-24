@@ -36,7 +36,10 @@ if (createNewLabel && labelsSet.size > 0) {
     })
     .filter((item) => item !== undefined)
 
-  console.log('🧨 Inserting new labels', newLabels)
+  console.log(
+    '🧨 Inserting new labels',
+    newLabels.map((item) => item.labelName),
+  )
   await dbClient.insert(labels).values(newLabels)
   console.log('🚀 Inserted new labels')
 }
