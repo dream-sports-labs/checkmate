@@ -288,67 +288,9 @@ export default function TestList() {
     }
   }, [automationStatusFetcher.data?.data])
 
-  useEffect(() => {
-    table.setRowSelection((_) => {
-      return {}
-    })
-
-    if (searchParams.has('squadIds')) {
-      const squadIds = safeJsonParse(searchParams.get('squadIds') as string)
-      if (squadIds && squadIds?.length > 0) {
-        for (let index in filter) {
-          if (filter[index].filterName === FilterNames.Squad) {
-            filter[index].filterOptions.forEach((option) => {
-              if (squadIds.includes(option.id)) {
-                option.checked = true
-              }
-            })
-            break
-          }
-        }
-      }
-    }
-
-    if (searchParams.has('labelIds')) {
-      const labelIds = safeJsonParse(searchParams.get('labelIds') as string)
-      if (labelIds && labelIds?.length > 0) {
-        for (let index in filter) {
-          if (filter[index].filterName === FilterNames.Label) {
-            filter[index].filterOptions.forEach((option) => {
-              if (labelIds.includes(option.id)) {
-                option.checked = true
-              }
-            })
-            break
-          }
-        }
-      }
-    }
-
-    if (searchParams.has('platformIds')) {
-      const platformIds = safeJsonParse(
-        searchParams.get('platformIds') as string,
-      )
-      if (platformIds && platformIds?.length > 0) {
-        for (let index in filter) {
-          if (filter[index].filterName === FilterNames.Platform) {
-            console.log('--->>')
-            filter[index].filterOptions.forEach((option) => {
-              if (platformIds.includes(option.id)) {
-                option.checked = true
-              }
-            })
-            break
-          }
-        }
-      }
-    }
-  }, [searchParams])
-
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     'Created By': false,
     'Test Covered By': false,
-    // 'Test ID': false,
     Section: false,
   })
 

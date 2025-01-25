@@ -10,8 +10,8 @@ import {FilterIconShuffle} from '../RunTestList/FilterIcon'
 import {cn} from '@ui/utils'
 
 interface ITestsFilters {
-  filter: any
-  setFilter: any
+  filter: TestListFilter[]
+  setFilter: React.Dispatch<React.SetStateAction<TestListFilter[]>>
   onFilterApply: (
     selectedFilters: TestListFilter[],
     filterType?: string,

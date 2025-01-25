@@ -169,6 +169,12 @@ export default function RunTestList() {
   }
 
   let filterType: MultipleUnifiedFilterProps['filterType']
+  if (searchParams.has('filterType')) {
+    filterType =
+      (searchParams.get(
+        'filterType',
+      ) as MultipleUnifiedFilterProps['filterType']) ?? 'and'
+  }
 
   useEffect(() => {
     const squads = squadsFetcher.data?.data
@@ -427,76 +433,6 @@ export default function RunTestList() {
       return {}
     })
   }
-
-  useEffect(() => {
-    if (searchParams.has('squadIds')) {
-      const squadIds = safeJsonParse(searchParams.get('squadIds') as string)
-      if (squadIds && squadIds?.length > 0) {
-        for (let index in filter) {
-          if (filter[index].filterName === FilterNames.Squad) {
-            filter[index].filterOptions.forEach((option) => {
-              if (squadIds.includes(option.id)) {
-                option.checked = true
-              }
-            })
-            break
-          }
-        }
-      }
-    }
-
-    if (searchParams.has('labelIds')) {
-      const labelIds = safeJsonParse(searchParams.get('labelIds') as string)
-      if (labelIds && labelIds?.length > 0) {
-        for (let index in filter) {
-          if (filter[index].filterName === FilterNames.Label) {
-            filter[index].filterOptions.forEach((option) => {
-              if (labelIds.includes(option.id)) {
-                option.checked = true
-              }
-            })
-            break
-          }
-        }
-      }
-    }
-
-    if (searchParams.has('statusArray')) {
-      const statusArray = safeJsonParse(
-        searchParams.get('statusArray') as string,
-      )
-      if (statusArray && statusArray?.length > 0) {
-        for (let index in filter) {
-          if (filter[index].filterName === FilterNames.Status) {
-            filter[index].filterOptions.forEach((option) => {
-              if (statusArray.includes(option.id)) {
-                option.checked = true
-              }
-            })
-            break
-          }
-        }
-      }
-    }
-
-    if (searchParams.has('platformIds')) {
-      const platformIds = safeJsonParse(
-        searchParams.get('platformIds') as string,
-      )
-      if (platformIds && platformIds?.length > 0) {
-        for (let index in filter) {
-          if (filter[index].filterName === FilterNames.Platform) {
-            filter[index].filterOptions.forEach((option) => {
-              if (platformIds.includes(option.id)) {
-                option.checked = true
-              }
-            })
-            break
-          }
-        }
-      }
-    }
-  }, [searchParams])
 
   return (
     <div className={cn('flex flex-col py-6 h-full w-full')}>

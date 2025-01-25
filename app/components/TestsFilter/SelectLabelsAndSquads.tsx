@@ -1,29 +1,15 @@
-import {Button} from '@ui/button'
 import {
-  DialogHeader,
-  DialogFooter,
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from '@ui/dialog'
-import {Label} from '@ui/label'
-import {cn} from '@ui/utils'
-import {
-  DropdownMenuCheckboxes,
-  IDropdownMenuCheckboxes,
-} from './DropdownMenuCheckboxes'
-import {useState} from 'react'
-import {setUpdatedFilterList} from './utils'
-import {RadioGroup, RadioGroupItem} from '@ui/radio-group'
-import {
-  AND_SELECTION,
-  MULTIPLE_SELECTED,
-  NONE_SELECTED,
-  OR_SELECTION,
-} from '~/constants'
+  MultipleUnifiedFilter,
+  MultipleUnifiedFilterProps,
+  TestListFilter,
+} from '@components/MultipleUnifiedFilter/MultipleUnifiedFilter'
+import {useFetcher, useParams, useSearchParams} from '@remix-run/react'
+import {API} from '@route/utils/api'
+import {ORG_ID} from '@route/utils/constants'
+import {useEffect, useState} from 'react'
+import {Squad} from '~/screens/RunTestList/interfaces'
+import {isChecked} from '~/screens/RunTestList/utils'
+import {FilterNames} from '~/screens/TestList/testTable.interface'
 
 export interface Lables {
   labelName: string
@@ -63,119 +49,219 @@ export interface TestCoveredBy {
   testCoveredById: number
 }
 
-export interface ISelectLabelsAndSquads {
-  labelsList: IDropdownMenuCheckboxes[]
-  squadsList: IDropdownMenuCheckboxes[]
-  onSubmit: (param: {
-    labelsList: IDropdownMenuCheckboxes[]
-    squadsList: IDropdownMenuCheckboxes[]
-    filterType: 'and' | 'or'
-  }) => void
-}
+export const SelectLabelsAndSquads = () => {
+  const pathParams = useParams()
+  const projectId = Number(pathParams?.projectId)
+  const orgId = ORG_ID
 
-export const SelectLabelsAndSquads = ({
-  labelsList,
-  squadsList,
-  onSubmit,
-}: ISelectLabelsAndSquads) => {
-  const [selectLabelsList, setSelectLabelsList] =
-    useState<IDropdownMenuCheckboxes[]>(labelsList)
+  const [searchParams, setSearchParams] = useSearchParams()
 
-  const [selectSquadsList, setSelectSquadsList] =
-    useState<IDropdownMenuCheckboxes[]>(squadsList)
+  const squadsFetcher = useFetcher<{data: Squad[]}>()
+  const labelsFetcher = useFetcher<{data: Lables[]}>()
+  const platformFetcher = useFetcher<{data: Platforms[]}>()
 
-  const [selectedType, setSelectedType] = useState<'and' | 'or'>('and')
+  useEffect(() => {
+    platformFetcher.load(`/${API.GetPlatforms}?orgId=${orgId}`)
+  }, [orgId])
 
-  const handleCheckboxChange = ({
-    filterName,
-    value,
-  }: {
-    filterName: string
-    value: string
-  }) => {
-    if (filterName === 'labels') {
-      setUpdatedFilterList(value, selectLabelsList, setSelectLabelsList)
+  useEffect(() => {
+    squadsFetcher.load(`/${API.GetSquads}?projectId=${projectId}`)
+    labelsFetcher.load(`/${API.GetLabels}?projectId=${projectId}`)
+  }, [projectId])
+
+  useEffect(() => {
+    const squads = squadsFetcher.data?.data
+    if (squads) {
+      const isSquadFilterPresent = filter.some(
+        (filter) => filter.filterName === FilterNames.Squad,
+      )
+      if (!isSquadFilterPresent)
+        setFilter((prev) => {
+          return [
+            ...prev,
+            {
+              filterName: FilterNames.Squad,
+              filterOptions: squads.map((squad) => {
+                return {
+                  id: squad.squadId,
+                  optionName: squad.squadName,
+                  checked: isChecked({
+                    searchParams,
+                    filterName: 'squadIds',
+                    filterId: squad.squadId,
+                  }),
+                }
+              }),
+            },
+          ]
+        })
     }
-    if (filterName === 'squads') {
-      setUpdatedFilterList(value, selectSquadsList, setSelectSquadsList)
+  }, [squadsFetcher.data])
+
+  useEffect(() => {
+    const labels = labelsFetcher.data?.data
+    if (labels) {
+      const isLabelFilterPresent = filter.some(
+        (filter) => filter.filterName === FilterNames.Label,
+      )
+      if (!isLabelFilterPresent)
+        setFilter((prev) => {
+          return [
+            ...prev,
+            {
+              filterName: FilterNames.Label,
+              filterOptions: labels.map((label) => {
+                return {
+                  id: label.labelId,
+                  optionName: label.labelName,
+                  checked: isChecked({
+                    searchParams,
+                    filterName: 'labelIds',
+                    filterId: label.labelId,
+                  }),
+                }
+              }),
+            },
+          ]
+        })
     }
+  }, [labelsFetcher.data])
+
+  useEffect(() => {
+    const platforms = platformFetcher.data?.data
+    if (platforms) {
+      const isPlatformFilterPresent = filter.some(
+        (filter) => filter.filterName === FilterNames.Platform,
+      )
+      if (!isPlatformFilterPresent)
+        setFilter((prev) => {
+          return [
+            ...prev,
+            {
+              filterName: FilterNames.Platform,
+              filterOptions: platforms.map((platform) => {
+                return {
+                  id: platform.platformId,
+                  optionName: platform.platformName,
+                  checked: isChecked({
+                    searchParams,
+                    filterName: 'platformIds',
+                    filterId: platform.platformId,
+                  }),
+                }
+              }),
+            },
+          ]
+        })
+    }
+  }, [platformFetcher.data])
+
+  const [filter, setFilter] = useState<TestListFilter[]>([])
+
+  const onFilterApply = (
+    selectedFilters: TestListFilter[],
+    filterType: string = 'and',
+  ) => {
+    setFilter(selectedFilters)
+
+    setSearchParams(
+      (prev) => {
+        prev.set('filterType', filterType)
+        return prev
+      },
+      {replace: true},
+    )
+
+    selectedFilters.forEach((filter) => {
+      if (filter.filterName === FilterNames.Squad) {
+        const selectedSquads = filter.filterOptions
+          .filter((option) => option.checked)
+          .map((option) => option.id)
+
+        if (selectedSquads?.length === 0) {
+          setSearchParams(
+            (prev) => {
+              prev.delete('squadIds')
+              prev.set('page', (1).toString())
+              return prev
+            },
+            {replace: true},
+          )
+        } else {
+          setSearchParams(
+            (prev) => {
+              prev.set('squadIds', JSON.stringify(selectedSquads))
+              prev.set('page', (1).toString())
+              return prev
+            },
+            {replace: true},
+          )
+        }
+      } else if (filter.filterName === FilterNames.Label) {
+        const selectedLabels = filter.filterOptions
+          .filter((option) => option.checked)
+          .map((option) => option.id)
+
+        if (selectedLabels?.length === 0) {
+          setSearchParams(
+            (prev) => {
+              prev.delete('labelIds')
+              prev.set('page', (1).toString())
+              return prev
+            },
+            {replace: true},
+          )
+        } else {
+          setSearchParams(
+            (prev) => {
+              prev.set('labelIds', JSON.stringify(selectedLabels))
+              prev.set('page', (1).toString())
+              return prev
+            },
+            {replace: true},
+          )
+        }
+      } else if (filter.filterName === FilterNames.Platform) {
+        const selectedPlatforms = filter.filterOptions
+          .filter((option) => option.checked)
+          .map((option) => option.id)
+
+        if (selectedPlatforms?.length === 0) {
+          setSearchParams(
+            (prev) => {
+              prev.delete('platformIds')
+              prev.set('page', (1).toString())
+              return prev
+            },
+            {replace: true},
+          )
+        } else {
+          setSearchParams(
+            (prev) => {
+              prev.set('platformIds', JSON.stringify(selectedPlatforms))
+              prev.set('page', (1).toString())
+              return prev
+            },
+            {replace: true},
+          )
+        }
+      }
+    })
+  }
+  let filterType: MultipleUnifiedFilterProps['filterType']
+  if (searchParams.has('filterType')) {
+    filterType =
+      (searchParams.get(
+        'filterType',
+      ) as MultipleUnifiedFilterProps['filterType']) ?? 'and'
   }
 
   return (
-    <>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="outline">Filter Labels & Squads</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[600px] -mt-16">
-          <DialogHeader>
-            <DialogTitle>Filter Labels & Squads</DialogTitle>
-            <DialogDescription>Tests belong to</DialogDescription>
-          </DialogHeader>
-          <div className={cn('items-center', 'self-center')}>
-            <div className="flex flex-row gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="labels" className="text-right">
-                  Labels
-                </Label>
-                <DropdownMenuCheckboxes
-                  filterName="labels"
-                  list={selectLabelsList}
-                  handleCheckboxChange={handleCheckboxChange}
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="squads" className="text-right">
-                  Squads
-                </Label>
-                <DropdownMenuCheckboxes
-                  filterName="squads"
-                  list={selectSquadsList}
-                  handleCheckboxChange={handleCheckboxChange}
-                />
-              </div>
-            </div>
-          </div>
-          <RadioGroup
-            className="mt-4"
-            defaultValue={selectedType}
-            onValueChange={(value: 'and' | 'or') => {
-              setSelectedType(value)
-            }}>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="and" id="and" />
-              <Label className="text-xs" htmlFor="and">
-                {AND_SELECTION}
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="or" id="or" />
-              <Label className="text-xs" htmlFor="or">
-                {OR_SELECTION}
-              </Label>
-            </div>
-          </RadioGroup>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button
-                onClick={() =>
-                  onSubmit({
-                    labelsList: selectLabelsList,
-                    squadsList: selectSquadsList,
-                    filterType: selectedType,
-                  })
-                }
-                type="submit">
-                Apply Filter
-              </Button>
-            </DialogClose>
-          </DialogFooter>
-          <div className="text-xs flex flex-col mt-4 text-red-600">
-            <span>{NONE_SELECTED}</span>
-            <span>{MULTIPLE_SELECTED}</span>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </>
+    <MultipleUnifiedFilter
+      filters={filter}
+      onFilterApply={onFilterApply}
+      filterType={filterType}
+      variant="dialog"
+    />
   )
 }

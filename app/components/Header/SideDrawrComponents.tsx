@@ -39,7 +39,8 @@ export const ContentComponent = ({
         setSideDrawerOpen(false)
         navigate(navigateTo, {}, e)
       }}
-      className="font-semibold p-0"
+      size={'lg'}
+      className="font-semibold p-0 "
       variant={'link'}>
       <text>{text}</text>
     </Button>

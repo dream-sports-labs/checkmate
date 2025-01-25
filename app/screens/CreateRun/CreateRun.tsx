@@ -1,4 +1,3 @@
-import {API} from '~/routes/utilities/api'
 import {CreateRunRequestAPIType} from '@api/createRun'
 import {InputsSpacing} from '@components/Forms/InputsSpacing'
 import {IDropdownMenuCheckboxes} from '@components/TestsFilter/DropdownMenuCheckboxes'
@@ -8,7 +7,13 @@ import {
 } from '@components/TestsFilter/SelectLabelsAndSquads'
 import {zodResolver} from '@hookform/resolvers/zod'
 import {useCustomNavigate} from '@hooks/useCustomNavigate'
-import {useFetcher, useLoaderData, useParams} from '@remix-run/react'
+import {
+  useFetcher,
+  useLoaderData,
+  useParams,
+  useSearchParams,
+} from '@remix-run/react'
+import {safeJsonParse} from '@route/utils/utils'
 import {Button} from '@ui/button'
 import {
   Form,
@@ -19,15 +24,16 @@ import {
   FormMessage,
 } from '@ui/form'
 import {RadioGroup, RadioGroupItem} from '@ui/radio-group'
+import {Skeleton} from '@ui/skeleton'
 import {Textarea} from '@ui/textarea'
 import {useToast} from '@ui/use-toast'
 import {cn} from '@ui/utils'
 import {useEffect, useState} from 'react'
 import {SubmitHandler, useForm} from 'react-hook-form'
 import {z} from 'zod'
-import {Squad} from '~/screens/RunTestList/interfaces'
 import {FILTER_TEST_CASES, INCLUDE_ALL_TEST_CASES} from '~/constants'
-import {Skeleton} from '@ui/skeleton'
+import {API} from '~/routes/utilities/api'
+import {Squad} from '~/screens/RunTestList/interfaces'
 
 const formSchema = z.object({
   runName: z
@@ -52,20 +58,13 @@ export const CreateRun = (props: CreateRunProps) => {
   const countFetcher = useFetcher<{data: {count: number}}>()
   const createRunFetcher = useFetcher<any>()
   const updateRunFetcher = useFetcher<any>()
-  const squadsFetcher = useFetcher<{data: Squad[]}>()
-  const labelsFetcher = useFetcher<{data: Lables[]}>()
   const projectNameFetcher = useFetcher<any>()
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const [testsCount, setTestsCount] = useState<number | undefined>(undefined)
   const [testCreationError, setTestCreationError] = useState<string>()
-
-  const [squadsList, setSquadsList] = useState<IDropdownMenuCheckboxes[]>([])
-  const [labelsList, setLabelsList] = useState<IDropdownMenuCheckboxes[]>([])
   const [projectName, setProjectName] = useState<string | null>(null)
 
-  const [selectedFilterType, setSelectedFilterType] = useState<
-    'and' | 'or' | null | undefined
-  >('and')
   const params = useParams()
   const navigate = useCustomNavigate()
   const projectId = Number(params?.projectId) ?? 0
@@ -82,8 +81,6 @@ export const CreateRun = (props: CreateRunProps) => {
   const {toast} = useToast()
 
   useEffect(() => {
-    squadsFetcher.load(`/${API.GetSquads}/?projectId=${projectId}`)
-    labelsFetcher.load(`/${API.GetLabels}?projectId=${projectId}`)
     projectNameFetcher.load(`/${API.GetProjectDetail}?projectId=${projectId}`)
   }, [])
 
@@ -103,59 +100,27 @@ export const CreateRun = (props: CreateRunProps) => {
   }, [testCreationError])
 
   useEffect(() => {
-    if (labelsFetcher.data?.data && labelsList.length === 0) {
-      const labels = labelsFetcher?.data?.data || []
-
-      setLabelsList(
-        labels.map((label) => {
-          return {
-            name: label.labelName || 'None',
-            id: label.labelId || 0,
-            selected: true,
-          }
-        }),
-      )
-    }
-  }, [labelsFetcher?.data?.data])
-
-  useEffect(() => {
-    if (squadsFetcher.data?.data && squadsList.length === 0) {
-      const squads = squadsFetcher?.data?.data || []
-      const squadsSet = new Set<number>()
-      setSquadsList(
-        squads.map((squad) => {
-          squadsSet.add(squad.squadId)
-          return {
-            name: squad.squadName || 'None',
-            id: squad.squadId || 0,
-            selected: true,
-          }
-        }),
-      )
-    }
-  }, [squadsFetcher?.data?.data])
-
-  useEffect(() => {
     let url = `/${API.GetTestsCount}?projectId=${projectId}`
-    if (form.getValues('testSelection') === 'filter') {
-      if (squadsList.some((squad) => squad.selected)) {
-        const selectedSquadIds = squadsList.map((squad) => {
-          if (squad.selected) return squad.id
-        })
-        {
-          url += `&squadIds=${JSON.stringify(Array.from(selectedSquadIds))}`
-        }
-      }
-      if (labelsList.some((lable) => lable.selected)) {
-        const selectedLabelIds = labelsList.map((label) => {
-          if (label.selected) return label.id
-        })
-        url += `&labelIds=${JSON.stringify(Array.from(selectedLabelIds))}`
-      }
-      url += `&filterType=${selectedFilterType}`
+    if (searchParams.has('filterType')) {
+      url += `&${searchParams.toString()}`
     }
     countFetcher.load(url)
-  }, [squadsList, labelsList, selectedFilterType])
+  }, [searchParams])
+
+  useEffect(() => {
+    if (form.getValues('testSelection') === 'all') {
+      setSearchParams(
+        (prev) => {
+          prev.delete('squadIds')
+          prev.delete('labelIds')
+          prev.delete('filterType')
+          prev.delete('platformIds')
+          return prev
+        },
+        {replace: true},
+      )
+    }
+  }, [form.getValues('testSelection')])
 
   useEffect(() => {
     if (createRunFetcher.data) {
@@ -200,27 +165,17 @@ export const CreateRun = (props: CreateRunProps) => {
   }, [countFetcher?.data])
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (data) => {
-    let postData: CreateRunRequestAPIType
     if (props.flow === FLOW.CREATE) {
-      if (data.testSelection === 'filter') {
-        postData = {
-          runName: data.runName,
-          runDescription: data.runDescription,
-          projectId,
-          labelIds: labelsList
-            .filter((label) => label.selected)
-            .map((label) => label.id),
-          squadIds: squadsList
-            .filter((squad) => squad.selected)
-            .map((squad) => squad.id),
-          filterType: selectedFilterType,
-        }
-      } else {
-        postData = {
-          runName: data.runName,
-          runDescription: data.runDescription,
-          projectId,
-        }
+      const postData: CreateRunRequestAPIType = {
+        runName: data.runName,
+        runDescription: data.runDescription,
+        projectId,
+        labelIds: safeJsonParse(searchParams.get('labelIds') as string),
+        squadIds: safeJsonParse(searchParams.get('squadIds') as string),
+        platformIds: safeJsonParse(searchParams.get('platformIds') as string),
+        filterType: (searchParams.has('filterType')
+          ? searchParams?.get('filterType')
+          : 'and') as 'and' | 'or',
       }
 
       createRunFetcher.submit(postData, {
@@ -248,20 +203,6 @@ export const CreateRun = (props: CreateRunProps) => {
   const isCreatingRun =
     createRunFetcher.state === 'loading' ||
     createRunFetcher.state === 'submitting'
-
-  const onFiltersSubmit = ({
-    labelsList,
-    squadsList,
-    filterType,
-  }: {
-    labelsList: IDropdownMenuCheckboxes[]
-    squadsList: IDropdownMenuCheckboxes[]
-    filterType: 'and' | 'or'
-  }) => {
-    setLabelsList(labelsList)
-    setSquadsList(squadsList)
-    setSelectedFilterType(filterType)
-  }
 
   const handleClick = () => {
     navigate(-1)
@@ -399,11 +340,7 @@ export const CreateRun = (props: CreateRunProps) => {
                                   'flex-col',
                                   'rounded-l',
                                 )}>
-                                <SelectLabelsAndSquads
-                                  labelsList={labelsList}
-                                  squadsList={squadsList}
-                                  onSubmit={onFiltersSubmit}
-                                />
+                                <SelectLabelsAndSquads />
                               </div>
                             ) : null}
                           </div>

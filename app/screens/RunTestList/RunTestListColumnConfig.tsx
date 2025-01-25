@@ -40,7 +40,6 @@ export const priorityMapping: {[key: string]: ReactNode} = {
 
 export const RunTestListColumnConfig: ColumnDef<Tests>[] = [
   {
-    id: 'select',
     accessorKey: 'select',
     header: ({table}) => (
       <Checkbox
@@ -64,7 +63,6 @@ export const RunTestListColumnConfig: ColumnDef<Tests>[] = [
     enableHiding: false,
   },
   {
-    id: 'testId',
     accessorKey: TestListingColumns.testId,
     header: () => (
       <SortingHeaderComponent
@@ -80,7 +78,6 @@ export const RunTestListColumnConfig: ColumnDef<Tests>[] = [
     enableHiding: false,
   },
   {
-    id: 'title',
     accessorKey: TestListingColumns.title,
     header: () => <SortingHeaderComponent heading={TestListingColumns.title} />,
 
@@ -119,7 +116,6 @@ export const RunTestListColumnConfig: ColumnDef<Tests>[] = [
     enableHiding: false,
   },
   {
-    id: 'status',
     accessorKey: TestListingColumns.status,
     header: () => (
       <HeaderComponent
@@ -149,7 +145,6 @@ export const RunTestListColumnConfig: ColumnDef<Tests>[] = [
     enableHiding: false,
   },
   {
-    id: 'testedBy',
     accessorKey: TestListingColumns.testedBy,
     header: () => (
       <HeaderComponent
@@ -167,7 +162,6 @@ export const RunTestListColumnConfig: ColumnDef<Tests>[] = [
     },
   },
   {
-    id: 'priority',
     accessorKey: TestListingColumns.priority,
     header: ({}) => (
       <SortingHeaderComponent
@@ -178,7 +172,6 @@ export const RunTestListColumnConfig: ColumnDef<Tests>[] = [
     cell: ({row}) => <PriorityRowComponent priority={row.original.priority} />,
   },
   {
-    id: 'squad',
     accessorKey: TestListingColumns.squad,
     header: () => (
       <HeaderComponent position={'left'} heading={TestListingColumns.squad} />
@@ -192,7 +185,6 @@ export const RunTestListColumnConfig: ColumnDef<Tests>[] = [
     },
   },
   {
-    id: 'platform',
     accessorKey: TestListingColumns.platform,
     header: () => (
       <SortingHeaderComponent
@@ -205,7 +197,6 @@ export const RunTestListColumnConfig: ColumnDef<Tests>[] = [
     },
   },
   {
-    id: 'automationStatus',
     accessorKey: TestListingColumns.automationStatus,
     header: () => (
       <SortingHeaderComponent
@@ -219,7 +210,6 @@ export const RunTestListColumnConfig: ColumnDef<Tests>[] = [
     ),
   },
   {
-    id: 'labelName',
     accessorKey: TestListingColumns.labelName,
     header: () => (
       <HeaderComponent
@@ -239,7 +229,6 @@ export const RunTestListColumnConfig: ColumnDef<Tests>[] = [
     ),
   },
   {
-    id: 'section',
     accessorKey: TestListingColumns.section,
     header: () => (
       <SortingHeaderComponent
@@ -259,7 +248,6 @@ export const RunTestListColumnConfig: ColumnDef<Tests>[] = [
     ),
   },
   {
-    id: 'testCoveredBy',
     accessorKey: TestListingColumns.testCoveredBy,
     header: () => (
       <HeaderComponent

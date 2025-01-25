@@ -81,7 +81,7 @@ const SearchParams = {
 
     const searchParams = Object.fromEntries(url.searchParams.entries())
 
-    const projectId = params.projectId ?? Number(searchParams['projectId'])
+    const projectId = params?.projectId ?? Number(searchParams['projectId'])
 
     const squadIds = searchParams.squadIds
       ? jsonParseWithError(searchParams.squadIds, 'squadIds')
@@ -89,7 +89,9 @@ const SearchParams = {
     const labelIds = searchParams.labelIds
       ? jsonParseWithError(searchParams.labelIds, 'labelIds')
       : undefined
-
+    const platformIds = searchParams.platformIds
+      ? jsonParseWithError(searchParams.platformIds, 'platformIds')
+      : undefined
     const filterType = searchParams.filterType
       ? (searchParams.filterType as ITestsController['filterType'])
       : 'and'
@@ -99,7 +101,14 @@ const SearchParams = {
 
     if (!checkForProjectId(projectId))
       throw new Error('Invalid projectId', {cause: ErrorCause.INVALID_PARAMS})
-    return {projectId, squadIds, labelIds, filterType, includeTestIds}
+    return {
+      projectId,
+      platformIds,
+      squadIds,
+      labelIds,
+      filterType,
+      includeTestIds,
+    }
   },
   getRunTests: ({params, request}: ISearchParams): ITestRunData => {
     const url = new URL(request.url)
