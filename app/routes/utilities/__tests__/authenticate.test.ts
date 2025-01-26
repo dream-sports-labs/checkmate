@@ -16,6 +16,9 @@ describe('getUser and checkForAuthToken', () => {
     userName: 'John Doe',
     email: 'johndoe@example.com',
     role: 'admin',
+    profileUrl: null,
+    ssoId: 'mockSsoId',
+    token: 'mockToken',
   }
 
   beforeEach(() => {

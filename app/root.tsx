@@ -18,6 +18,7 @@ import {GlobalLoading} from './screens/GlobalLoading'
 import {AppHeader} from '@components/Header/AppHeader'
 import {APP_NAME} from './constants'
 import {version} from '../package.json'
+import {getUser} from '@route/utils/authenticate'
 
 export const links: LinksFunction = () => [{rel: 'stylesheet', href: styles}]
 
@@ -25,6 +26,7 @@ export {ErrorBoundary} from './components/ErrorBoundry/ErrorBoundry'
 
 export async function loader({request}: LoaderFunctionArgs) {
   const result = await AuthenticatorService.getUser(request)
+
   const currentUrl = new URL(request.url)
 
   if (currentUrl.pathname !== AuthenticatorRoutes.LOGIN && !result?.user)

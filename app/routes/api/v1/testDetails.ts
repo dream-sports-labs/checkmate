@@ -1,15 +1,16 @@
+import TestsController from '@controllers/tests.controller'
 import {LoaderFunctionArgs} from '@remix-run/node'
-import {checkForProjectId, checkForTestId} from '../../utilities/utils'
+import {API} from '@route/utils/api'
+import {getUserAndCheckAccess} from '@route/utils/checkForUserAndAccess'
 import {
   errorResponseHandler,
   responseHandler,
 } from '~/routes/utilities/responseHandler'
-import TestsController from '@controllers/tests.controller'
-import {getUser} from '../../utilities/authenticate'
+import {checkForProjectId, checkForTestId} from '../../utilities/utils'
 
 export async function loader({params, request}: LoaderFunctionArgs) {
   try {
-    await getUser(request)
+    await getUserAndCheckAccess({request, resource: API.GetTestDetails})
     const url = new URL(request.url)
     const searchParams = Object.fromEntries(url.searchParams.entries())
     const projectId = Number(searchParams['projectId'] ?? params.projectId)

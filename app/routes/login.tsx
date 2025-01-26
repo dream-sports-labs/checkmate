@@ -6,7 +6,11 @@ import {
   redirect,
 } from '@remix-run/node'
 import {useLoaderData, useSubmit} from '@remix-run/react'
-import {AuthenticatorRoutes} from '@services/auth/interfaces'
+import {
+  AUTH_PROVIDER,
+  AuthenticatorRoutes,
+  SessionName,
+} from '@services/auth/interfaces'
 import {useEffect} from 'react'
 import {getUser} from '~/routes/utilities/authenticate'
 import {responseHandler} from '~/routes/utilities/responseHandler'
@@ -17,7 +21,10 @@ export let action = async ({request}: ActionFunctionArgs) => {
   if (request.method === 'DELETE') {
     return AuthenticatorService.logout(request)
   }
-  return AuthenticatorService.authenticate(request)
+  return AuthenticatorService.authenticate({
+    request,
+    authProvider: AUTH_PROVIDER.GOOGLE,
+  })
 }
 
 export let loader: LoaderFunction = async ({request}: LoaderFunctionArgs) => {

@@ -2,6 +2,7 @@
 
 1. Docker desktop
 2. yarn v4 installed
+3. Google OAuth application
 
 #### Local Dev Setup
 

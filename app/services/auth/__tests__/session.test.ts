@@ -1,5 +1,6 @@
 import {createCookieSessionStorage} from '@remix-run/node'
 import {SessionStorageService} from '@services/auth/session' // Adjust the path as necessary
+import { SessionName } from '../interfaces'
 
 jest.mock('@remix-run/node', () => ({
   createCookieSessionStorage: jest.fn(),
@@ -13,7 +14,7 @@ describe('SessionStorageService', () => {
     ;(SessionStorageService as any).sessionStorage = createCookieSessionStorage(
       {
         cookie: {
-          name: '_session',
+          name: SessionName,
           sameSite: 'lax',
           path: '/',
           httpOnly: true,
@@ -28,7 +29,7 @@ describe('SessionStorageService', () => {
     // Ensure `createCookieSessionStorage` is mocked correctly
     expect(createCookieSessionStorage).toHaveBeenCalledWith({
       cookie: {
-        name: '_session',
+        name: SessionName,
         sameSite: 'lax',
         path: '/',
         httpOnly: true,
@@ -39,7 +40,7 @@ describe('SessionStorageService', () => {
   })
 
   it('should have the correct session key', () => {
-    expect(SessionStorageService.sessionKey).toBe('_session')
+    expect(SessionStorageService.sessionKey).toBe(SessionName)
   })
 
   it('should expose a sessionStorage object', () => {
@@ -52,7 +53,7 @@ describe('SessionStorageService', () => {
     ;(SessionStorageService as any).sessionStorage = createCookieSessionStorage(
       {
         cookie: {
-          name: '_session',
+          name: SessionName,
           sameSite: 'lax',
           path: '/',
           httpOnly: true,

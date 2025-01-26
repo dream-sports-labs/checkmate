@@ -40,6 +40,9 @@ describe('GetUserReturnType', () => {
       email: 'test@example.com',
       userName: 'Test User',
       role: 'admin',
+      profileUrl: 'https://example.com/profile',
+      ssoId: 'mockSsoId',
+      token: 'mockToken',
     }
 
     const result: GetUserReturnType = {
@@ -73,11 +76,14 @@ describe('UserReturnType', () => {
     } as Session
 
     const mockUser: User = {
-        userId: 1,
-        email: 'test@example.com',
-        userName: 'Test User',
-        role: 'admin',
-      }
+      userId: 1,
+      email: 'test@example.com',
+      userName: 'Test User',
+      role: 'admin',
+      profileUrl: 'https://example.com/profile',
+      ssoId: 'mockSsoId',
+      token: 'mockToken',
+    }
 
     const userResponse: UserReturnType = {
       user: mockUser,

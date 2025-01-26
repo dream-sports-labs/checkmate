@@ -1,15 +1,21 @@
+import {User} from '@dao/users.dao'
 import {ActionFunctionArgs, LoaderFunctionArgs} from '@remix-run/node'
 import {Authenticator} from 'remix-auth'
 import {GoogleStrategy} from 'remix-auth-google'
 import UsersController from '~/dataController/users.controller'
-import {AuthenticatorRoutes, UserReturnType} from '~/services/auth/interfaces'
+import {
+  AUTH_PROVIDER,
+  AuthenticatorRoutes,
+  SessionName,
+  UserReturnType,
+} from '~/services/auth/interfaces'
 import {SessionStorageService} from '~/services/auth/session'
 import {env} from '~/services/config'
 
 type AuthRequest = LoaderFunctionArgs | ActionFunctionArgs
 
 export class Auth {
-  static authenticator = new Authenticator(
+  static authenticator = new Authenticator<User>(
     SessionStorageService.sessionStorage,
     {
       sessionKey: SessionStorageService.sessionKey,
@@ -37,15 +43,15 @@ export class Auth {
       request.headers.get('Cookie'),
     )
 
-    const user = session.get('_session') ?? null
+    const user = session.get(SessionName) ?? null
 
     if (user?.ssoId) {
       try {
         const currentUser = await UsersController.getUser({ssoId: user.ssoId})
-        session.set('_session', currentUser)
+        session.set(SessionName, currentUser)
       } catch (error) {
         console.error('Error getting user:', error)
-        session.unset('_session')
+        session.unset(SessionName)
         const cookieHeader =
           await SessionStorageService.sessionStorage.commitSession(session)
         return {
@@ -56,18 +62,30 @@ export class Auth {
       }
     }
 
-    return {user: session.get('_session') ?? null, session}
+    return {user: session.get(SessionName) ?? null, session}
   }
 
-  callback(request: AuthRequest['request']) {
-    return Auth.authenticator.authenticate('google', request, {
+  callback({
+    authProvider,
+    request,
+  }: {
+    request: AuthRequest['request']
+    authProvider: AUTH_PROVIDER
+  }) {
+    return Auth.authenticator.authenticate(authProvider, request, {
       failureRedirect: AuthenticatorRoutes.LOGIN,
       successRedirect: '/',
     })
   }
 
-  async authenticate(request: AuthRequest['request']) {
-    return Auth.authenticator.authenticate('google', request)
+  async authenticate({
+    authProvider,
+    request,
+  }: {
+    request: AuthRequest['request']
+    authProvider: AUTH_PROVIDER
+  }) {
+    return Auth.authenticator.authenticate(authProvider, request)
   }
 
   async isAuthenticated(request: AuthRequest['request']) {

@@ -6,6 +6,10 @@ export enum AuthenticatorRoutes {
   LOGOUT = '/logout',
 }
 
+export enum AUTH_PROVIDER {
+  GOOGLE = 'google',
+}
+
 export type GetUserReturnType = {
   user: null | User
   session: Session<SessionData, SessionData>
@@ -18,5 +22,7 @@ interface RedirectResponse {
   cookieHeader: string
   user?: never
 }
+
+export const SessionName = '_session'
 
 export type UserReturnType = GetUserReturnType | RedirectResponse

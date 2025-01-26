@@ -28,9 +28,9 @@ export interface User {
   userId: number
   userName: string
   email: string
-  profileUrl?: string | null
-  ssoId?: string | null
-  token?: string | null
+  profileUrl: string | null
+  ssoId: string | null
+  token: string | null
   role: string
 }
 
@@ -110,6 +110,7 @@ const UsersDao = {
       ssoId: string | null
       profileUrl: string | null
       token: string | null
+      role: string
     }[]
   > {
     try {
