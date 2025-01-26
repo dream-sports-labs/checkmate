@@ -49,7 +49,7 @@ export interface TestCoveredBy {
   testCoveredById: number
 }
 
-export const SelectLabelsAndSquads = () => {
+export const RunFilter = () => {
   const pathParams = useParams()
   const projectId = Number(pathParams?.projectId)
   const orgId = ORG_ID

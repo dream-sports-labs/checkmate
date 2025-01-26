@@ -5,7 +5,7 @@ import {
   TestListFilter,
 } from '@components/MultipleUnifiedFilter/MultipleUnifiedFilter'
 import {SearchBar} from '@components/SearchBar/SearchBar'
-import {Lables, Platforms} from '@components/TestsFilter/SelectLabelsAndSquads'
+import {Lables, Platforms} from '~/screens/CreateRun/RunFilter'
 import {ToggleColumns} from '@components/ToggleColums'
 import {
   useFetcher,

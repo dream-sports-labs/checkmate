@@ -7,7 +7,7 @@ import {
   Sections,
   TestCoveredBy,
   Type,
-} from '@components/TestsFilter/SelectLabelsAndSquads'
+} from '~/screens/CreateRun/RunFilter'
 import {useCustomNavigate} from '@hooks/useCustomNavigate'
 import {useFetcher, useParams} from '@remix-run/react'
 import {Button} from '@ui/button'

@@ -3,7 +3,7 @@ import {
   DropdownMenuCheckboxes,
   IDropdownMenuCheckboxes,
 } from '@components/TestsFilter/DropdownMenuCheckboxes'
-import {Lables} from '@components/TestsFilter/SelectLabelsAndSquads'
+import {Lables} from '~/screens/CreateRun/RunFilter'
 import {setUpdatedFilterList} from '@components/TestsFilter/utils'
 import {useFetcher, useParams} from '@remix-run/react'
 import {Button} from '@ui/button'

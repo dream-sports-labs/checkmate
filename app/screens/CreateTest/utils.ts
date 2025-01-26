@@ -1,4 +1,4 @@
-import {Sections} from '@components/TestsFilter/SelectLabelsAndSquads'
+import {Sections} from '~/screens/CreateRun/RunFilter'
 import {Squad} from '../RunTestList/interfaces'
 
 export const isMandatory = (attribute: string): boolean => {

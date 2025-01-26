@@ -1,10 +1,5 @@
 import {CreateRunRequestAPIType} from '@api/createRun'
 import {InputsSpacing} from '@components/Forms/InputsSpacing'
-import {IDropdownMenuCheckboxes} from '@components/TestsFilter/DropdownMenuCheckboxes'
-import {
-  Lables,
-  SelectLabelsAndSquads,
-} from '@components/TestsFilter/SelectLabelsAndSquads'
 import {zodResolver} from '@hookform/resolvers/zod'
 import {useCustomNavigate} from '@hooks/useCustomNavigate'
 import {
@@ -33,7 +28,7 @@ import {SubmitHandler, useForm} from 'react-hook-form'
 import {z} from 'zod'
 import {FILTER_TEST_CASES, INCLUDE_ALL_TEST_CASES} from '~/constants'
 import {API} from '~/routes/utilities/api'
-import {Squad} from '~/screens/RunTestList/interfaces'
+import {RunFilter} from '~/screens/CreateRun/RunFilter'
 
 const formSchema = z.object({
   runName: z
@@ -340,7 +335,7 @@ export const CreateRun = (props: CreateRunProps) => {
                                   'flex-col',
                                   'rounded-l',
                                 )}>
-                                <SelectLabelsAndSquads />
+                                <RunFilter />
                               </div>
                             ) : null}
                           </div>
