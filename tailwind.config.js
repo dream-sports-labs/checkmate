@@ -23,6 +23,11 @@ module.exports = {
         mono: ['Courier New', 'monospace'],
         lobster: ['Lobster', 'cursive'],
         poppins: ['Poppins', 'sans-serif'],
+        georgia: ['Georgia', 'serif'],
+        gill: ['Gill Sans', 'sans-serif'],
+        trebu: ['Trebuchet MS', 'Helvetica', 'sans-serif'],
+        times: ['Times New Roman', 'serif'],
+        copper: ['Copperplate', 'Papyrus', 'fantasy'],
       },
       colors: {
         border: 'hsl(var(--border))',

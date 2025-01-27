@@ -23,6 +23,6 @@ interface RedirectResponse {
   user?: never
 }
 
-export const SessionName = '_session'
+export const SESSION_NAME = 'user_session'
 
 export type UserReturnType = GetUserReturnType | RedirectResponse

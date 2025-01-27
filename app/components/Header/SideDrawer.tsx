@@ -1,5 +1,4 @@
 import {useLocation, useParams} from '@remix-run/react'
-import {useCustomNavigate} from '@hooks/useCustomNavigate'
 import {LARGE_PAGE_SIZE, ORG_ID, SMALL_PAGE_SIZE} from '@route/utils/constants'
 import {useState} from 'react'
 import {APP_NAME} from '~/constants'
@@ -16,7 +15,6 @@ import {ContentComponent, FooterComponent} from './SideDrawrComponents'
 
 export const SideDrawer = () => {
   const orgId = ORG_ID
-  const navigate = useCustomNavigate()
   const [sideDrawerOpen, setSideDrawerOpen] = useState<boolean>(false)
   const {projectId} = useParams()
   const location = useLocation()
@@ -33,7 +31,7 @@ export const SideDrawer = () => {
           style={{height: 32, width: 'auto'}}
         />
       </SheetTrigger>
-      <div className="flex mr-auto ml-4 text-3xl text-gray-900 tracking-wide font-sans">
+      <div className="flex mr-auto ml-4 text-3xl text-gray-900 tracking-wide font-times">
         {APP_NAME}
       </div>
       <SheetContent side="left" className="w-[100px] sm:w-[300px] pl-8 pt-12">

@@ -1,8 +1,8 @@
 import {createCookieSessionStorage} from '@remix-run/node'
-import {SessionName} from './interfaces'
+import {SESSION_NAME} from './interfaces'
 
 export class SessionStorageService {
-  static sessionKey = SessionName
+  static sessionKey = SESSION_NAME
   static sessionStorage = createCookieSessionStorage({
     cookie: {
       name: SessionStorageService.sessionKey,

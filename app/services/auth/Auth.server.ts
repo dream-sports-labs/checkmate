@@ -6,7 +6,7 @@ import UsersController from '~/dataController/users.controller'
 import {
   AUTH_PROVIDER,
   AuthenticatorRoutes,
-  SessionName,
+  SESSION_NAME,
   UserReturnType,
 } from '~/services/auth/interfaces'
 import {SessionStorageService} from '~/services/auth/session'
@@ -43,15 +43,15 @@ export class Auth {
       request.headers.get('Cookie'),
     )
 
-    const user = session.get(SessionName) ?? null
+    const user = session.get(SESSION_NAME) ?? null
 
     if (user?.ssoId) {
       try {
         const currentUser = await UsersController.getUser({ssoId: user.ssoId})
-        session.set(SessionName, currentUser)
+        session.set(SESSION_NAME, currentUser)
       } catch (error) {
         console.error('Error getting user:', error)
-        session.unset(SessionName)
+        session.unset(SESSION_NAME)
         const cookieHeader =
           await SessionStorageService.sessionStorage.commitSession(session)
         return {
@@ -62,7 +62,7 @@ export class Auth {
       }
     }
 
-    return {user: session.get(SessionName) ?? null, session}
+    return {user: session.get(SESSION_NAME) ?? null, session}
   }
 
   callback({

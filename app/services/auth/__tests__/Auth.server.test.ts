@@ -4,7 +4,7 @@ import UsersController from '~/dataController/users.controller'
 import {
   AUTH_PROVIDER,
   AuthenticatorRoutes,
-  SessionName,
+  SESSION_NAME,
 } from '~/services/auth/interfaces'
 
 jest.mock('~/services/auth/session')
@@ -25,7 +25,7 @@ describe('Auth Service', () => {
 
     mockSession = {
       get: jest.fn((key: string) =>
-        key === SessionName ? {ssoId: 'mockSsoId'} : null,
+        key === SESSION_NAME ? {ssoId: 'mockSsoId'} : null,
       ),
       set: jest.fn(),
       unset: jest.fn(),
@@ -59,7 +59,7 @@ describe('Auth Service', () => {
       expect(result.user).toEqual({
         ssoId: 'mockSsoId',
       })
-      expect(mockSession.set).toHaveBeenCalledWith(SessionName, {
+      expect(mockSession.set).toHaveBeenCalledWith(SESSION_NAME, {
         id: 1,
         name: 'Test User',
         email: 'test@example.com',
@@ -74,7 +74,7 @@ describe('Auth Service', () => {
 
       const result = await new Auth().getUser(mockRequest)
 
-      expect(mockSession.unset).toHaveBeenCalledWith(SessionName)
+      expect(mockSession.unset).toHaveBeenCalledWith(SESSION_NAME)
       expect(
         SessionStorageService.sessionStorage.commitSession,
       ).toHaveBeenCalledWith(mockSession)
