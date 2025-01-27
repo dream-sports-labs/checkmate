@@ -8,7 +8,7 @@ export const AppHeader = ({user}: {user: User | undefined}) => {
     <header
       className={cn(
         'flex items-center justify-between px-6 sticky top-0 z-100 shadow-md',
-        'bg-slate-200',
+        'bg-slate-50',
       )}>
       <SideDrawer />
       {user?.userId && UserComponent(user)}
