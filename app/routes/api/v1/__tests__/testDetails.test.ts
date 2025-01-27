@@ -1,4 +1,4 @@
-import {loader} from '~/routes/api/v1/testDetails' // Adjust the path as necessary
+import {loader} from '~/routes/api/v1/testDetails'
 import TestsController from '@controllers/tests.controller'
 
 import {checkForProjectId, checkForTestId} from '~/routes/utilities/utils'

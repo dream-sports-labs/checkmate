@@ -73,10 +73,10 @@ export const DropdownMenuCheckboxes = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent className="ml-4 max-w-80 max-h-[50vh] overflow-y-auto">
         <Input
-          ref={inputRef} // Keep reference for input
+          ref={inputRef}
           placeholder="Search..."
           value={searchFilter}
-          onChange={(e) => setSearchFilter(e.target.value)} // Immediate filter update
+          onChange={(e) => setSearchFilter(e.target.value)}
           key={'SelectFilter'}
           className="mb-1"
         />

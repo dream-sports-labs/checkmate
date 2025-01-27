@@ -7,7 +7,6 @@ import {
   responseHandler,
 } from '~/routes/utilities/responseHandler'
 
-//GET Handler
 export async function loader({request}: LoaderFunctionArgs) {
   try {
     await getUserAndCheckAccess({

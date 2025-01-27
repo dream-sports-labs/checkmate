@@ -1,4 +1,4 @@
-import {DrizzleAdapter} from '@services/rbac/adapter' // Adjust the path as necessary
+import {DrizzleAdapter} from '@services/rbac/adapter'
 import {loadPolicies, loadRoles} from '@services/rbac/policyUtils'
 import {UserRoleStore} from '~/services/rbac/userRoleStore'
 import {AccessType} from '~/routes/utilities/api'
@@ -21,7 +21,6 @@ describe('DrizzleAdapter', () => {
         ['g', new Map([['g', {policy: []}]])],
       ]),
     }
-
     ;(UserRoleStore.getInstance as jest.Mock).mockReturnValue({
       addUserRole: jest.fn(),
     })
@@ -43,13 +42,11 @@ describe('DrizzleAdapter', () => {
 
       await adapter.loadPolicy(mockModel)
 
-      // Verify policies are added to the model
       expect(mockModel.model.get('p').get('p').policy).toEqual([
         ['admin', 'resource1', 'read'],
         ['user', 'resource2', 'write'],
       ])
 
-      // Verify roles are added to the model
       expect(mockModel.model.get('g').get('g').policy).toEqual([
         ['user1', 'admin'],
         ['user2', 'user'],
@@ -58,7 +55,6 @@ describe('DrizzleAdapter', () => {
         [AccessType.USER, AccessType.READER],
       ])
 
-      // Verify UserRoleStore interactions
       const userRoleStore = UserRoleStore.getInstance()
       expect(userRoleStore.addUserRole).toHaveBeenCalledWith('user1', 'admin')
       expect(userRoleStore.addUserRole).toHaveBeenCalledWith('user2', 'user')
@@ -70,7 +66,6 @@ describe('DrizzleAdapter', () => {
 
       await adapter.loadPolicy(mockModel)
 
-      // Verify no policies or roles are added to the model
       expect(mockModel.model.get('p').get('p').policy).toEqual([])
       expect(mockModel.model.get('g').get('g').policy).toEqual([
         [AccessType.ADMIN, AccessType.USER],

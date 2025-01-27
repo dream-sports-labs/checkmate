@@ -41,7 +41,7 @@ describe('responseHandler', () => {
         },
       },
     )
-    expect(response).toBeUndefined() // `json` itself is called to handle the response.
+    expect(response).toBeUndefined()
   })
 
   it('should log an error and return a 403 response for ACCESS_ERROR_MESSAGE', () => {

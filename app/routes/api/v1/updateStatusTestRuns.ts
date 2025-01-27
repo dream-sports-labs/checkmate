@@ -27,7 +27,6 @@ export type UpdateStatusTestRunsRequestAPIType = z.infer<
   typeof UpdateStatusTestRunsRequestSchema
 > & {userId: number}
 
-// PUT, POST, DELETE, PATCH,
 export const action = async ({request}: ActionFunctionArgs) => {
   try {
     const user = await getUserAndCheckAccess({

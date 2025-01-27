@@ -1,3 +1,5 @@
+import {AppHeader} from '@components/Header/AppHeader'
+import {LinksFunction, LoaderFunctionArgs, redirect} from '@remix-run/node'
 import {
   Links,
   Meta,
@@ -7,18 +9,15 @@ import {
   useLocation,
   useRouteLoaderData,
 } from '@remix-run/react'
-import styles from './globals.css?url'
-import {LinksFunction, LoaderFunctionArgs, redirect} from '@remix-run/node'
-import {Toaster} from '~/ui/toaster'
 import {SearchModal} from '~/components/SearchModal/SearchModal'
+import {User} from '~/db/dao/users.dao'
 import {AuthenticatorService} from '~/services/auth/Auth.server'
 import {AuthenticatorRoutes} from '~/services/auth/interfaces'
-import {User} from '~/db/dao/users.dao'
-import {GlobalLoading} from './screens/GlobalLoading'
-import {AppHeader} from '@components/Header/AppHeader'
-import {APP_NAME} from './constants'
+import {Toaster} from '~/ui/toaster'
 import {version} from '../package.json'
-import {getUser} from '@route/utils/authenticate'
+import {APP_NAME} from './constants'
+import styles from './globals.css?url'
+import {GlobalLoading} from './screens/GlobalLoading'
 
 export const links: LinksFunction = () => [{rel: 'stylesheet', href: styles}]
 

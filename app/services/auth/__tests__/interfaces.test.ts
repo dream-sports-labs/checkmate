@@ -4,7 +4,7 @@ import {
   AuthenticatorRoutes,
   GetUserReturnType,
   UserReturnType,
-} from '@services/auth/interfaces' // Adjust the path as necessary
+} from '@services/auth/interfaces'
 
 describe('AuthenticatorRoutes', () => {
   it('should define the correct routes', () => {

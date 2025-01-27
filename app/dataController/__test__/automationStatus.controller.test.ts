@@ -1,40 +1,50 @@
-import AutomationStatusController from "@controllers/automationStatus.controller"; // Adjust the path as necessary
-import AutomationStatusDao from "@dao/automationStatus.dao";
+import AutomationStatusController from '@controllers/automationStatus.controller'
+import AutomationStatusDao from '@dao/automationStatus.dao'
 
-jest.mock("@dao/automationStatus.dao");
+jest.mock('@dao/automationStatus.dao')
 
-describe("AutomationStatusController", () => {
+describe('AutomationStatusController', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-  });
+    jest.clearAllMocks()
+  })
 
-  describe("getAllAutomationStatus", () => {
-    it("should call AutomationStatusDao.getAllAutomationStatus with the correct parameters", async () => {
-      const mockParams = { orgId: 123 };
+  describe('getAllAutomationStatus', () => {
+    it('should call AutomationStatusDao.getAllAutomationStatus with the correct parameters', async () => {
+      const mockParams = {orgId: 123}
       const mockResponse = [
-        { statusId: 1, statusName: "Active" },
-        { statusId: 2, statusName: "Inactive" },
-      ];
+        {statusId: 1, statusName: 'Active'},
+        {statusId: 2, statusName: 'Inactive'},
+      ]
 
-      (AutomationStatusDao.getAllAutomationStatus as jest.Mock).mockResolvedValue(mockResponse);
+      ;(
+        AutomationStatusDao.getAllAutomationStatus as jest.Mock
+      ).mockResolvedValue(mockResponse)
 
-      const result = await AutomationStatusController.getAllAutomationStatus(mockParams);
+      const result = await AutomationStatusController.getAllAutomationStatus(
+        mockParams,
+      )
 
-      expect(AutomationStatusDao.getAllAutomationStatus).toHaveBeenCalledWith(mockParams);
-      expect(result).toEqual(mockResponse);
-    });
+      expect(AutomationStatusDao.getAllAutomationStatus).toHaveBeenCalledWith(
+        mockParams,
+      )
+      expect(result).toEqual(mockResponse)
+    })
 
-    it("should throw an error if AutomationStatusDao.getAllAutomationStatus fails", async () => {
-      const mockParams = { orgId: 123 };
-      const mockError = new Error("Database error");
+    it('should throw an error if AutomationStatusDao.getAllAutomationStatus fails', async () => {
+      const mockParams = {orgId: 123}
+      const mockError = new Error('Database error')
 
-      (AutomationStatusDao.getAllAutomationStatus as jest.Mock).mockRejectedValue(mockError);
+      ;(
+        AutomationStatusDao.getAllAutomationStatus as jest.Mock
+      ).mockRejectedValue(mockError)
 
-      await expect(AutomationStatusController.getAllAutomationStatus(mockParams)).rejects.toThrow(
-        "Database error"
-      );
+      await expect(
+        AutomationStatusController.getAllAutomationStatus(mockParams),
+      ).rejects.toThrow('Database error')
 
-      expect(AutomationStatusDao.getAllAutomationStatus).toHaveBeenCalledWith(mockParams);
-    });
-  });
-});
+      expect(AutomationStatusDao.getAllAutomationStatus).toHaveBeenCalledWith(
+        mockParams,
+      )
+    })
+  })
+})

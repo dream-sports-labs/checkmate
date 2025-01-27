@@ -24,7 +24,7 @@ describe('TestRunsController', () => {
 
   const invalidTestIdStatusArray = [
     {testId: 3, status: 'INVALID_STATUS' as TestStatusType},
-    {status: TestStatusType.Passed}, // missing testId
+    {status: TestStatusType.Passed},
   ]
 
   const mixedTestIdStatusArray = [

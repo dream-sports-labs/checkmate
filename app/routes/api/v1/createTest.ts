@@ -11,7 +11,7 @@ import {getRequestParams} from '../../utilities/utils'
 import {BaseUpdateTestRequestSchema} from './updateTest'
 
 export const CreateTestRequestSchema = BaseUpdateTestRequestSchema.omit({
-  testId: true, // Omit testId for creation
+  testId: true,
 })
   .refine((data) => data.sectionId || data.new_section, {
     message: 'Select or add section',

@@ -22,7 +22,10 @@ export const loader: LoaderFunction = async ({params, request}) => {
       : Number(url.searchParams.get('runId'))
 
     if (!checkForRunId(runId)) {
-      throw new Error('Invalid or missing runId')
+      return responseHandler({
+        error: 'Invalid or missing runId',
+        status: 400,
+      })
     }
 
     const data = await TestRunsController.downloadReport({runId})

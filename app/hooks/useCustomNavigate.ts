@@ -5,7 +5,7 @@ export function useCustomNavigate() {
   const navigate = useNavigate()
 
   const customNavigate = (
-    to: string | number, // Can be a URL string or a number for relative navigation
+    to: string | number,
     options?: NavigateOptions,
     event?:
       | React.MouseEvent<HTMLDivElement, MouseEvent>

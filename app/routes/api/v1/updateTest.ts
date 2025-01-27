@@ -44,7 +44,7 @@ export const UpdateTestRequestSchema = BaseUpdateTestRequestSchema.refine(
   (data) => data.sectionId || data.new_section,
   {
     message: 'Select or Create a section',
-    path: ['sectionId'], // Highlight sectionId for error
+    path: ['sectionId'],
   },
 )
   .refine((data) => !(data.sectionId && data.new_section), {

@@ -6,7 +6,6 @@ import {
   TestListFilter,
 } from '@components/MultipleUnifiedFilter/MultipleUnifiedFilter'
 import {StatusFilterOptions} from '@components/MultipleUnifiedFilter/staticFiltersData'
-import {Lables, Platforms} from '~/screens/CreateRun/RunFilter'
 import {ToggleColumns} from '@components/ToggleColums'
 import {
   useFetcher,
@@ -29,7 +28,7 @@ import {SearchBar} from '~/components/SearchBar/SearchBar'
 import {RunTestListResponseType} from '~/routes/project.$projectId.run.$runId._index'
 import {API} from '~/routes/utilities/api'
 import {MED_PAGE_SIZE, ORG_ID} from '~/routes/utilities/constants'
-import {safeJsonParse} from '~/routes/utilities/utils'
+import {Lables, Platforms} from '~/screens/CreateRun/RunFilter'
 import {AddResultDialog} from '~/screens/RunTestList/AddResultDialog'
 import {Squad} from '~/screens/RunTestList/interfaces'
 import {RunMetaData} from '~/screens/RunTestList/RunMetaData'

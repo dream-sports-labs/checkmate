@@ -83,7 +83,6 @@ export async function handleNewSectionAndSquad(params: {
     resultKeys.push(key)
   }
 
-  // Add promise for new_section if it exists
   if (params.new_section) {
     const createNewSection =
       SectionsController.createSectionFromHierarchyString({
@@ -94,7 +93,6 @@ export async function handleNewSectionAndSquad(params: {
     addPromise('newSection', createNewSection)
   }
 
-  // Add promise for new_squad if it exists
   if (params.new_squad) {
     const createNewSquad = SquadsController.checkAndCreateSquad({
       squadName: params.new_squad,
@@ -104,7 +102,6 @@ export async function handleNewSectionAndSquad(params: {
     addPromise('newSquad', createNewSquad)
   }
 
-  // Execute all promises and map results
   const results = await Promise.all(promiseArray)
   const resolvedResults = resultKeys.reduce((acc, key, index) => {
     acc[key] = results[index]

@@ -11,7 +11,7 @@ import {checkForTestId} from '../../utilities/utils'
 export interface StatusEntry {
   status: string
   updatedBy: string
-  updatedOn: string // ISO 8601 format (e.g., "2024-11-20T14:17:36.000Z")
+  updatedOn: string
   comment: string | null
 }
 

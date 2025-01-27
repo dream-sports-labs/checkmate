@@ -1,7 +1,11 @@
-import {Auth} from '@services/auth/Auth.server' // Adjust the path as necessary
+import {Auth} from '@services/auth/Auth.server'
 import {SessionStorageService} from '~/services/auth/session'
 import UsersController from '~/dataController/users.controller'
-import {AUTH_PROVIDER, AuthenticatorRoutes, SessionName} from '~/services/auth/interfaces'
+import {
+  AUTH_PROVIDER,
+  AuthenticatorRoutes,
+  SessionName,
+} from '~/services/auth/interfaces'
 
 jest.mock('~/services/auth/session')
 jest.mock('~/dataController/users.controller')

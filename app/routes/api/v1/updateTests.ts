@@ -44,7 +44,6 @@ const editableColumnTypes = [
 
 type UpdateRunType = z.infer<typeof UpdateRunSchema>
 
-// PUT, POST, DELETE, PATCH,
 export const action = async ({request, params}: ActionFunctionArgs) => {
   try {
     const user = await getUserAndCheckAccess({

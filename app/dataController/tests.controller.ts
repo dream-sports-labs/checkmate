@@ -118,7 +118,7 @@ const TestsController = {
 
   bulkAddTests: async (param: IBulkAddTestsController) => {
     try {
-      //get all squads and sections
+      //Get all squads and sections
       const squadsAdded = []
       const sectionsAdded = []
       const allSquads = await SquadsDao.getAllSquads({
@@ -159,7 +159,6 @@ const TestsController = {
         })
       }
 
-      //TODO: remove hardcoded orgId
       const allPriority = await PriorityDao.getAllPriority({
         orgId: param.orgId,
       })

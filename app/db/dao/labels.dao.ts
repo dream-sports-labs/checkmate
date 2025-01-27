@@ -78,7 +78,6 @@ const LabelsDao = {
         createdBy: params.createdBy,
       }))
 
-      // Perform the batch insert
       const data = await dbClient.insert(labels).values(insertData)
       return data
     } catch (error: any) {

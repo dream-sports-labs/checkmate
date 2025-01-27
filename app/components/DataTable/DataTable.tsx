@@ -39,7 +39,6 @@ export function DataTable<T>({
 }: TableProps<T>) {
   const rows = !!table.getRowModel().rows?.length
 
-  // Ref for scrollable container
   const containerRef = useRef<HTMLDivElement>(null)
 
   const handleRowClick = (
@@ -57,7 +56,7 @@ export function DataTable<T>({
 
   return (
     <div
-      ref={containerRef} // Attach the ref here
+      ref={containerRef}
       className={cn(
         'max-h-full w-full border border-zinc-300 rounded-xl bg-slate-50 overflow-scroll',
       )}
