@@ -60,8 +60,6 @@ describe('Download Report Loader', () => {
 
     expect(checkForRunId).toHaveBeenCalledWith(0)
 
-    console.log('-->', response, response instanceof Response, typeof response)
-
     if (response instanceof Response) {
       const responseData = await response.json()
       expect(responseData).toEqual({
