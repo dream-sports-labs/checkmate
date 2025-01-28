@@ -7,9 +7,6 @@ WORKDIR /app
 # Install required system dependencies for building native modules
 RUN apt-get update && apt-get install -y python3 build-essential
 
-# Copy package manager configuration files
-COPY package.json yarn.lock ./
-
 # Reinstall dependencies and handle optional dependencies
 RUN corepack enable && corepack prepare yarn@4.0.0 --activate
 
@@ -20,5 +17,12 @@ RUN yarn install
 # # Build the Remix application
 RUN yarn build
 
-# # Expose the Remix application's default port
+RUN env
+
 EXPOSE 3000
+
+# # Seed the data
+# RUN yarn db:init
+
+
+# CMD ["yarn", "start"]
