@@ -68,12 +68,12 @@ export const UpdateUserRoleDialog = ({
         style={{
           backgroundColor: getUserRoleColor(currentType),
           fontWeight: 400,
-          width: 96,
+          width: 100,
           color: getUserRoleTextColor(currentType),
         }}
-        className={cn('h-3 px-2 py-3')}>
+        className={cn('h-3 py-3')}>
         {currentType?.charAt(0)?.toUpperCase() + currentType?.slice(1)}
-        <ChevronDown size={16} strokeWidth={2} className="ml-2" />
+        <ChevronDown size={16} strokeWidth={2} className="ml-auto" />
       </Button>
     )
   }
@@ -81,7 +81,7 @@ export const UpdateUserRoleDialog = ({
   return (
     <CustomDialog
       anchorComponent={triggerComponent()}
-      headerComponent={<DialogTitle>Update User Type</DialogTitle>}
+      headerComponent={<DialogTitle>Update User Role</DialogTitle>}
       contentComponent={
         <div className="flex flex-col gap-4 py-4">
           <div className="flex items-center gap-4">
@@ -105,7 +105,7 @@ export const UpdateUserRoleDialog = ({
               onClick={handleSubmit}
               disabled={updateRoleFetcher.state !== 'idle' || !selectedRole}
               className="w-full bg-blue-600">
-              Update Type
+              Update Role
             </Button>
           </DialogClose>
         </updateRoleFetcher.Form>

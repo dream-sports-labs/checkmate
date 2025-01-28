@@ -60,6 +60,7 @@ export default defineConfig({
               label: "Runs",
               items: ["guides/runs/runs", "guides/runs/run-detail"],
             },
+            "guides/user-settings",
           ],
         },
       ],

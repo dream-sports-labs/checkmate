@@ -36,9 +36,9 @@ export const AdminPanelColumnConfig: ColumnDef<GetAllUsersResponse>[] = [
     },
   },
   {
-    accessorKey: 'type',
+    accessorKey: 'Role',
     header: () => (
-      <HeaderComponent heading={'Type'} position={'left'} className="ml-0" />
+      <HeaderComponent heading={'Role'} position={'left'} className="ml-0" />
     ),
     cell: ({row}) => {
       const role = row.original.role
