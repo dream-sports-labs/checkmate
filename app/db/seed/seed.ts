@@ -15,7 +15,13 @@ import {seed} from './seedData'
 
 const seedData = async (data: any, tableName: MySqlTable<TableConfig>) => {
   try {
-    await dbClient.insert(tableName).values(data)
+    const existingRecords = await dbClient.select().from(tableName).limit(1);
+    if (existingRecords.length > 0) {
+      console.log(`Table ${tableName.getSQL.name} already has data. Skipping seeding.`);
+      return;
+    }else{
+       await dbClient.insert(tableName).values(data)
+    }
   } catch (err) {
     console.error('Something went wrong...')
     console.error(err)
