@@ -1,36 +1,18 @@
-# # Ignore node_modules (in case it's present locally)
-# node_modules
-
-# # Ignore local environment files
-# .env
-# .env.local
-
-# # Ignore build output (if you want to rebuild inside the container)
-# build
-
-# # Ignore logs
-# logs
-# *.log
-
-# # Ignore Docker-specific files
-# Dockerfile
-# .dockerignore
-
-# # Ignore any other files you don't need
-# drizzle
-# app/db/seed/seedTests/*.json
-
-# node_modules
-# /.cache
-# /build
-# .env
-# .idea/*
-# .DS_Store
-# todo.txt
-# playground.*
-# .yarn
-# .vscode
-# coverage/*
-# app/config.json
-# drizzle/*
-# app/db/seed/seedTests/*.json
+node_modules
+.env
+.env.example
+build
+logs
+*.log
+Dockerfile
+.dockerignore
+drizzle
+app/db/seed/seedTests/*.json
+.cache
+.idea/*
+.DS_Store
+todo.txt
+playground.*
+.yarn
+.vscode
+coverage/*
