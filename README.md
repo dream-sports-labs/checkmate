@@ -22,7 +22,7 @@
    ```
    This command will:
    - Create a database container using Docker.
-   - Seed the database with initial data.
+   - Seed the database with initial data from the `seedData.sql` file.
 5. Start the application in development mode:
    ```sh
    yarn dev
@@ -56,7 +56,7 @@
    ```
    - Use this script to replicate production-like behavior in Docker while reusing an existing database container.
    - If a database container does not already exist, this script will create one.
-2. IApply schema changes to the database:
+2. Apply schema changes to the database:
    ```sh
       yarn dev:db:setup
    ```
@@ -66,7 +66,7 @@
    - Apply the schema to the database.
    - Seed data from the app/db/seed folder.
 3. Manage the Checkmate database:
-   - Create the database:
+   - Create the database and seed data from `seedData.sql` file:
      ```sh
      yarn docker:db:setup
      ```
