@@ -1,10 +1,10 @@
-#### Pre-requisites
+### Pre-requisites
 
 1. **Docker Desktop**: Ensure Docker Desktop is installed and running.
 2. **Yarn v4**
 3. **Google OAuth Application**: Set up a Google OAuth application to use authentication features.
 
-#### Local Dev Setup
+### Local Dev Setup
 
 1. Clone the repository:
    ```sh
@@ -29,7 +29,7 @@
    ```
 6. App will be started on http://localhost:3000
 
-#### Docker Setup
+### Docker Setup
 
 1. Create an environment file:
    - Ensure you have a .env file in place, based on .env.example.
@@ -48,7 +48,7 @@
 
 **Note**: Application running in docker is in **production** mode
 
-#### Developer Scripts
+### Developer Scripts
 
 1. Set up the application in Docker with an existing database:
    ```sh
