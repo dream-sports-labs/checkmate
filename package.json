@@ -13,7 +13,7 @@
     "db:schema:push": "yarn db:generate && yarn db:migrate",
     "db:seed": "npx tsx app/db/seed/seed.ts && sh ./scripts/insertTests.sh",
     "db:studio": "drizzle-kit studio --port 4000",
-    "dev:setup": "yarn docker:db:setup --db-init true && yarn db:init",
+    "dev:db:setup": "yarn docker:db:setup --db-init true && yarn db:init",
     "docker:setup": "./scripts/docker-start.sh --app-docker true --db-init true",
     "docker:app:setup": "./scripts/docker-start.sh --app-docker true --db-init false",
     "docker:db:setup": "./scripts/docker-start.sh --app-docker false --db-init true",

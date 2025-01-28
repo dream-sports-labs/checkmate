@@ -7,21 +7,21 @@
 #### Local Dev Setup
 
 1. Clone the repo
-   ```sh frame="none"
+   ```sh
    git clone git@github.com:dream-sports-labs/checkmate.git
    ```
 2. Install dependencies using
-   ```sh frame="none"
+   ```sh
    yarn install
    ```
 3. Create .env file, take reference from .env.example
 4. To setup the checkmate database and seed data
-   ```sh frame="none"
-   yarn dev:setup
+   ```sh
+   yarn docker:db:setup
    ```
    It will create the database container in docker, and seed the data in it.
 5. To start the application in dev mode
-   ```sh frame="none"
+   ```sh
    yarn dev
    ```
 6. App will be started on http://localhost:3000
@@ -30,11 +30,11 @@
 
 1. Create .env file
 2. Install dependencies using
-   ```sh frame="none"
+   ```sh
    yarn install
    ```
 3. To setup checkmate application and database
-   ```sh frame="none"
+   ```sh
    yarn docker:setup
    ```
    - It will create the database and application container in docker
@@ -45,25 +45,31 @@
 #### Developer Scripts
 
 1. To setup the checkmate application in docker with existing database of docker, to visualise the production mode behaviour
-   ```sh frame="none"
+   ```sh
    yarn docker:app:setup
    ```
    - This will create the application container in docker, and create the database container only if it is not present
-2. To setup the checkmate database
+2. Incase of schema changes and you want them reflect on database, run
+   ```sh
+      yarn dev:db:setup
+   ```
+   - This will create the database in docker, and instead of seeding data through seed file, it will generate the new schema and store in drizzle folder and push the schema in dataase.
+   - Will proceed to run `yarn db:init` and seed the data from app/db/seed folder.
+3. To setup the checkmate database
    - To create database only
-     ```sh frame="none"
+     ```sh
      yarn docker:db:setup
      ```
    - To insert data in it
-     ```sh frame="none"
+     ```sh
      yarn db:init
      ```
-3. Run the [drizzle](https://orm.drizzle.team/docs/overview) studio to monitor your database
-   ```sh frame="none"
+4. Run the [drizzle](https://orm.drizzle.team/docs/overview) studio to monitor your database
+   ```sh
    yarn db:studio
    ```
-4. Generate sql file from the drizzle schema
-   ```sh frame="none"
+5. Generate sql file from the drizzle schema
+   ```sh
    yarn db:generate
    ```
    - This will generate sql file in drizzle folder at root
