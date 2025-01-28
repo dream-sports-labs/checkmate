@@ -8,30 +8,32 @@ import { Steps } from "@astrojs/starlight/components";
 
 #### Pre-requisites
 
-1. Docker desktop
-2. yarn v4 installed
-3. Google OAuth application
+1. **Docker Desktop**: Ensure Docker Desktop is installed and running.
+2. **Yarn v4**
+3. **Google OAuth Application**: Set up a Google OAuth application to use authentication features.
    - Follow the steps on the [Google documentation](https://developers.google.com/identity/protocols/oauth2/web-server#creatingcred) to create a new application and get a client ID and secret.
 
 #### Local Dev Setup
 
 <Steps>
 
-1. Clone the repo
+1. Clone the repository:
    ```sh frame="none"
    git clone git@github.com:dream-sports-labs/checkmate.git
    ```
-2. Install dependencies using
+2. Install dependencies
    ```sh frame="none"
    yarn install
    ```
-3. Create .env file, take reference from .env.example
-4. To setup the checkmate database and seed data
+3. Create .env file,
+   - Copy the .env.example file and rename it to .env. Update it with your specific environment variables.
+4. Set up the database and seed data:
    ```sh frame="none"
    yarn docker:db:setup
    ```
-   It will create the database container in docker, and seed the data in it.
-5. To start the application in dev mode
+   - Create a database container using Docker.
+   - Seed the database with initial data.
+5. Start the application in development mode:
    ```sh frame="none"
    yarn dev
    ```
@@ -43,16 +45,18 @@ import { Steps } from "@astrojs/starlight/components";
 
 <Steps>
 
-1. Create .env file
-2. Install dependencies using
+1. Create an environment file:
+   - Ensure you have a .env file in place, based on .env.example.
+2. Install dependencies
    ```sh frame="none"
    yarn install
    ```
-3. To setup checkmate application and database
+3. Set up the application and database:
    ```sh frame="none"
    yarn docker:setup
    ```
-   - It will create the database and application container in docker
+   - Create both the application and database containers using Docker.
+   - Seed the database with initial data.
 4. App will be started on http://localhost:3000
 
 </Steps>
@@ -63,32 +67,37 @@ Application running in docker is in **production** mode
 
 #### Developer Scripts
 
-1. To setup the checkmate application in docker with existing database of docker, to visualise the production mode behaviour
+1. Set up the application in Docker with an existing database:
    ```sh frame="none"
    yarn docker:app:setup
    ```
-   - This will create the application container in docker, and create the database container only if it is not present
-2. Incase of schema changes and you want them reflect on database, run
+   - Use this script to replicate production-like behavior in Docker while reusing an existing database container.
+   - If a database container does not already exist, this script will create one.
+2. IApply schema changes to the database:
    ```sh frame="none"
       yarn dev:db:setup
    ```
-   - This will create the database in docker, and instead of seeding data through seed file, it will generate the new schema and store in drizzle folder and push the schema in dataase.
-   - Will proceed to seed the data from app/db/seed folder.
-3. To setup the checkmate database
-   - To create database only
+   - Create a database container in Docker (if one doesn’t exist).
+   - Generate the updated schema in the drizzle folder.
+   - Apply the schema to the database.
+   - Seed data from the app/db/seed folder.
+3. Manage the Checkmate database:
+   - Create the database:
      ```sh frame="none"
      yarn docker:db:setup
      ```
-   - To insert data in it
+   - Insert seed data from seed folder:
      ```sh frame="none"
      yarn db:init
      ```
-4. Run the [drizzle](https://orm.drizzle.team/docs/overview) studio to monitor your database
+4. Monitor the database with [Drizzle Studio](https://orm.drizzle.team/docs/overview):
+   - Use the Drizzle Studio tool to explore and manage the database.
    ```sh frame="none"
    yarn db:studio
    ```
-5. Generate sql file from the drizzle schema
+5. Generate SQL from the Drizzle schema:
+   - To export the database schema as an SQL file:
    ```sh frame="none"
    yarn db:generate
    ```
-   - This will generate sql file in drizzle folder at root
+   - The generated SQL file will be saved in the drizzle folder at the project root.

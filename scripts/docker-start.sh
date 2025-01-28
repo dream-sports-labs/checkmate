@@ -1,24 +1,24 @@
 #!/bin/bash
 
-
 APP_DOCKER=false
 DB_INIT=true
-
+SEED_DATA=true
 
 while [[ "$#" -gt 0 ]]; do
   case $1 in
-    --app-docker) APP_DOCKER="$2"; shift ;;   
-    --db-init) DB_INIT="$2"; shift ;;         
+    --app-docker) APP_DOCKER="$2"; shift ;;    # Flag for running the app in Docker
+    --db-init) DB_INIT="$2"; shift ;;          # Flag for initializing the database
+    --seed-data) SEED_DATA="$2"; shift ;;      # Flag for triggering db_seeder
     *)
       echo "Unknown option: $1"
-      echo "Usage: $0 [--app-docker <true|false>] [--db-init <true|false>]"
+      echo "Usage: $0 [--app-docker <true|false>] [--db-init <true|false>] [--seed-data <true|false>]"
       exit 1
       ;;
   esac
   shift
 done
 
-
+# Validate flags
 if [[ "$APP_DOCKER" != "true" && "$APP_DOCKER" != "false" ]]; then
   echo "Invalid value for --app-docker. Use 'true' or 'false'."
   exit 1
@@ -28,14 +28,23 @@ if [[ "$DB_INIT" != "true" && "$DB_INIT" != "false" ]]; then
   echo "Invalid value for --db-init. Use 'true' or 'false'."
   exit 1
 fi
+
+if [[ "$SEED_DATA" != "true" && "$SEED_DATA" != "false" ]]; then
+  echo "Invalid value for --seed-data. Use 'true' or 'false'."
+  exit 1
+fi
+
+# Shutdown existing application container
 docker-compose down --volumes checkmate-app
 
 if [ "$DB_INIT" == "true" ]; then
   echo "Shutting down existing checkmate-db container..."
   docker-compose down --volumes checkmate-db
-  docker-compose down --volumes db_seeder
   echo "Starting fresh checkmate-db container..."
   docker-compose up --build -d checkmate-db
+  
+  # Always trigger db_seeder when DB_INIT is true
+  echo "Starting db_seeder for fresh data seeding..."
   docker-compose up --build -d db_seeder
   sleep 10
 else
@@ -45,11 +54,15 @@ else
   else
     echo "Starting or rebuilding checkmate-db..."
     docker-compose up --build -d checkmate-db
-    docker-compose up --build -d db_seeder
     sleep 10
   fi
+  
+  # Conditionally trigger db_seeder if --seed-data is true
+  if [ "$SEED_DATA" == "true" ]; then
+    echo "Starting db_seeder for data seeding as requested..."
+    docker-compose up --build -d db_seeder
+  fi
 fi
-
 
 if [ "$APP_DOCKER" == "true" ]; then
   echo "Starting or rebuilding checkmate-app..."

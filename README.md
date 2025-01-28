@@ -65,7 +65,7 @@
    - Generate the updated schema in the drizzle folder.
    - Apply the schema to the database.
    - Seed data from the app/db/seed folder.
-3. TManage the Checkmate database:
+3. Manage the Checkmate database:
    - Create the database:
      ```sh
      yarn docker:db:setup
