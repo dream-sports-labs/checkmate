@@ -33,9 +33,10 @@ docker-compose down --volumes checkmate-app
 if [ "$DB_INIT" == "true" ]; then
   echo "Shutting down existing checkmate-db container..."
   docker-compose down --volumes checkmate-db
+  docker-compose down --volumes db_seeder
   echo "Starting fresh checkmate-db container..."
   docker-compose up --build -d checkmate-db
-  
+  docker-compose up --build -d db_seeder
   sleep 10
 else
   DB_STATUS=$(docker inspect --format='{{json .State.Health.Status}}' checkmate-db 2>/dev/null)
@@ -44,6 +45,7 @@ else
   else
     echo "Starting or rebuilding checkmate-db..."
     docker-compose up --build -d checkmate-db
+    docker-compose up --build -d db_seeder
     sleep 10
   fi
 fi
