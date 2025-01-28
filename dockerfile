@@ -14,15 +14,6 @@ RUN corepack enable && corepack prepare yarn@4.0.0 --activate
 COPY . .
 RUN yarn install
 
-# # Build the Remix application
 RUN yarn build
 
-RUN env
-
 EXPOSE 3000
-
-# # Seed the data
-# RUN yarn db:init
-
-
-# CMD ["yarn", "start"]

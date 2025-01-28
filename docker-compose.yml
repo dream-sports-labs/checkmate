@@ -42,7 +42,7 @@ services:
     networks:
       - checkmate-network
     command: >
-      sh -c "yarn db:init && yarn build && yarn start"
+      sh -c "yarn db:init && yarn start"
 
 volumes:
   checkmate-mysql:
