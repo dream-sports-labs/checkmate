@@ -27,7 +27,7 @@
    - Seed the database with initial data.
 4. App will be started on http://localhost:3000
 
-📌 **[Here](https://checkmate.dreamsportslabs.com/project/setup/) is the complete setup guide.** 🚀
+📌📌 **[Here](https://checkmate.dreamsportslabs.com/project/setup/) is the complete setup guide.**
 
 ## How to Contribute
 
