@@ -2,7 +2,7 @@
 
 1. **Docker Desktop**: Ensure Docker Desktop is installed and running.
 2. **Yarn v4**
-3. **Google OAuth Application**: Set up a Google OAuth application to use authentication features.
+3. **Google OAuth Application**: Set up a Google OAuth application to enable login.
 
 ### Local Dev Setup
 
