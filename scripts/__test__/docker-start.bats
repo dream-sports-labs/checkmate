@@ -1,112 +1,135 @@
 #!/usr/bin/env bats
 
 setup() {
-  # Mock commands
-  function docker-compose() {
-    echo "Mocked docker-compose: $*"
-  }
+  # Create a temporary directory for mocks
+  export MOCK_DIR="$BATS_TMPDIR/bin"
+  mkdir -p "$MOCK_DIR"
 
-  function docker() {
-    if [[ "$1" == "inspect" ]]; then
-      echo '"healthy"'  # Mocked exact output expected by the script
-    else
-      echo "Mocked docker: $*"
-    fi
-  }
+  # Mock `docker-compose`
+  cat << 'EOF' > "$MOCK_DIR/docker-compose"
+#!/bin/bash
+echo "Mocked docker-compose: $*"
+EOF
+  chmod +x "$MOCK_DIR/docker-compose"
 
-  # Save the original PATH
-  ORIGINAL_PATH=$PATH
+  # Mock `docker`
+  cat << 'EOF' > "$MOCK_DIR/docker"
+#!/bin/bash
+if [[ "$1" == "inspect" && "$2" == "--format={{json .State.Health.Status}}" ]]; then
+  echo '"healthy"'  # Default: return healthy status
+else
+  echo "Mocked docker: $*"
+fi
+EOF
+  chmod +x "$MOCK_DIR/docker"
 
-  # Override PATH to include mocked commands
-  PATH=$BATS_TMPDIR:$PATH
+  # Save the original PATH and prepend mock directory
+  ORIGINAL_PATH="$PATH"
+  export PATH="$MOCK_DIR:$PATH"
 }
 
 teardown() {
   # Restore the original PATH
-  PATH=$ORIGINAL_PATH
+  export PATH="$ORIGINAL_PATH"
 }
 
-@test "Default behavior should shut down and rebuild DB and skip app" {
+@test "1. Default behavior should shut down and rebuild DB and skip app" {
   run ./docker-start.sh
-  [[ "$status" -eq 0 ]]
+  [ "$status" -eq 0 ]
   [[ "$output" == *"Shutting down existing checkmate-db container..."* ]]
   [[ "$output" == *"Starting fresh checkmate-db container..."* ]]
   [[ "$output" == *"Excluding checkmate-app service."* ]]
 }
 
-@test "Should fail with invalid --app-docker value" {
+@test "2. Should fail with invalid --app-docker value" {
   run ./docker-start.sh --app-docker invalid
-  [[ "$status" -eq 1 ]]
+  [ "$status" -eq 1 ]
   [[ "$output" == *"Invalid value for --app-docker"* ]]
 }
 
-@test "Should fail with invalid --db-init value" {
+@test "3. Should fail with invalid --db-init value" {
   run ./docker-start.sh --db-init invalid
-  [[ "$status" -eq 1 ]]
+  [ "$status" -eq 1 ]
   [[ "$output" == *"Invalid value for --db-init"* ]]
 }
 
-@test "Should fail with invalid --seed-data value" {
+@test "4. Should fail with invalid --seed-data value" {
   run ./docker-start.sh --seed-data invalid
-  [[ "$status" -eq 1 ]]
+  [ "$status" -eq 1 ]
   [[ "$output" == *"Invalid value for --seed-data"* ]]
 }
 
-@test "Should rebuild DB if not healthy when --db-init false" {
-  function docker() {
-    if [[ "$1" == "inspect" ]]; then
-      echo '{"State":{"Health":{"Status":"unhealthy"}}}'  # Mocked unhealthy status
-    else
-      echo "Mocked docker: $*"
-    fi
-  }
+@test "5. Should rebuild DB if not healthy when --db-init false" {
+  # Override docker mock to return unhealthy status
+  echo -e '#!/bin/bash\nif [[ "$1" == "inspect" ]]; then echo '"'"'unhealthy'"'"'; else echo "Mocked docker: $*"; fi' > "$MOCK_DIR/docker"
+  chmod +x "$MOCK_DIR/docker"
 
   run ./docker-start.sh --db-init false
-  [[ "$status" -eq 0 ]]
+  [ "$status" -eq 0 ]
   [[ "$output" == *"Starting or rebuilding checkmate-db..."* ]]
 }
 
-@test "Should start checkmate-app when --app-docker true" {
+@test "6. Should start checkmate-app when --app-docker true" {
   run ./docker-start.sh --app-docker true
-  [[ "$status" -eq 0 ]]
+  [ "$status" -eq 0 ]
   [[ "$output" == *"Starting or rebuilding checkmate-app..."* ]]
 }
 
-@test "Should skip checkmate-app when --app-docker false" {
+@test "7. Should skip checkmate-app when --app-docker false" {
   run ./docker-start.sh --app-docker false
-  [[ "$status" -eq 0 ]]
+  [ "$status" -eq 0 ]
   [[ "$output" == *"Excluding checkmate-app service."* ]]
 }
 
-@test "Should seed data when --seed-data true and --db-init false" {
+@test "8. Should seed data when --seed-data true and --db-init false" {
   run ./docker-start.sh --db-init false --seed-data true
-  [[ "$status" -eq 0 ]]
+  [ "$status" -eq 0 ]
   [[ "$output" == *"Starting db_seeder for data seeding as requested..."* ]]
 }
 
-@test "Should not seed data when --seed-data false and --db-init false" {
+@test "9. Should not seed data when --seed-data false and --db-init false" {
   run ./docker-start.sh --db-init false --seed-data false
-  [[ "$status" -eq 0 ]]
+  [ "$status" -eq 0 ]
   [[ "$output" != *"Starting db_seeder for data seeding as requested..."* ]]
 }
 
-@test "Should always seed data when --db-init true" {
+@test "10. Should always seed data when --db-init true" {
   run ./docker-start.sh --db-init true --seed-data false
-  [[ "$status" -eq 0 ]]
+  [ "$status" -eq 0 ]
   [[ "$output" == *"Starting fresh checkmate-db container..."* ]]
-  [[ "$output" == *"Starting db_seeder for fresh data seeding..."* ]]
+  [[ "$output" == *"Starting db_seeder for data seeding as requested..."* ]]
 }
 
-@test "Should handle healthy DB and skip unnecessary DB rebuild" {
-  function docker() {
-    if [[ "$1" == "inspect" ]]; then
-      echo '{"State":{"Health":{"Status":"healthy"}}}'  # Mocked healthy status
-    else
-      echo "Mocked docker: $*"
-    fi
-  }
-
+@test "11. Should handle healthy DB and skip unnecessary DB rebuild" {
   run ./docker-start.sh --db-init false
-  [[ "$status" -eq 0 ]]
+  [ "$status" -eq 0 ]
   [[ "$output" == *"checkmate-db is already running and healthy."* ]]
+}
+
+@test "12. Should handle all flags true" {
+  run ./docker-start.sh --app-docker true --db-init true --seed-data true
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"Starting or rebuilding checkmate-app..."* ]]
+  [[ "$output" == *"Starting fresh checkmate-db container..."* ]]
+  [[ "$output" == *"Starting db_seeder for data seeding as requested..."* ]]
+}
+
+@test "13. Should handle all flags false" {
+  run ./docker-start.sh --app-docker false --db-init false --seed-data false
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"Excluding checkmate-app service."* ]]
+}
+
+@test "14. Should start DB and app when both flags are true" {
+  run ./docker-start.sh --app-docker true --db-init true
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"Starting or rebuilding checkmate-app..."* ]]
+  [[ "$output" == *"Starting fresh checkmate-db container..."* ]]
+}
+
+@test "15. Should only start db_seeder when --seed-data true" {
+  run ./docker-start.sh --db-init false --seed-data true
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"Starting db_seeder for data seeding as requested..."* ]]
+  [[ "$output" != *"Shutting down existing checkmate-db container..."* ]]
 }
