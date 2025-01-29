@@ -34,8 +34,8 @@ if [[ "$SEED_DATA" != "true" && "$SEED_DATA" != "false" ]]; then
   exit 1
 fi
 
-# Shutdown existing application container
-docker-compose down --volumes checkmate-app
+
+echo $APP_DOCKER $DB_INIT $SEED_DATA
 
 if [ "$DB_INIT" == "true" ]; then
   echo "Shutting down existing checkmate-db container..."
@@ -55,11 +55,13 @@ else
   # Conditionally trigger db_seeder if --seed-data is true
   if [ "$SEED_DATA" == "true" ]; then
     echo "Starting db_seeder for data seeding as requested..."
+    docker-compose down --volumes db_seeder
     docker-compose up --build -d db_seeder
   fi
 fi
 
 if [ "$APP_DOCKER" == "true" ]; then
+  docker-compose down --volumes checkmate-app
   echo "Starting or rebuilding checkmate-app..."
   docker-compose up --build -d checkmate-app
 else

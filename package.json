@@ -16,7 +16,7 @@
     "dev:db:setup": "yarn docker:db:setup --db-init true --seed-data false && yarn db:init",
     "docker:setup": "./scripts/docker-start.sh --app-docker true --db-init true --seed-data true",
     "docker:app:setup": "./scripts/docker-start.sh --app-docker true --seed-data false --db-init false",
-    "docker:db:setup": "./scripts/docker-start.sh --app-docker false --db-init true --seed-data true",
+    "docker:db:setup": "./scripts/docker-start.sh --seed-data true --app-docker false --db-init true",
     "dev": "node server.mjs",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "NODE_ENV=production node server.mjs",
