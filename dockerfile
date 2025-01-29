@@ -13,7 +13,5 @@ RUN corepack enable && corepack prepare yarn@4.0.0 --activate
 # Copy application code
 COPY . .
 RUN yarn install
-
 RUN yarn build
-
 EXPOSE 3000
