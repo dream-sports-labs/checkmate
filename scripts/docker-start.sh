@@ -60,6 +60,7 @@ else
     docker-compose up --build -d checkmate-db
     echo "Waiting 10 seconds to ensure database is fully ready..."
     sleep 10  
+
     # Conditionally trigger db_seeder if --seed-data is true
     if [ "$SEED_DATA" == "true" ]; then
       echo "Starting db_seeder for data seeding as requested..."
@@ -68,7 +69,6 @@ else
     fi
     sleep 10
   fi
-
 
 fi
 

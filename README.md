@@ -55,7 +55,7 @@
    yarn docker:app:setup
    ```
    - Use this script to replicate production-like behavior in Docker while reusing an existing database container.
-   - If a database container does not already exist, this script will create one.
+   - If a database container does not already exist, this script will create one and seed data from `seedData.sql` file.
 2. Apply schema changes to the database:
    ```sh
       yarn dev:db:setup

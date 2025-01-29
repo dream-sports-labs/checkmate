@@ -72,7 +72,7 @@ Application running in docker is in **production** mode
    yarn docker:app:setup
    ```
    - Use this script to replicate production-like behavior in Docker while reusing an existing database container.
-   - If a database container does not already exist, this script will create one.
+   - If a database container does not already exist, this script will create one and seed data from `seedData.sql` file.
 2. Apply schema changes to the database:
    ```sh frame="none"
       yarn dev:db:setup
@@ -80,7 +80,7 @@ Application running in docker is in **production** mode
    - Create a database container in Docker (if one doesn’t exist).
    - Generate the updated schema in the drizzle folder.
    - Apply the schema to the database.
-   - Seed data from the app/db/seed folder.
+   - Seed data from the `app/db/seed` folder.
 3. Manage the Checkmate database:
    - Create the database and seed data from `seedData.sql` file::
      ```sh frame="none"

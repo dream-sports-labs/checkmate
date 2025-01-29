@@ -15,7 +15,7 @@
     "db:studio": "drizzle-kit studio --port 4000",
     "dev:db:setup": "./scripts/docker-start.sh --db-init true && yarn db:init",
     "docker:setup": "./scripts/docker-start.sh --app-docker true --db-init true --seed-data true",
-    "docker:app:setup": "./scripts/docker-start.sh --app-docker true",
+    "docker:app:setup": "./scripts/docker-start.sh --app-docker true --seed-data true",
     "docker:db:setup": "./scripts/docker-start.sh --seed-data true --db-init true",
     "dev": "node server.mjs",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
