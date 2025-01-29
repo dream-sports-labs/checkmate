@@ -19,21 +19,25 @@
 
 ### Installation: Docker Setup
 
-1. Create an environment file:
+1. Clone the repository:
+   ```sh
+   git clone git@github.com:dream-sports-labs/checkmate.git
+   ```
+2. Create an environment file:
    - Ensure you have a .env file in place, based on .env.example.
-2. Install dependencies
-   ```sh frame="none"
+3. Install dependencies
+   ```sh
    yarn install
    ```
-3. Set up the application and database:
-   ```sh frame="none"
+4. Set up the application and database:
+   ```sh
    yarn docker:setup
    ```
    - Create both the application and database containers using Docker.
    - Seed the database with initial data.
-4. App will be started on http://localhost:3000
+5. App will be started on http://localhost:3000
 
-📌📌 **[Here](https://checkmate.dreamsportslabs.com/project/setup/) is the complete setup guide.**
+📌📌 **[Here is the complete setup guide](https://checkmate.dreamsportslabs.com/project/setup/)**
 
 ### API Documentation
 
