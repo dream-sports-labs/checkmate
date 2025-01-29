@@ -47,7 +47,7 @@ All contributions must be properly tested to maintain project stability.
 
 ## Getting Support
 
-If you have questions or need clarification on contributing, reach out via the Issue Tracker.
+- If you have questions or need clarification on contributing, reach out via the [Issue Tracker](https://github.com/dream-sports-labs/checkmate/issues) or [Discord](https://discord.com/channels/1317172052179943504/1329754684730380340).
 
 We appreciate your contributions to Checkmate and look forward to your participation in improving this project! 🚀
 
