@@ -10,13 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@ui/dropdown-menu'
-import {
-  DeleteIcon,
-  Download,
-  EditIcon,
-  ListRestart,
-  LockIcon,
-} from 'lucide-react'
+import {DeleteIcon, EditIcon, ListRestart, LockIcon} from 'lucide-react'
 import {ReactElement, useEffect, useMemo, useRef, useState} from 'react'
 import {Tests} from './interfaces'
 import {LockRunDialogue} from './LockRunDialog'
@@ -24,46 +18,31 @@ import {RemoveTestsDialogue} from './RemoveTestsDialog'
 import {ResetRunsDialogue} from './ResetRunDialogue'
 import React from 'react'
 import {toast} from '@ui/use-toast'
-import {downloadReport} from './utils'
-import {API} from '@route/utils/api'
-
-enum ACTIONS {
-  EDIT = 'EDIT',
-  LOCK = 'LOCK',
-  REMOVE_TEST = 'REMOVE TEST',
-  RESET_RUN = 'RESET RUN',
-  DOWNLOAD = 'DOWNLOAD',
-}
 
 const ACTION_ITEMS: {
   id: number
-  action: ACTIONS
+  action: 'EDIT' | 'LOCK' | 'REMOVE TEST' | 'RESET RUN'
   icon: ReactElement
 }[] = [
   {
     id: 1,
-    action: ACTIONS.EDIT,
+    action: 'EDIT',
     icon: <EditIcon size={14} />,
   },
   {
     id: 2,
-    action: ACTIONS.REMOVE_TEST,
+    action: 'REMOVE TEST',
     icon: <DeleteIcon size={14} />,
   },
   {
     id: 3,
-    action: ACTIONS.RESET_RUN,
+    action: 'RESET RUN',
     icon: <Tooltip anchor={<ListRestart size={14} />} content={'Reset Run'} />,
   },
   {
     id: 4,
-    action: ACTIONS.LOCK,
+    action: 'LOCK',
     icon: <LockIcon size={14} />,
-  },
-  {
-    id: 5,
-    action: ACTIONS.DOWNLOAD,
-    icon: <Download size={14} />,
   },
 ]
 
@@ -97,22 +76,17 @@ export const RunActions = React.memo(({table, runData}: IRunActions) => {
     }
   }, [apiResponse])
 
-  const handleRunAction = (action: ACTIONS) => {
+  const handleRunAction = (
+    action: 'EDIT' | 'LOCK' | 'REMOVE TEST' | 'RESET RUN',
+  ) => {
     setActionDD(false)
-    if (action === ACTIONS.LOCK) setLockRunDialog(true)
-    else if (action === ACTIONS.REMOVE_TEST) {
+    if (action === 'LOCK') setLockRunDialog(true)
+    else if (action === 'REMOVE TEST') {
       setRemoveTestDialogue(true)
-    } else if (action === ACTIONS.EDIT)
+    } else if (action === 'EDIT')
       navigate(`/project/${projectId}/editRun/${runData?.runId ?? 0}`)
-    else if (action === ACTIONS.RESET_RUN) {
+    else if (action === 'RESET RUN') {
       setResetRunDialog(true)
-    } else if (action === ACTIONS.DOWNLOAD) {
-      console.log('Download')
-      downloadReport({
-        fetchUrl: `/${API.DownloadReport}?runId=${runData.runId}`,
-        fileName: `${runData.runName}-run`,
-        setDownloading: () => {},
-      })
     }
   }
 

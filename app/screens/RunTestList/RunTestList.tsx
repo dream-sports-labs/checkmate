@@ -454,7 +454,7 @@ export default function RunTestList() {
             <DownLoadTests
               tooltipText={'Download Report'}
               fetchUrl={`/${API.DownloadReport}?runId=${runData.runId}`}
-              fileName={`${runData.runName}-run`}
+              fileName={`${runData.runId}.${runData.runName}-run`}
             />
           )
         )}
