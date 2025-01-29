@@ -124,7 +124,9 @@ export default function RunTestList() {
   }, [testRunsMetaDataFetcher.data])
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
-    select: !(testRunsData?.[0]?.runStatus !== 'Active'),
+    select: testRunsData?.[0]?.runStatus
+      ? !(testRunsData?.[0]?.runStatus === 'Locked')
+      : true,
     'Test Covered By': false,
     Label: false,
     Section: false,

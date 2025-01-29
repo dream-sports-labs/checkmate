@@ -24,6 +24,24 @@ services:
       retries: 5
       start_period: 30s
 
+  db_seeder:
+    image: mysql:8.0
+    container_name: db-seeder
+    depends_on:
+      checkmate-db:
+        condition: service_healthy
+    networks:
+      - checkmate-network
+    volumes:
+      - ./seedData.sql:/seedData.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+    entrypoint: >
+      sh -c "sleep 10 &&
+      mysql --host=checkmate-db --user=root --password=root_password < ./seedData.sql &&
+      echo 'Database seeding completed' &&
+      exit"
+
   checkmate-app:
     build:
       context: .
@@ -42,7 +60,7 @@ services:
     networks:
       - checkmate-network
     command: >
-      sh -c "yarn db:init && yarn start"
+      sh -c "yarn start"
 
 volumes:
   checkmate-mysql:
