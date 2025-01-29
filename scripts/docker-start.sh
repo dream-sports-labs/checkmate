@@ -1,7 +1,8 @@
 #!/bin/bash
 
+#Default values
 APP_DOCKER=false
-DB_INIT=true
+DB_INIT=false
 SEED_DATA=false
 
 while [[ "$#" -gt 0 ]]; do
@@ -40,9 +41,11 @@ if [ "$DB_INIT" == "true" ]; then
   echo "Starting fresh checkmate-db container..."
   docker-compose up --build -d checkmate-db
 
+  echo "Waiting 10 seconds to ensure database is fully ready..."
+  sleep 10
+
   # Conditionally trigger db_seeder if --seed-data is true
   if [ "$SEED_DATA" == "true" ]; then
-    echo "Running migrations...123456"
     echo "Starting db_seeder for data seeding as requested..."
     docker-compose down --volumes db_seeder
     docker-compose up --build -d db_seeder
@@ -55,10 +58,10 @@ else
     # If the database is not healthy, rebuild the container
     echo "Starting or rebuilding checkmate-db..."
     docker-compose up --build -d checkmate-db
-
+    echo "Waiting 10 seconds to ensure database is fully ready..."
+    sleep 10  
     # Conditionally trigger db_seeder if --seed-data is true
     if [ "$SEED_DATA" == "true" ]; then
-      echo "Running migrations...123456"
       echo "Starting db_seeder for data seeding as requested..."
       docker-compose down --volumes db_seeder
       docker-compose up --build -d db_seeder
@@ -66,7 +69,7 @@ else
     sleep 10
   fi
 
-  echo "Running migrations..."
+
 fi
 
 # Start or rebuild checkmate-app service

@@ -48,7 +48,8 @@ services:
       dockerfile: ./dockerfile
     container_name: checkmate-app
     depends_on:
-      - db_seeder
+      checkmate-db:
+        condition: service_healthy
     env_file:
       - .env
     environment:
