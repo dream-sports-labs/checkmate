@@ -4,27 +4,25 @@
 
 ## Features
 
-- Test Management
-- Create, manage and track test runs.
-- Integration APIs
-- Reporting & Analytics
-- RBAC & Google Login
+- Effortlessly manage test cases and segregate.
+- Create runs, track and download reports.
+- Integration APIs.
+- RBAC & Google Login.
 
-## Usage
+## Installation
 
 ### Pre-requisites
 
 1. Docker Desktop
 2. Google OAuth Application
 
-### Installation: Docker Setup
+### Docker Setup
 
 1. Clone the repository:
    ```sh
    git clone git@github.com:dream-sports-labs/checkmate.git
    ```
-2. Create an environment file:
-   - Ensure you have a .env file in place, based on .env.example.
+2. Create an environment file, based on .env.example.
 3. Install dependencies
    ```sh
    yarn install

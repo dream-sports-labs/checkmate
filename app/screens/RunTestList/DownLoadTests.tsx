@@ -3,6 +3,7 @@ import {cn} from '@ui/utils'
 import {Download, LoaderCircle} from 'lucide-react'
 import {throttle} from '../TestList/utils'
 import {useState} from 'react'
+import {downloadReport} from './utils'
 
 interface IDownLoadTests {
   tooltipText: string
@@ -14,6 +15,7 @@ interface IDownLoadTests {
   fileName?: string
   className?: string
 }
+
 export const DownLoadTests = ({
   style,
   tooltipText,
@@ -23,39 +25,10 @@ export const DownLoadTests = ({
 }: IDownLoadTests) => {
   const [downloading, setDownloading] = useState<boolean>(false)
 
-  const downloadReport = async () => {
-    setDownloading(true)
-    const downloadCSV = async () => {
-      try {
-        const response = await fetch(fetchUrl)
-
-        if (!response.ok) {
-          throw new Error('Failed to download CSV')
-        }
-
-        const blob = await response.blob()
-        const url = URL.createObjectURL(blob)
-
-        const link = document.createElement('a')
-        link.href = url
-        link.setAttribute('download', `${fileName ? fileName : 'report'}.csv`)
-        document.body.appendChild(link)
-        link.click()
-
-        // Clean up
-        link.remove()
-        URL.revokeObjectURL(url)
-        setDownloading(false)
-      } catch (error) {
-        console.error('Error downloading CSV:', error)
-        setDownloading(false)
-      }
-    }
-
-    downloadCSV()
-  }
-
-  const debouncedDownloadTestsExecution: any = throttle(downloadReport, 5000)
+  const debouncedDownloadTestsExecution = throttle(
+    () => downloadReport({fetchUrl, fileName, setDownloading}),
+    5000,
+  )
 
   return (
     <Tooltip
