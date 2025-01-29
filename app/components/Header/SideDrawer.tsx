@@ -80,7 +80,7 @@ export const SideDrawer = () => {
               text="Ask Question"
             />
             <FooterComponent
-              href="https://github.com/dream-sports-labs/checkmate/issues/new?template=Blank+issue"
+              href="https://github.com/dream-sports-labs/checkmate/issues"
               setSideDrawerOpen={setSideDrawerOpen}
               text="Report Issue"
             />
