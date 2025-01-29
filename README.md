@@ -2,6 +2,12 @@
 
 ## Overview
 
+Welcome to Checkmate! 🎉
+
+This Test Case Management tool is designed to address the challenges faced by teams in managing and executing test cases with the highest level of availability and reliability. It aims to streamline the testing process, offering robust functionality, seamless integrations, and the ability to handle large-scale operations efficiently.
+
+TechStack Used: Remix, Drizzle, Shadcn, MySQL, Casbin(RBAC)
+
 ## Features
 
 - Effortlessly manage test cases and segregate.
