@@ -34,32 +34,42 @@ if [[ "$SEED_DATA" != "true" && "$SEED_DATA" != "false" ]]; then
   exit 1
 fi
 
-
-echo $APP_DOCKER $DB_INIT $SEED_DATA
-
 if [ "$DB_INIT" == "true" ]; then
   echo "Shutting down existing checkmate-db container..."
   docker-compose down --volumes checkmate-db
   echo "Starting fresh checkmate-db container..."
   docker-compose up --build -d checkmate-db
+
+  # Conditionally trigger db_seeder if --seed-data is true
+  if [ "$SEED_DATA" == "true" ]; then
+    echo "Running migrations...123456"
+    echo "Starting db_seeder for data seeding as requested..."
+    docker-compose down --volumes db_seeder
+    docker-compose up --build -d db_seeder
+  fi
 else
   DB_STATUS=$(docker inspect --format='{{json .State.Health.Status}}' checkmate-db 2>/dev/null)
   if [ "$DB_STATUS" == '"healthy"' ]; then
     echo "checkmate-db is already running and healthy."
   else
+    # If the database is not healthy, rebuild the container
     echo "Starting or rebuilding checkmate-db..."
     docker-compose up --build -d checkmate-db
+
+    # Conditionally trigger db_seeder if --seed-data is true
+    if [ "$SEED_DATA" == "true" ]; then
+      echo "Running migrations...123456"
+      echo "Starting db_seeder for data seeding as requested..."
+      docker-compose down --volumes db_seeder
+      docker-compose up --build -d db_seeder
+    fi
     sleep 10
   fi
-  
-  # Conditionally trigger db_seeder if --seed-data is true
-  if [ "$SEED_DATA" == "true" ]; then
-    echo "Starting db_seeder for data seeding as requested..."
-    docker-compose down --volumes db_seeder
-    docker-compose up --build -d db_seeder
-  fi
+
+  echo "Running migrations..."
 fi
 
+# Start or rebuild checkmate-app service
 if [ "$APP_DOCKER" == "true" ]; then
   docker-compose down --volumes checkmate-app
   echo "Starting or rebuilding checkmate-app..."
