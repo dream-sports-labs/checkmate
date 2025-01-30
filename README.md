@@ -6,22 +6,6 @@ This Test Case Management tool is designed to address the challenges faced by te
 
 ### TechStack Used:
 
-- <span style="display: flex; align-items: center;">
-  <img src="app/assets/remix.png" alt="Remix" style="width:16px; height:auto; margin-right:5px;"> Remix
-  </span>
-- <span style="display: flex; align-items: center;">
-  <img src="app/assets/drizzle.png" alt="Drizzle" style="width:16px; height:auto; margin-right:5px;"> Drizzle
-  </span>
-- <span style="display: flex; align-items: center;">
-  <img src="app/assets/mysql.png" alt="MySQL" style="width:16px; height:auto; margin-right:5px;"> MySQL
-  </span>
-- <span style="display: flex; align-items: center;">
-  <img src="app/assets/shadcn.png" alt="Shadcn" style="width:16px; height:auto; margin-right:5px;"> Shadcn
-  </span>
-- <span style="display: flex; align-items: center;">
-  <img src="app/assets/casbin.png" alt="Casbin(RBAC)" style="width:16px; height:auto; margin-right:5px;"> Casbin (RBAC)
-  </span>
-
 ## 📌 Features
 
 - ✅ Effortlessly manage test cases and segregate based on labels, squads, sections, priority...
@@ -36,6 +20,33 @@ This Test Case Management tool is designed to address the challenges faced by te
 - [Installation Guide](https://checkmate.dreamsportslabs.com/project/setup/)
 - [Product Guide](https://checkmate.dreamsportslabs.com/guides/projects/)
 - [Connect with us](https://discord.com/channels/1317172052179943504/1329754684730380340)
+
+### TechStack Used:
+
+- <span style="display: flex; align-items: center;">
+  <img src="app/assets/remix.png" alt="Remix" style="width:16px; height:auto; margin-right:5px;"> 
+  <a href="https://remix.run/" target="_blank">Remix</a>
+  </span>
+
+- <span style="display: flex; align-items: center;">
+  <img src="app/assets/drizzle.png" alt="Drizzle" style="width:16px; height:auto; margin-right:5px;"> 
+  <a href="https://orm.drizzle.team/" target="_blank">Drizzle</a>
+  </span>
+
+- <span style="display: flex; align-items: center;">
+  <img src="app/assets/mysql.png" alt="MySQL" style="width:16px; height:auto; margin-right:5px;"> 
+  <a href="https://www.mysql.com/" target="_blank">MySQL</a>
+  </span>
+
+- <span style="display: flex; align-items: center;">
+  <img src="app/assets/shadcn.png" alt="Shadcn" style="width:16px; height:auto; margin-right:5px;"> 
+  <a href="https://ui.shadcn.com/" target="_blank">Shadcn</a>
+  </span>
+
+- <span style="display: flex; align-items: center;">
+  <img src="app/assets/casbin.png" alt="Casbin(RBAC)" style="width:16px; height:auto; margin-right:5px;"> 
+  <a href="https://casbin.org/" target="_blank">Casbin (RBAC)</a>
+  </span>
 
 ## 📦 Installation
 
