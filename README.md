@@ -82,7 +82,7 @@ This Test Case Management tool is designed to address the challenges faced by te
   </details>
 - <details>
     <summary>Add Tests</summary>
-  ![Add Tests](docs/src/assets/add-run.gif)
+  ![Add Tests](docs/src/assets/add-test.gif)
   </details>
 - <details>
     <summary>Create Runs</summary>
