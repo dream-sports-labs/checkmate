@@ -4,28 +4,23 @@ Welcome to Checkmate! 🎉
 
 This Test Case Management tool is designed to address the challenges faced by teams in managing and executing test cases with the highest level of availability and reliability. It aims to streamline the testing process, offering robust features, seamless integrations, migration, and user-friendly and intuitive design.
 
-TechStack Used:
+### TechStack Used:
 
-- <div style="display: flex; align-items: center;">
-      <img src="app/assets/remix.png" alt="Alt Text" style="width: 16px; height: auto; margin-right: 5px;">
-      <div>Remix</div>
-  </div>
-- <div style="display: flex; align-items: center;">
-      <img src="app/assets/drizzle.png" alt="Alt Text" style="width: 16px; height: auto; margin-right: 5px;">
-      <div>Drizzle</div>
-  </div>
-- <div style="display: flex; align-items: center;">
-      <img src="app/assets/mysql.png" alt="Alt Text" style="width: 16px; height: auto; margin-right: 5px;">
-      <div>MySQL</div>
-  </div>
-- <div style="display: flex; align-items: center;">
-      <img src="app/assets/shadcn.png" alt="Alt Text" style="width: 16px; height: auto; margin-right: 5px;">
-      <div>Shadcn</div>
-  </div>
-- <div style="display: flex; align-items: center;">
-      <img src="app/assets/casbin.png" alt="Alt Text" style="width: 16px; height: auto; margin-right: 5px;">
-      <div>Casbin(RBAC)</div>
-  </div>
+- <span style="display: flex; align-items: center;">
+  <img src="app/assets/remix.png" alt="Remix" style="width:16px; height:auto; margin-right:5px;"> Remix
+  </span>
+- <span style="display: flex; align-items: center;">
+  <img src="app/assets/drizzle.png" alt="Drizzle" style="width:16px; height:auto; margin-right:5px;"> Drizzle
+  </span>
+- <span style="display: flex; align-items: center;">
+  <img src="app/assets/mysql.png" alt="MySQL" style="width:16px; height:auto; margin-right:5px;"> MySQL
+  </span>
+- <span style="display: flex; align-items: center;">
+  <img src="app/assets/shadcn.png" alt="Shadcn" style="width:16px; height:auto; margin-right:5px;"> Shadcn
+  </span>
+- <span style="display: flex; align-items: center;">
+  <img src="app/assets/casbin.png" alt="Casbin(RBAC)" style="width:16px; height:auto; margin-right:5px;"> Casbin (RBAC)
+  </span>
 
 ## 📌 Features
 
