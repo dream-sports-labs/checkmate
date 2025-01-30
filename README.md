@@ -17,7 +17,7 @@ This Test Case Management tool is designed to address the challenges faced by te
 - [Detailed Documentation](https://checkmate.dreamsportslabs.com/)
 - [Installation Guide](https://checkmate.dreamsportslabs.com/project/setup/)
 - [Product Guide](https://checkmate.dreamsportslabs.com/guides/projects/)
-- [Connect with us](https://discord.com/channels/1317172052179943504/1329754684730380340)
+- [Connect with us on discord](https://discord.com/channels/1317172052179943504/1329754684730380340)
 
 ## 📦 Installation
 
