@@ -1,21 +1,48 @@
 # Checkmate - Test Case Management Tool
 
-## Overview
-
 Welcome to Checkmate! 🎉
 
 This Test Case Management tool is designed to address the challenges faced by teams in managing and executing test cases with the highest level of availability and reliability. It aims to streamline the testing process, offering robust features, seamless integrations, migration, and user-friendly and intuitive design.
 
-TechStack Used: Remix, Drizzle, Shadcn, MySQL, Casbin(RBAC)
+TechStack Used:
 
-## Features
+- <div style="display: flex; align-items: center;">
+      <img src="app/assets/remix.png" alt="Alt Text" style="width: 16px; height: auto; margin-right: 5px;">
+      <div>Remix</div>
+  </div>
+- <div style="display: flex; align-items: center;">
+      <img src="app/assets/drizzle.png" alt="Alt Text" style="width: 16px; height: auto; margin-right: 5px;">
+      <div>Drizzle</div>
+  </div>
+- <div style="display: flex; align-items: center;">
+      <img src="app/assets/mysql.png" alt="Alt Text" style="width: 16px; height: auto; margin-right: 5px;">
+      <div>MySQL</div>
+  </div>
+- <div style="display: flex; align-items: center;">
+      <img src="app/assets/shadcn.png" alt="Alt Text" style="width: 16px; height: auto; margin-right: 5px;">
+      <div>Shadcn</div>
+  </div>
+- <div style="display: flex; align-items: center;">
+      <img src="app/assets/casbin.png" alt="Alt Text" style="width: 16px; height: auto; margin-right: 5px;">
+      <div>Casbin(RBAC)</div>
+  </div>
 
-- Effortlessly manage test cases and segregate.
-- Create runs, track and download reports.
-- Integration APIs.
-- RBAC & Google Login.
+## 📌 Features
 
-## Installation
+- ✅ Effortlessly manage test cases and segregate based on labels, squads, sections, priority...
+- ✅ Create runs, update status, track, download reports, analyse the historical status.
+- ✅ Provided the integration **APIs** to integrate with you testing pipline.
+- ✅ Role Bases Access Control for secure usage.
+- ✅ Integrated Google Login
+
+## 🔗 Quick Links
+
+- [Detailed Documentation](https://checkmate.dreamsportslabs.com/)
+- [Installation Guide](https://checkmate.dreamsportslabs.com/project/setup/)
+- [Product Guide](https://checkmate.dreamsportslabs.com/guides/projects/)
+- [Connect with us](https://discord.com/channels/1317172052179943504/1329754684730380340)
+
+## 📦 Installation
 
 ### Pre-requisites
 
@@ -28,7 +55,7 @@ TechStack Used: Remix, Drizzle, Shadcn, MySQL, Casbin(RBAC)
    ```sh
    git clone git@github.com:dream-sports-labs/checkmate.git
    ```
-2. Create an environment file, based on .env.example.
+2. Create an .env file at root level, based on .env.example.
 3. Install dependencies
    ```sh
    yarn install
@@ -41,19 +68,49 @@ TechStack Used: Remix, Drizzle, Shadcn, MySQL, Casbin(RBAC)
    - Seed the database with initial data.
 5. App will be started on http://localhost:3000
 
-📌📌 **[Here is the complete setup guide](https://checkmate.dreamsportslabs.com/project/setup/)**
+### ▶️ Sample Videos
 
-### API Documentation
+<details>
+  <summary>Create Projects</summary>
 
-Postman collection of project APIs is currently on discord, complete documentation is in progress.
+![Project Management](docs/src/assets/create-project.gif)
 
-## How to Contribute
+</details>
 
-Checkmate is an open-source project and welcomes contributions from the community. For details on how to contribute, please refer to [CONTRIBUTING.md](/CONTRIBUTING.md).
+<details>
+  <summary>Add Tests</summary>
+  
+![Project Management](docs/src/assets/add-run.gif)
 
-## Documentation
+<details>
+  <summary>Create Runs</summary>
+  
+![Project Management](docs/src/assets/add-run.gif)
 
-Check out the full documentation on the [website](https://checkmate.dreamsportslabs.com/).
+</details>
+
+<details>
+  <summary>Manage Runs</summary>
+  
+![Project Management](docs/src/assets/test-status.gif)
+
+</details>
+
+### 📖 API Documentation
+
+Postman collection of project APIs is currently on [discord](https://discord.com/channels/1317172052179943504/1329754684730380340), complete documentation is in progress.
+
+## Created by DreamSportsLabs
+
+DreamSportsLabs is committed to building open-source tools that empower developers and businesses. Learn more about us at our website.
+
+## 🚀 Contribute to Checkmate
+
+Checkmate is an open-source project and welcomes contributions from the community. For details on how to contribute, please see our [guide to contributing](/CONTRIBUTING.md).
+
+## © License
+
+This project is published under the [MIT License](/LICENSE).
 
 ## Contact
 
