@@ -55,13 +55,6 @@ This Test Case Management tool is designed to address the challenges faced by te
    </details>
 
 <details>
-  <summary>Video Tutorial</summary>
-
-![Add Project](docs/src/assets/create-project.gif)
-
-</details>
-
-<details>
     <summary>Add Tests</summary>
   
   ![Add Tests](docs/src/assets/add-test.gif)
