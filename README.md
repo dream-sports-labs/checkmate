@@ -76,32 +76,22 @@ This Test Case Management tool is designed to address the challenges faced by te
 
 ### ▶️ Sample Videos
 
-<details>
-  <summary>Create Projects</summary>
-
-![Project Management](docs/src/assets/create-project.gif)
-
-</details>
-
-<details>
-  <summary>Add Tests</summary>
-  
-![Add Tests](docs/src/assets/add-run.gif)
-</details>
-
-<details>
-  <summary>Create Runs</summary>
-  
-![Create Runs](docs/src/assets/add-run.gif)
-
-</details>
-
-<details>
-  <summary>Manage Runs</summary>
-  
-![Manage Runs](docs/src/assets/test-status.gif)
-
-</details>
+- <details>
+      <summary>Create Projects</summary>
+    ![Project Management](docs/src/assets/create-project.gif)
+  </details>
+- <details>
+    <summary>Add Tests</summary>
+  ![Add Tests](docs/src/assets/add-run.gif)
+  </details>
+- <details>
+    <summary>Create Runs</summary>
+  ![Create Runs](docs/src/assets/add-run.gif)
+  </details>
+- <details>
+    <summary>Manage Runs</summary>
+  ![Manage Runs](docs/src/assets/test-status.gif)
+  </details>
 
 ### 📖 API Documentation
 
