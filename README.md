@@ -80,19 +80,20 @@ TechStack Used:
 <details>
   <summary>Add Tests</summary>
   
-![Project Management](docs/src/assets/add-run.gif)
+![Add Tests](docs/src/assets/add-run.gif)
+</details>
 
 <details>
   <summary>Create Runs</summary>
   
-![Project Management](docs/src/assets/add-run.gif)
+![Create Runs](docs/src/assets/add-run.gif)
 
 </details>
 
 <details>
   <summary>Manage Runs</summary>
   
-![Project Management](docs/src/assets/test-status.gif)
+![Manage Runs](docs/src/assets/test-status.gif)
 
 </details>
 
