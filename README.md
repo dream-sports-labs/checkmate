@@ -7,10 +7,10 @@ This Test Case Management tool is designed to address the challenges faced by te
 ## 📌 Features
 
 - ✅ Effortlessly manage test cases and segregate based on labels, squads, sections, priority...
-- ✅ Create runs, update status, track, download reports, analyse the historical status.
+- ✅ Create **runs, update status, track, download reports**, and analyse the historical status.
 - ✅ Provided the integration **APIs** to integrate with you testing pipline.
-- ✅ Role Bases Access Control for secure usage.
-- ✅ Integrated Google Login
+- ✅ **Role Bases Access Control** for secure usage.
+- ✅ Integrated **Google Login** for ease of use.
 
 ## 🔗 Quick Links
 
