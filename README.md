@@ -19,6 +19,55 @@ This Test Case Management tool is designed to address the challenges faced by te
 - [Product Guide](https://checkmate.dreamsportslabs.com/guides/projects/)
 - [Connect with us](https://discord.com/channels/1317172052179943504/1329754684730380340)
 
+## 📦 Installation
+
+### Pre-requisites
+
+1. Docker Desktop
+2. Google OAuth Application
+
+### Docker Setup
+
+1. Clone the repository:
+   ```sh
+   git clone git@github.com:dream-sports-labs/checkmate.git
+   ```
+2. Create an .env file at root level, based on .env.example.
+3. Install dependencies
+   ```sh
+   yarn install
+   ```
+4. Set up the application and database:
+   ```sh
+   yarn docker:setup
+   ```
+   - Create both the application and database containers using Docker.
+   - Seed the database with initial data.
+5. App will be started on http://localhost:3000
+
+### ⏯️ Sample Videos
+
+<details>
+      <summary>Create Projects</summary>
+    ![Project Management](docs/src/assets/create-project.gif)
+  </details>
+<details>
+    <summary>Add Tests</summary>
+  ![Add Tests](docs/src/assets/add-test.gif)
+  </details>
+<details>
+    <summary>Create Runs</summary>
+  ![Create Runs](docs/src/assets/add-run.gif)
+  </details>
+<details>
+    <summary>Manage Runs</summary>
+  ![Manage Runs](docs/src/assets/test-status.gif)
+  </details>
+
+### 📖 API Documentation
+
+Postman collection of project APIs is currently on [discord](https://discord.com/channels/1317172052179943504/1329754684730380340), complete documentation is in progress.
+
 ### TechStack Used:
 
 - <span style="display: flex; align-items: center;">
@@ -46,55 +95,6 @@ This Test Case Management tool is designed to address the challenges faced by te
   <a href="https://casbin.org/" target="_blank">Casbin (RBAC)</a>
   </span>
 
-## 📦 Installation
-
-### Pre-requisites
-
-1. Docker Desktop
-2. Google OAuth Application
-
-### Docker Setup
-
-1. Clone the repository:
-   ```sh
-   git clone git@github.com:dream-sports-labs/checkmate.git
-   ```
-2. Create an .env file at root level, based on .env.example.
-3. Install dependencies
-   ```sh
-   yarn install
-   ```
-4. Set up the application and database:
-   ```sh
-   yarn docker:setup
-   ```
-   - Create both the application and database containers using Docker.
-   - Seed the database with initial data.
-5. App will be started on http://localhost:3000
-
-### ▶️ Sample Videos
-
-- <details>
-      <summary>Create Projects</summary>
-    ![Project Management](docs/src/assets/create-project.gif)
-  </details>
-- <details>
-    <summary>Add Tests</summary>
-  ![Add Tests](docs/src/assets/add-test.gif)
-  </details>
-- <details>
-    <summary>Create Runs</summary>
-  ![Create Runs](docs/src/assets/add-run.gif)
-  </details>
-- <details>
-    <summary>Manage Runs</summary>
-  ![Manage Runs](docs/src/assets/test-status.gif)
-  </details>
-
-### 📖 API Documentation
-
-Postman collection of project APIs is currently on [discord](https://discord.com/channels/1317172052179943504/1329754684730380340), complete documentation is in progress.
-
 ## Created by DreamSportsLabs
 
 DreamSportsLabs is committed to building open-source tools that empower developers and businesses. Learn more about us at our website.
@@ -103,7 +103,7 @@ DreamSportsLabs is committed to building open-source tools that empower develope
 
 Checkmate is an open-source project and welcomes contributions from the community. For details on how to contribute, please see our [guide to contributing](/CONTRIBUTING.md).
 
-## © License
+## ⚖️ License
 
 This project is published under the [MIT License](/LICENSE).
 
