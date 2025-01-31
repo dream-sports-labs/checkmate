@@ -2,15 +2,15 @@
 
 Welcome to Checkmate! 🎉
 
-Remix powered Test Case Management Tool is designed to address the challenges faced by teams in managing and executing test cases with the highest level of availability and reliability. It aims to streamline the testing process, offering robust features, seamless integrations, migration, and user-friendly and intuitive design.
+This Test Case Management Tool is designed to address the challenges faced by teams in managing and executing test cases with the highest level of availability and reliability. It aims to streamline the testing process, offering robust features, seamless integrations, migration, and user-friendly and intuitive design.
 
 ## 📌 Features
 
-- ✅ Effortlessly manage test cases and segregate based on labels, squads, sections, priority...
-- ✅ Create **runs, update status, track, download reports**, and analyse the historical status.
-- ✅ Provided the integration **APIs** to integrate with you testing pipline.
-- ✅ **Role Bases Access Control** for secure usage.
-- ✅ Integrated **Google Login** for ease of use.
+- ✅ Effortlessly manage test cases and categorize them based on labels, squads, sections, priority, and more.
+- ✅ Create test runs, update statuses, track progress, download reports, and analyze historical data.
+- ✅ Provides integration APIs to seamlessly connect with your testing pipeline.
+- ✅ Role-Based Access Control (RBAC) for secure and controlled usage.
+- ✅ Integrated Google Login for a hassle-free authentication experience.
 
 ## 🔗 Quick Links
 
