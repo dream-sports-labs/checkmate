@@ -2,7 +2,7 @@
 
 Welcome to Checkmate! 🎉
 
-This Test Case Management tool is designed to address the challenges faced by teams in managing and executing test cases with the highest level of availability and reliability. It aims to streamline the testing process, offering robust features, seamless integrations, migration, and user-friendly and intuitive design.
+Remix powered Test Case Management Tool is designed to address the challenges faced by teams in managing and executing test cases with the highest level of availability and reliability. It aims to streamline the testing process, offering robust features, seamless integrations, migration, and user-friendly and intuitive design.
 
 ## 📌 Features
 
@@ -102,7 +102,7 @@ Postman collection of project APIs is currently on [discord](https://discord.com
   <a href="https://casbin.org/" target="_blank">Casbin (RBAC)</a>
   </span>
 
-## Created by DreamSportsLabs
+## <img src="app/assets/d11-logo.png" style="width:24px; height:auto; padding-top:8px;" /> Created by DreamSportsLabs
 
 DreamSportsLabs is committed to building open-source tools that empower developers and businesses. Learn more about us at our website.
 
@@ -114,6 +114,6 @@ Checkmate is an open-source project and welcomes contributions from the communit
 
 This project is published under the [MIT License](/LICENSE).
 
-## Contact
+## ✉️ Contact
 
 If you need feedback or support, reach out via the [Issue Tracker](https://github.com/dream-sports-labs/checkmate/issues) or [Discord](https://discord.com/channels/1317172052179943504/1329754684730380340).
