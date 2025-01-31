@@ -75,7 +75,7 @@ Remix powered Test Case Management Tool is designed to address the challenges fa
 
 Postman collection of project APIs is currently on [discord](https://discord.com/channels/1317172052179943504/1329754684730380340), complete documentation is in progress.
 
-### TechStack Used:
+### ⚙️ TechStack Used:
 
 - <span style="display: flex; align-items: center;">
   <img src="app/assets/remix.png" alt="Remix" style="width:16px; height:auto; margin-right:5px;"> 
