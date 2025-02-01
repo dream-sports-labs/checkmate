@@ -86,25 +86,6 @@ const SquadsDao = {
       errorHandling(error)
     }
   },
-  addSquads: async (params: IAddSquads) => {
-    try {
-      const insertData = params.squads.map((squad) => ({
-        squadName: squad?.trim(),
-        projectId: params.projectId,
-        createdBy: params.createdBy,
-      }))
-
-      const data = await dbClient.insert(squads).values(insertData)
-      return data
-    } catch (error: any) {
-      logger({
-        type: LogType.SQL_ERROR,
-        tag: 'Adding labels',
-        message: `${error.message}  ${error.cause}`,
-      })
-      errorHandling(error)
-    }
-  },
 }
 
 export default SquadsDao

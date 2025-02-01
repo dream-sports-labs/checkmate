@@ -3,22 +3,20 @@ import {useCustomNavigate} from '@hooks/useCustomNavigate'
 import {PlusCircledIcon} from '@radix-ui/react-icons'
 import {useFetcher, useParams} from '@remix-run/react'
 import {Button} from '@ui/button'
-import {toast} from '@ui/use-toast'
-import {MouseEvent, ReactElement, useEffect, useMemo, useState} from 'react'
-import {useSearchParams} from 'react-router-dom'
-import {Loader} from '~/components/Loader/Loader'
-import {API} from '~/routes/utilities/api'
-import {safeJsonParse} from '~/routes/utilities/utils'
-import {Popover, PopoverContent, PopoverTrigger} from '~/ui/popover'
-import {cn} from '~/ui/utils'
-import {AddSquadsLabelsDialogue} from './AddSquadsLabelsDialogue'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@ui/dropdown-menu'
-import {c} from 'node_modules/vite/dist/node/types.d-aGj9QkWt'
+import {toast} from '@ui/use-toast'
+import {MouseEvent, useEffect, useState} from 'react'
+import {useSearchParams} from 'react-router-dom'
+import {Loader} from '~/components/Loader/Loader'
+import {API} from '~/routes/utilities/api'
+import {safeJsonParse} from '~/routes/utilities/utils'
+import {cn} from '~/ui/utils'
+import {AddSquadsLabelsDialogue} from './AddSquadsLabelsDialogue'
 
 enum Actions {
   AddTest = 'Test',
@@ -62,11 +60,21 @@ export const ProjectActions = () => {
 
   useEffect(() => {
     if (saveChanges.data?.error === null) {
-      const message = 'Successfully added'
+      let toastMessage = ''
+
+      if (saveChanges.data?.data?.success?.message) {
+        toastMessage += saveChanges.data?.data?.success?.message
+      }
+      if (saveChanges.data?.data?.failed?.message) {
+        toastMessage += saveChanges.data?.data?.failed?.message
+      }
+      if (saveChanges.data?.data?.message)
+        toastMessage = saveChanges.data?.data?.message
+
+      if (!toastMessage) toastMessage = 'Changes saved successfully'
       toast({
-        title: 'Success',
-        description: message,
-        variant: 'success',
+        description: toastMessage,
+        variant: 'info',
       })
     } else if (saveChanges.data?.error) {
       const message = saveChanges.data?.error

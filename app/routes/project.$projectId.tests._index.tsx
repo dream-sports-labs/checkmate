@@ -16,16 +16,18 @@ export default function TestsList() {
   return (
     <div className={'flex flex-row h-full mr-[-80px] -ml-12'}>
       <ResizablePanelGroup direction={'horizontal'}>
-        <ResizablePanel className={'mr-4'} defaultSize={80}>
+        <ResizablePanel order={1} className={'mr-4'} defaultSize={96}>
           <TestListPage />
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel
-          minSize={15}
+          order={2}
+          maxSize={20}
+          minSize={4}
           collapsedSize={4}
-          maxSize={25}
           defaultSize={20}
-          collapsible={true}>
+          collapsible={true}
+          style={{overflow: 'hidden'}}>
           <SectionList />
         </ResizablePanel>
       </ResizablePanelGroup>

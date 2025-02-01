@@ -39,23 +39,35 @@ export const action = async ({request}: ActionFunctionArgs) => {
       throw new Error('At least one squad must be provided')
     }
 
-    const resp = await SquadsController.addSquads({
+    const resp = await SquadsController.addMulitpleSquads({
       projectId: data.projectId,
       squads: data.squads,
       createdBy: user?.userId ?? 0,
     })
 
-    if (resp) {
-      return responseHandler({
-        data: {message: `${resp[0].affectedRows} Squad(s) added successfully`},
-        status: 201,
-      })
-    } else {
-      return responseHandler({
-        error: 'Error adding squads due to duplicate entries',
-        status: 400,
-      })
+    const responseSanity: {
+      success?: {message: string; existingSquads: any[]; newSquads: any[]}
+      failed?: {message: string; squads: any[]}
+    } = {}
+    if (resp?.success?.length > 0) {
+      responseSanity.success = {
+        message: `${resp?.success?.length} Squad(s) added successfully`,
+        existingSquads: resp?.success.filter((squad) => squad?.createdBy),
+        newSquads: resp.success.filter((squad) => !squad?.createdBy),
+      }
     }
+
+    if (resp?.failed?.length > 0) {
+      responseSanity.failed = {
+        message: `${resp.failed.length} Squad(s) failed to add`,
+        squads: resp.failed,
+      }
+    }
+
+    return responseHandler({
+      data: responseSanity,
+      status: 201,
+    })
   } catch (error: any) {
     return errorResponseHandler(error)
   }

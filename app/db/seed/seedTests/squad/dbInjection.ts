@@ -1,39 +1,42 @@
+import SquadsController from '@controllers/squads.controller'
 import squadsData from 'app/db/seed/seedTests/tests_squads.json'
-import {client, dbClient} from '~/db/client'
-import {squads} from '~/db/schema/squads'
 import {CREATED_BY, PROJECT_ID} from '../contants'
 
 async function insertSquadsData() {
-  const insertPromises = []
+  await SquadsController.addMulitpleSquads({
+    squads: squadsData,
+    projectId: PROJECT_ID,
+    createdBy: CREATED_BY,
+  })
+    .then((res) => {
+      const {success, failed} = res
 
-  for (let squad of squadsData) {
-    if (!squad) continue
-    const insertPromise = dbClient
-      .insert(squads)
-      .values({
-        squadName: squad,
-        createdBy: CREATED_BY,
-        projectId: PROJECT_ID,
-      })
-      .catch((e) => {
-        console.log(`⛔️ Error in inserting squad ${squad}`, e)
-      })
+      console.log(
+        `✅ ${success.length} Squads Data Inserted Successfully 🚀`,
+        success.map((s) => {
+          return {
+            squadName: s?.squadName,
+            squadId: s?.squadId,
+          }
+        }),
+      )
 
-    // Push each insert promise into the array
-    insertPromises.push(insertPromise)
-  }
-
-  // Execute all insert promises concurrently
-  await Promise.all(insertPromises)
-  console.log('🚀  SQUADS DATA INSERTED SUCCESSFULLY')
+      if (failed.length > 0) {
+        console.log(
+          `❌ Failed to insert ${failed.length} Squads Data...`,
+          failed.map((f) => {
+            return {
+              error: f.message,
+            }
+          }),
+        )
+      }
+      process.exit(0)
+    })
+    .catch((e) => {
+      console.log('❌ Error in inserting squads data...', e)
+      process.exit(1)
+    })
 }
-
-// Execute the function and ensure the client connection is closed
+console.log('Inserting Squads Data...')
 insertSquadsData()
-  .then(() => {
-    client.end()
-  })
-  .catch((err) => {
-    console.error('⛔️ Error during squad data insertion:', err)
-    client.end()
-  })

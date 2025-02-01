@@ -8,6 +8,7 @@ export interface IGetSectionIdByNameAndHierarcy {
 
 export interface IGetAllSections {
   projectId: number
+  runId?: number
 }
 
 export interface IAddSection {

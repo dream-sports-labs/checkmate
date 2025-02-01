@@ -235,6 +235,30 @@ const SearchParams = {
       userRoles,
     }
   },
+  getSections: ({
+    params,
+    request,
+  }: ISearchParams): {projectId: number; runId?: number} => {
+    const url = new URL(request.url)
+
+    const projectId = params.projectId
+      ? Number(params.projectId)
+      : Number(url.searchParams.get('projectId'))
+
+    if (!checkForProjectId(projectId))
+      throw new Error('Invalid projectId', {cause: ErrorCause.INVALID_PARAMS})
+
+    const runId = params.runId
+      ? Number(params.runId)
+      : url.searchParams.get('runId')
+      ? Number(url.searchParams.get('runId'))
+      : undefined
+
+    return {
+      projectId,
+      runId,
+    }
+  },
 }
 
 export default SearchParams

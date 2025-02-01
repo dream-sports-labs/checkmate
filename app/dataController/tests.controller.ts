@@ -10,6 +10,7 @@ import TestCoveredByDao from '@dao/testCoveredBy.dao'
 import TestsDao, {IBulkAddTestsDao} from '~/db/dao/test.dao'
 import {handleNewSectionAndSquad} from './utils'
 import SectionsController from './sections.controller'
+import SquadsController from './squads.controller'
 
 export interface ITestStatus {
   projectId: number
@@ -194,7 +195,7 @@ const TestsController = {
           (squad) => squad.squadName === test.squad?.trim(),
         )?.squadId
         if (!squadId && test.squad) {
-          const newSquad = await SquadsDao.addSquad({
+          const newSquad = await SquadsController.checkAndCreateSquad({
             squadName: test.squad?.trim(),
             projectId: param.projectId,
             createdBy: param.createdBy,

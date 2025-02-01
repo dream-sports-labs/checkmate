@@ -27,7 +27,7 @@ const seedUsers = async () => {
     await seedData(seed.usersData, users)
     console.log('Data seeded for users')
   } catch (e) {
-    console.log('⛔️ Data seeding failed', e)
+    console.log('❌ Data seeding failed', e)
   }
 }
 
@@ -36,7 +36,7 @@ const seedOrganisations = async () => {
     await seedData(seed.organisationsData, organisations)
     console.log('Data seeded for organisations')
   } catch (e) {
-    console.log('⛔️ Data seeding failed', e)
+    console.log('❌ Data seeding failed', e)
   }
 }
 
@@ -45,7 +45,7 @@ const seedProjects = async () => {
     await seedData(seed.projectsData, projects)
     console.log('Data seeded for projects')
   } catch (e) {
-    console.log('⛔️ Data seeding failed', e)
+    console.log('❌ Data seeding failed', e)
   }
 }
 const seedLabels = async () => {
@@ -53,7 +53,7 @@ const seedLabels = async () => {
     await seedData(seed.labelsData, labels)
     console.log('Data seeded for labels')
   } catch (e) {
-    console.log('⛔️ Data seeding failed', e)
+    console.log('❌ Data seeding failed', e)
   }
 }
 
@@ -62,7 +62,7 @@ const seedPriority = async () => {
     await seedData(seed.priorityData, priority)
     console.log('Data seeded for priority')
   } catch (e) {
-    console.log('⛔️ Data seeding failed', e)
+    console.log('❌ Data seeding failed', e)
   }
 }
 
@@ -71,7 +71,7 @@ const seedAutomationStatus = async () => {
     await seedData(seed.automationStatusData, automationStatus)
     console.log('Data seeded for automation status')
   } catch (e) {
-    console.log('⛔️ Data seeding failed', e)
+    console.log('❌ Data seeding failed', e)
   }
 }
 
@@ -80,7 +80,7 @@ const seedPlatform = async () => {
     await seedData(seed.platformData, platform)
     console.log('Data seeded for platform')
   } catch (e) {
-    console.log('⛔️ Data seeding failed', e)
+    console.log('❌ Data seeding failed', e)
   }
 }
 
@@ -89,7 +89,7 @@ const seedTestCoveredBy = async () => {
     await seedData(seed.testCoveredByData, testCoveredBy)
     console.log('Data seeded for testCoveredBy')
   } catch (e) {
-    console.log('⛔️ Data seeding failed', e)
+    console.log('❌ Data seeding failed', e)
   }
 }
 
@@ -98,7 +98,7 @@ const seedType = async () => {
     await seedData(seed.typeData, type)
     console.log('Data seeded for type')
   } catch (e) {
-    console.log('⛔️ Data seeding failed', e)
+    console.log('❌ Data seeding failed', e)
   }
 }
 
@@ -114,8 +114,8 @@ const main = async () => {
   await seedPlatform()
   await seedAutomationStatus()
 
-  console.log('🚀 Database seeded successfully')
-  console.log('🚀 Exiting the seeding process')
+  console.log('✅ Database seeded successfully')
+  console.log('✅ Exiting the seeding process')
   process.exit(0)
 }
 

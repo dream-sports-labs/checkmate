@@ -1,23 +1,45 @@
 import {logger, LogType} from '~/utils/logger'
 import {dbClient} from '../client'
-import {and, eq} from 'drizzle-orm/sql'
+import {and, eq, inArray} from 'drizzle-orm/sql'
 import {errorHandling} from './utils'
-import {sections} from '../schema/tests'
+import {sections, tests} from '../schema/tests'
 import {
   IAddSection,
   IGetAllSections,
   IGetSectionIdByNameAndHierarcy,
 } from '@controllers/sections.controller'
+import {runs, testRunMap} from '@schema/runs'
 
 const SectionsDao = {
-  getAllSections: async ({projectId}: IGetAllSections) => {
+  getAllSections: async ({projectId, runId}: IGetAllSections) => {
     try {
-      const data = await dbClient
-        .select()
-        .from(sections)
-        .where(eq(sections.projectId, projectId))
+      if (!runId) {
+        const data = await dbClient
+          .select()
+          .from(sections)
+          .where(eq(sections.projectId, projectId))
 
-      return data
+        return data
+      } else {
+        const sectionIds = await dbClient
+          .selectDistinct({sectionId: tests.sectionId})
+          .from(testRunMap)
+          .innerJoin(tests, eq(testRunMap.testId, tests.testId))
+          .where(eq(testRunMap.runId, runId))
+
+        const sectionIdList = sectionIds
+          .map((row) => row.sectionId)
+          .filter((sectionId) => sectionId !== null)
+
+        if (sectionIdList.length === 0) return []
+
+        const data = await dbClient
+          .select()
+          .from(sections)
+          .where(inArray(sections.sectionId, sectionIdList as number[]))
+
+        return data
+      }
     } catch (error: any) {
       // FOR DEV PURPOSES
       logger({
