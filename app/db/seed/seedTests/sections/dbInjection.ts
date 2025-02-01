@@ -30,12 +30,12 @@ async function insertSectionsData() {
   if (success.length > 0) {
     console.log(
       `✅ Successfully inserted ${success.length} sections`,
-      success.map((s) => {
-        return {
-          sectionHierarchy: s?.sectionHierarchy,
-          sectionId: s?.sectionId,
-        }
-      }),
+      // success.map((s) => {
+      //   return {
+      //     sectionHierarchy: s?.sectionHierarchy,
+      //     sectionId: s?.sectionId,
+      //   }
+      // }),
     )
   }
   if (failed.length > 0)

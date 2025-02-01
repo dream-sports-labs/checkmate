@@ -13,12 +13,12 @@ async function insertSquadsData() {
 
       console.log(
         `✅ ${success.length} Squads Data Inserted Successfully 🚀`,
-        success.map((s) => {
-          return {
-            squadName: s?.squadName,
-            squadId: s?.squadId,
-          }
-        }),
+        // success.map((s) => {
+        //   return {
+        //     squadName: s?.squadName,
+        //     squadId: s?.squadId,
+        //   }
+        // }),
       )
 
       if (failed.length > 0) {
