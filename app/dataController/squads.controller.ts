@@ -64,19 +64,30 @@ const SquadsController = {
   addMulitpleSquads: async (param: IAddSquads) => {
     const {squads, projectId, createdBy} = param
 
-    const results = await Promise.allSettled(
-      squads.map((squadName) =>
-        SquadsController.checkAndCreateSquad({squadName, projectId, createdBy}),
-      ),
-    )
+    const results: PromiseSettledResult<SquadResult>[] =
+      await Promise.allSettled(
+        squads.map((squadName) =>
+          SquadsController.checkAndCreateSquad({
+            squadName,
+            projectId,
+            createdBy,
+          }),
+        ),
+      )
 
     const success = results
-      .filter((result) => result?.status === 'fulfilled')
-      .map((result) => result?.value)
+      .filter(
+        (result): result is PromiseFulfilledResult<SquadResult> =>
+          result.status === 'fulfilled',
+      )
+      .map((result) => result.value)
 
     const failed = results
-      .filter((result) => result?.status === 'rejected')
-      .map((result) => result?.reason)
+      .filter(
+        (result): result is PromiseRejectedResult =>
+          result.status === 'rejected',
+      )
+      .map((result) => result.reason)
 
     return {success, failed}
   },

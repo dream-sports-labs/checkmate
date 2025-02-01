@@ -23,32 +23,51 @@ describe('Add Squads - Action Function', () => {
       squads: ['squad1', 'squad2'],
       projectId: 1,
     }
+
+    const mockUser = {userId: 123}
+    const mockResponse = {
+      success: [
+        {squadId: 1, squadName: 'squad1', projectId: 1, createdBy: 123},
+        {squadId: 2, squadName: 'squad2', projectId: 1, createdBy: null},
+      ],
+      failed: [],
+    }
+
+    ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(mockUser)
+    ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
+    ;(SquadsController.addMulitpleSquads as jest.Mock).mockResolvedValue(
+      mockResponse,
+    )
+    ;(responseHandler as jest.Mock).mockImplementation((response) => response)
+
     const request = new Request('http://localhost', {
       method: 'POST',
       headers: {'content-type': 'application/json'},
       body: JSON.stringify(requestData),
     })
-    const mockUser = {userId: 123}
-    const mockResponse = [{affectedRows: 2}]
-
-    ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(mockUser)
-    ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
-    ;(SquadsController.addSquads as jest.Mock).mockResolvedValue(mockResponse)
-    ;(responseHandler as jest.Mock).mockImplementation((response) => response)
-
     const response = await action({request} as any)
 
     expect(getUserAndCheckAccess).toHaveBeenCalledWith({
-      request,
+      request: expect.any(Request),
       resource: API.AddSquads,
     })
-    expect(SquadsController.addSquads).toHaveBeenCalledWith({
+    expect(SquadsController.addMulitpleSquads).toHaveBeenCalledWith({
       projectId: 1,
       squads: ['squad1', 'squad2'],
       createdBy: 123,
     })
     expect(responseHandler).toHaveBeenCalledWith({
-      data: {message: '2 Squad(s) added successfully'},
+      data: {
+        success: {
+          message: '2 Squad(s) added successfully',
+          existingSquads: [
+            {squadId: 1, squadName: 'squad1', projectId: 1, createdBy: 123},
+          ],
+          newSquads: [
+            {squadId: 2, squadName: 'squad2', projectId: 1, createdBy: null},
+          ],
+        },
+      },
       status: 201,
     })
   })
@@ -58,11 +77,7 @@ describe('Add Squads - Action Function', () => {
       method: 'POST',
       headers: {'content-type': 'text/plain'},
     })
-
-    ;(responseHandler as jest.Mock).mockImplementation((response) => response)
-
     const response = await action({request} as any)
-
     expect(responseHandler).toHaveBeenCalledWith({
       error: 'Invalid content type, expected application/json',
       status: 400,
@@ -74,71 +89,127 @@ describe('Add Squads - Action Function', () => {
       squads: [],
       projectId: 1,
     }
-    const request = new Request('http://localhost', {
-      method: 'POST',
-      headers: {'content-type': 'application/json'},
-      body: JSON.stringify(requestData),
-    })
+
     const mockUser = {userId: 123}
 
     ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(mockUser)
     ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
     ;(errorResponseHandler as jest.Mock).mockImplementation((error) => error)
 
+    const request = new Request('http://localhost', {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify(requestData),
+    })
     const response = await action({request} as any)
-
     expect(errorResponseHandler).toHaveBeenCalledWith(
       new Error('At least one squad must be provided'),
     )
   })
 
-  it('should return 400 if squads cannot be added due to duplicates', async () => {
+  it('should return failure response if squads cannot be added due to duplicates', async () => {
     const requestData = {
       squads: ['squad1', 'squad2'],
       projectId: 1,
     }
+    const mockUser = {userId: 123}
+    const mockResponse = {
+      success: [],
+      failed: ['squad1', 'squad2'],
+    }
+
+    ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(mockUser)
+    ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
+    ;(SquadsController.addMulitpleSquads as jest.Mock).mockResolvedValue(
+      mockResponse,
+    )
+    ;(responseHandler as jest.Mock).mockImplementation((response) => response)
+
     const request = new Request('http://localhost', {
       method: 'POST',
       headers: {'content-type': 'application/json'},
       body: JSON.stringify(requestData),
     })
-    const mockUser = {userId: 123}
-
-    ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(mockUser)
-    ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
-    ;(SquadsController.addSquads as jest.Mock).mockResolvedValue(null)
-    ;(responseHandler as jest.Mock).mockImplementation((response) => response)
-
     const response = await action({request} as any)
-
-    expect(SquadsController.addSquads).toHaveBeenCalledWith({
-      projectId: 1,
-      squads: ['squad1', 'squad2'],
-      createdBy: 123,
-    })
     expect(responseHandler).toHaveBeenCalledWith({
-      error: 'Error adding squads due to duplicate entries',
-      status: 400,
+      data: {
+        failed: {
+          message: '2 Squad(s) failed to add',
+          squads: ['squad1', 'squad2'],
+        },
+      },
+      status: 201,
     })
   })
 
-  it('should handle unexpected errors', async () => {
+  it('should return a response with both successful and failed squads', async () => {
+    const requestData = {
+      squads: ['squad1', 'squad2', 'squad3'],
+      projectId: 1,
+    }
+    const mockUser = {userId: 123}
+    const mockResponse = {
+      success: [
+        {squadId: 1, squadName: 'squad1', projectId: 1, createdBy: 123},
+      ],
+      failed: ['squad2', 'squad3'],
+    }
+
+    ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(mockUser)
+    ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
+    ;(SquadsController.addMulitpleSquads as jest.Mock).mockResolvedValue(
+      mockResponse,
+    )
+    ;(responseHandler as jest.Mock).mockImplementation((response) => response)
+
+    const request = new Request('http://localhost', {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify(requestData),
+    })
+
+    const response = await action({request} as any)
+
+    expect(SquadsController.addMulitpleSquads).toHaveBeenCalledWith({
+      projectId: 1,
+      squads: ['squad1', 'squad2', 'squad3'],
+      createdBy: 123,
+    })
+
+    expect(responseHandler).toHaveBeenCalledWith({
+      data: {
+        success: {
+          message: '1 Squad(s) added successfully',
+          existingSquads: [
+            {squadId: 1, squadName: 'squad1', projectId: 1, createdBy: 123},
+          ],
+          newSquads: [],
+        },
+        failed: {
+          message: '2 Squad(s) failed to add',
+          squads: ['squad2', 'squad3'],
+        },
+      },
+      status: 201,
+    })
+  })
+
+  it('should handle unexpected errors gracefully', async () => {
     const requestData = {
       squads: ['squad1'],
       projectId: 1,
     }
-    const request = new Request('http://localhost', {
-      method: 'POST',
-      headers: {'content-type': 'application/json'},
-      body: JSON.stringify(requestData),
-    })
     const mockError = new Error('Unexpected error')
 
     ;(getUserAndCheckAccess as jest.Mock).mockRejectedValue(mockError)
     ;(errorResponseHandler as jest.Mock).mockImplementation((error) => error)
 
+    const request = new Request('http://localhost', {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify(requestData),
+    })
     const response = await action({request} as any)
-
     expect(errorResponseHandler).toHaveBeenCalledWith(mockError)
   })
 })

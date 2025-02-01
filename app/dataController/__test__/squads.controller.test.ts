@@ -90,21 +90,85 @@ describe('SquadsController', () => {
     })
   })
 
-  describe('addSquads', () => {
-    it('should call SquadsDao.addSquads with the correct parameters', async () => {
-      const mockParams = {
-        squads: ['Squad A', 'Squad B'],
-        projectId: 123,
-        createdBy: 456,
-      }
-      const mockResponse = [{squadId: 1}, {squadId: 2}]
+  describe('addMulitpleSquads', () => {
+    afterEach(() => {
+      jest.clearAllMocks()
+    })
 
-      ;(SquadsDao.addSquads as jest.Mock).mockResolvedValue(mockResponse)
+    // beforeEach(() => {
+    //   jest.mock('~/dataController/squads.controller', () => ({
+    //     __esModule: true, // Ensure ES module compatibility
+    //     default: {
+    //       checkAndCreateSquad: jest.fn(),
+    //     },
+    //   }))
+    // })
 
-      const result = await SquadsController.addSquads(mockParams)
+    it('should return success for valid squads', async () => {
+      const mockSquads = ['Alpha', 'Bravo', 'Charlie']
+      const mockProjectId = 1
+      const mockCreatedBy = 123
 
-      expect(SquadsDao.addSquads).toHaveBeenCalledWith(mockParams)
-      expect(result).toEqual(mockResponse)
+      jest
+        .spyOn(SquadsController, 'checkAndCreateSquad')
+        .mockResolvedValueOnce({squadId: 1, squadName: 'Alpha', projectId: 1})
+        .mockResolvedValueOnce({squadId: 2, squadName: 'Bravo', projectId: 1})
+        .mockResolvedValueOnce({squadId: 3, squadName: 'Charlie', projectId: 1})
+
+      const result = await SquadsController.addMulitpleSquads({
+        squads: mockSquads,
+        projectId: mockProjectId,
+        createdBy: mockCreatedBy,
+      })
+
+      expect(result?.success).toHaveLength(3)
+      expect(result?.failed).toHaveLength(0)
+    })
+
+    it('should return failed for squads with missing names', async () => {
+      const mockSquads = ['Alpha', '', 'Charlie'] // One squad is missing a name
+      const mockProjectId = 1
+      const mockCreatedBy = 123
+
+      jest
+        .spyOn(SquadsController, 'checkAndCreateSquad')
+        .mockResolvedValueOnce({squadId: 1, squadName: 'Alpha', projectId: 1})
+        .mockRejectedValueOnce(new Error('Squad name is missing')) // Failing squad
+        .mockResolvedValueOnce({squadId: 3, squadName: 'Charlie', projectId: 1})
+
+      const result = await SquadsController.addMulitpleSquads({
+        squads: mockSquads,
+        projectId: mockProjectId,
+        createdBy: mockCreatedBy,
+      })
+
+      expect(result.success).toHaveLength(2) // Alpha & Charlie succeeded
+      expect(result.failed).toHaveLength(1)
+      expect(result.failed[0].message).toBe('Squad name is missing')
+    })
+
+    it('should correctly handle a mix of successful and failed squads', async () => {
+      const mockSquads = ['Alpha', 'Beta', 'InvalidSquad', 'Charlie']
+      const mockProjectId = 1
+      const mockCreatedBy = 123
+
+      jest
+        .spyOn(SquadsController, 'checkAndCreateSquad')
+        .mockResolvedValueOnce({squadId: 1, squadName: 'Alpha', projectId: 1})
+        .mockRejectedValueOnce(new Error('Database error')) // Beta fails
+        .mockRejectedValueOnce(new Error('Squad name is invalid')) // InvalidSquad fails
+        .mockResolvedValueOnce({squadId: 3, squadName: 'Charlie', projectId: 1})
+
+      const result = await SquadsController.addMulitpleSquads({
+        squads: mockSquads,
+        projectId: mockProjectId,
+        createdBy: mockCreatedBy,
+      })
+
+      expect(result.success).toHaveLength(2) // Alpha & Charlie succeeded
+      expect(result.failed).toHaveLength(2) // Beta & InvalidSquad failed
+      expect(result.failed[0].message).toBe('Database error')
+      expect(result.failed[1].message).toBe('Squad name is invalid')
     })
   })
 })
