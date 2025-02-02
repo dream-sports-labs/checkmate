@@ -103,7 +103,7 @@ const seedType = async () => {
 }
 
 const main = async () => {
-  console.log('🧨 Started seeding the database\n')
+  console.log('🧨 Started seeding the base data\n')
   await seedUsers()
   await seedOrganisations()
   await seedProjects()
@@ -114,8 +114,7 @@ const main = async () => {
   await seedPlatform()
   await seedAutomationStatus()
 
-  console.log('✅ Database seeded successfully')
-  console.log('✅ Exiting the seeding process')
+  console.log('✅ Base data seeded successfully')
   process.exit(0)
 }
 

@@ -2,18 +2,43 @@ import SectionsController from '@controllers/sections.controller'
 import sectionsData from 'app/db/seed/seedTests/tests_section.json'
 import {CREATED_BY, PROJECT_ID} from '../contants'
 
-console.log('Inserting Sections Data...')
+console.log('🧨 Inserting Sections Data...')
 
 async function insertSectionsData() {
-  const insertPromises = sectionsData.map((item) =>
-    SectionsController.createSectionFromHierarchyString({
-      sectionHierarchyString: item['Section Hierarchy'],
-      projectId: PROJECT_ID,
-      createdBy: CREATED_BY,
-    }),
-  )
+  const results: PromiseSettledResult<
+    | {
+        sectionId: number
+        sectionName: string
+        projectId: number
+        sectionHierarchy: string | null
+      }
+    | undefined
+  >[] = []
 
-  const results = await Promise.allSettled(insertPromises)
+  for (let item of sectionsData) {
+    try {
+      const sectionInserted =
+        await SectionsController.createSectionFromHierarchyString({
+          sectionHierarchyString: item['Section Hierarchy'],
+          projectId: PROJECT_ID,
+          createdBy: CREATED_BY,
+        })
+
+      results.push({
+        status: 'fulfilled',
+        value: sectionInserted,
+      })
+    } catch (error) {
+      console.log(
+        `❌ Error in inserting section ${item['Section Hierarchy']}`,
+        error,
+      )
+      results.push({
+        status: 'rejected',
+        reason: error,
+      })
+    }
+  }
 
   const success = results
     .filter((result) => result?.status === 'fulfilled')
@@ -46,5 +71,4 @@ async function insertSectionsData() {
   process.exit(0)
 }
 
-// Execute the function
 insertSectionsData()

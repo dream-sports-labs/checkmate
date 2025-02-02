@@ -26,7 +26,7 @@ async function insertSquadsData() {
           `❌ Failed to insert ${failed.length} Squads Data...`,
           failed.map((f) => {
             return {
-              error: f.message,
+              error: f,
             }
           }),
         )
