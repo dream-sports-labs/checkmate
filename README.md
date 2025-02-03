@@ -10,6 +10,12 @@ TechStack Used: Remix, Drizzle, Shadcn, MySQL, Casbin(RBAC)
 
 ## Features
 
+- ✅ Effortlessly manage test cases and categorize them based on labels, squads, sections, priority, and more.
+- ✅ Create test runs, update statuses, track progress, download reports, and analyze historical data.
+- ✅ Provides integration APIs to seamlessly connect with your testing pipeline.
+- ✅ Role-Based Access Control (RBAC) for secure and controlled usage.
+- ✅ Integrated Google Login for a hassle-free authentication experience.
+
 - Effortlessly manage test cases and segregate.
 - Create runs, track and download reports.
 - Integration APIs.
