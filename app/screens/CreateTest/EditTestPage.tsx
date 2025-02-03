@@ -1,13 +1,6 @@
+import {TestDetailsResponse} from '@api/testDetails'
 import {InputsSpacing} from '@components/Forms/InputsSpacing'
-import {
-  AutomationStatus,
-  Lables,
-  Platforms,
-  Priority,
-  Sections,
-  TestCoveredBy,
-  Type,
-} from '~/screens/CreateRun/RunFilter'
+import {IGetAllSectionsResponse} from '@controllers/sections.controller'
 import {useCustomNavigate} from '@hooks/useCustomNavigate'
 import {useFetcher, useParams} from '@remix-run/react'
 import {Button} from '@ui/button'
@@ -19,7 +12,15 @@ import {
   ORG_ID,
   LARGE_PAGE_SIZE as PAGE_SIZE,
 } from '~/routes/utilities/constants'
-import {Squad, TestDetailsFormDataValue} from '~/screens/RunTestList/interfaces'
+import {
+  AutomationStatus,
+  Lables,
+  Platforms,
+  Priority,
+  TestCoveredBy,
+  Type,
+} from '~/screens/CreateRun/RunFilter'
+import {Squad} from '~/screens/RunTestList/interfaces'
 import {
   OptionsInputComponent,
   ShortTextInputComponent,
@@ -31,6 +32,7 @@ import {
   sectionListPlaceholder,
   squadListPlaceholder,
 } from './utils'
+import {buildPath} from '@components/SectionList/utils'
 
 export default function EditTestPage({
   source,
@@ -41,13 +43,13 @@ export default function EditTestPage({
   const testId = Number(useParams().testId)
   const squadsFetcher = useFetcher<{data: Squad[]}>()
   const labelsFetcher = useFetcher<{data: Lables[]}>()
-  const sectionFetcher = useFetcher<{data: Sections[]}>()
+  const sectionFetcher = useFetcher<{data: IGetAllSectionsResponse[]}>()
   const priorityFetcher = useFetcher<{data: Priority[]}>()
   const automationStatusFetcher = useFetcher<{data: AutomationStatus[]}>()
   const typeFetcher = useFetcher<{data: Type[]}>()
   const platformFetcher = useFetcher<{data: Platforms[]}>()
   const testCoveredByFetcher = useFetcher<{data: TestCoveredBy[]}>()
-  const testDetailsFetcher = useFetcher<{data: TestDetailsFormDataValue}>()
+  const testDetailsFetcher = useFetcher<{data: TestDetailsResponse}>()
   const [isAddAndNext, setIsAddAndNext] = useState(false)
   const orgId = ORG_ID
   const navigate = useCustomNavigate()
@@ -94,8 +96,10 @@ export default function EditTestPage({
         : sectionFetcher.data?.data?.find((section) => {
             return (
               section.sectionName === testDetailsFetcher.data?.data.section &&
-              section.sectionHierarchy ===
-                testDetailsFetcher.data?.data.sectionHierarchy
+              section.sectionId === testDetailsFetcher.data?.data.sectionId &&
+              section.parentId ===
+                testDetailsFetcher.data?.data.sectionParentId &&
+              section.projectId === projectId
             )
           })?.sectionId || 0
 
@@ -337,13 +341,20 @@ export default function EditTestPage({
               newProperty: formData.new_section,
             })}
             key={AddTestLabels.Section}
-            list={sectionFetcher.data?.data?.map((section) => {
-              return {
-                id: section.sectionId,
-                property: section.sectionName,
-                name: section.sectionHierarchy,
-              }
-            })}
+            list={
+              sectionFetcher.data?.data
+                ? sectionFetcher.data?.data.map((section) => {
+                    return {
+                      id: section.sectionId,
+                      property: section.sectionName,
+                      name: buildPath({
+                        sectionId: section.sectionId,
+                        sectionsData: sectionFetcher.data?.data,
+                      }),
+                    }
+                  })
+                : []
+            }
             handleCheckboxChange={(param) => {
               setFormData({
                 ...formData,

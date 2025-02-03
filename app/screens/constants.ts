@@ -3,13 +3,7 @@ export const ConstantStrings = {
 }
 
 //Columns that are mandatory in the CSV file while uplading the tests
-export const MandatoryColumns = [
-  'Title',
-  'Section',
-  'Section Hierarchy',
-  'Steps',
-
-]
+export const MandatoryColumns = ['Title', 'Section', 'Steps']
 
 //Columns to be processed and insterted into the database
 export const AllowedColumns = {

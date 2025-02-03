@@ -42,8 +42,8 @@ export interface IGetAllSectionsResponse {
   projectId: number
   createdBy: number | null
   updatedBy: number | null
-  createdOn?: Date
-  updatedOn?: Date
+  createdOn: Date
+  updatedOn: Date
 }
 
 export interface ICreateSectionFromHierarchyStringResponse {

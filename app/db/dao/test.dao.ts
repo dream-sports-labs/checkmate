@@ -115,7 +115,7 @@ const TestsDao = {
           projectId: tests.projectId,
           section: sections.sectionName,
           sectionId: sections.sectionId,
-          sectionparentId: sections.parentId,
+          sectionParentId: sections.parentId,
         })
         .from(tests)
         .leftJoin(labelTestMap, eq(tests.testId, labelTestMap.testId))
@@ -459,7 +459,7 @@ const TestsDao = {
           steps: tests.steps,
           expectedResult: tests.expectedResult,
           sectionId: sections.sectionId,
-          sectionparentId: sections.parentId,
+          sectionParentId: sections.parentId,
           automationId: tests.automationId,
           additionalGroups: tests.additionalGroups,
           labelNames:
@@ -604,7 +604,7 @@ const TestsDao = {
           projectId: tests.projectId,
           section: sections.sectionName,
           sectionId: sections.sectionId,
-          sectionparentId: sections.parentId,
+          sectionParentId: sections.parentId,
         })
         .from(tests)
         .leftJoin(labelTestMap, eq(tests.testId, labelTestMap.testId))

@@ -1,4 +1,4 @@
-import {Sections} from '~/screens/CreateRun/RunFilter'
+import {IGetAllSectionsResponse} from '@controllers/sections.controller'
 import {Squad} from '../RunTestList/interfaces'
 
 export const isMandatory = (attribute: string): boolean => {
@@ -18,14 +18,14 @@ export const sectionListPlaceholder = ({
 }: {
   sectionId: number
   sectionData: {
-    data: Sections[]
+    data: {sectionId: number; sectionName: string}[]
   }
   newProperty?: string
 }): string => {
   if (sectionId) {
     const selectedSection = sectionData.data?.find(
       (section) => section.sectionId === sectionId,
-    )?.sectionHierarchy
+    )?.sectionName
     if (selectedSection) return selectedSection
   }
 

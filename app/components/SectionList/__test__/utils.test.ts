@@ -1,9 +1,56 @@
 import {IGetAllSectionsResponse} from '@controllers/sections.controller'
-import {buildHierarchyPath, buildSectionHierarchy} from '../utils'
-import {DisplaySection} from '../interfaces'
+import {buildHierarchyPath, buildPath, buildSectionHierarchy} from '../utils'
+import {DisplaySection, SectionWithHierarchy} from '../interfaces'
+
+describe('buildPath', () => {
+  it('should return an empty string when sectionsData is undefined', () => {
+    expect(buildPath({sectionId: 1, sectionsData: undefined})).toBe('')
+  })
+
+  it('should return the section name when there is no parent', () => {
+    const sectionsData = [{sectionId: 1, sectionName: 'Root', parentId: null}]
+    expect(buildPath({sectionId: 1, sectionsData})).toBe('Root')
+  })
+
+  it('should return the full hierarchy path', () => {
+    const sectionsData = [
+      {sectionId: 1, sectionName: 'Root', parentId: null},
+      {sectionId: 2, sectionName: 'Child', parentId: 1},
+      {sectionId: 3, sectionName: 'Grandchild', parentId: 2},
+    ]
+    expect(buildPath({sectionId: 3, sectionsData})).toBe(
+      'Root > Child > Grandchild',
+    )
+  })
+
+  it('should handle missing parent references gracefully', () => {
+    const sectionsData = [
+      {sectionId: 1, sectionName: 'Root', parentId: null},
+      {sectionId: 2, sectionName: 'Child', parentId: 10}, // ParentId does not exist
+    ]
+    expect(buildPath({sectionId: 2, sectionsData})).toBe('Child')
+  })
+
+  it('should return only the section name when it has no known parent', () => {
+    const sectionsData = [{sectionId: 5, sectionName: 'Orphan', parentId: null}]
+    expect(buildPath({sectionId: 5, sectionsData})).toBe('Orphan')
+  })
+
+  it('should handle cyclic dependencies gracefully', () => {
+    const sectionsData = [
+      {sectionId: 1, sectionName: 'A', parentId: 2},
+      {sectionId: 2, sectionName: 'B', parentId: 1}, // Cyclic reference
+    ]
+    expect(buildPath({sectionId: 1, sectionsData})).toBe('A') // Should prevent infinite loop
+  })
+})
 
 describe('buildHierarchyPath', () => {
-  it('should return sections with hierarchy paths in a simple hierarchy', () => {
+  it('should return an empty array when sectionsData is empty', () => {
+    expect(buildHierarchyPath({sectionsData: []})).toEqual([])
+  })
+
+  it('should return sections with correct hierarchy paths', () => {
     const sectionsData: IGetAllSectionsResponse[] = [
       {
         sectionId: 1,
@@ -18,7 +65,7 @@ describe('buildHierarchyPath', () => {
       },
       {
         sectionId: 2,
-        sectionName: 'Child',
+        sectionName: 'Child 1',
         sectionDescription: null,
         parentId: 1,
         projectId: 1,
@@ -27,17 +74,75 @@ describe('buildHierarchyPath', () => {
         createdOn: new Date(),
         updatedOn: new Date(),
       },
+      {
+        sectionId: 3,
+        sectionName: 'Child 2',
+        sectionDescription: null,
+        parentId: 1,
+        projectId: 1,
+        createdBy: 1,
+        updatedBy: 1,
+        createdOn: new Date(),
+        updatedOn: new Date(),
+      },
+      {
+        sectionId: 4,
+        sectionName: 'Grandchild',
+        sectionDescription: null,
+        parentId: 2,
+        projectId: 1,
+        createdBy: 1,
+        updatedBy: 1,
+        createdOn: new Date(),
+        updatedOn: new Date(),
+      },
     ]
 
-    const result = buildHierarchyPath({sectionsData})
-
-    expect(result).toEqual([
+    const expectedOutput: SectionWithHierarchy[] = [
       {...sectionsData[0], sectionHierarchy: 'Root'},
-      {...sectionsData[1], sectionHierarchy: 'Root > Child'},
-    ])
+      {...sectionsData[1], sectionHierarchy: 'Root > Child 1'},
+      {...sectionsData[2], sectionHierarchy: 'Root > Child 2'},
+      {...sectionsData[3], sectionHierarchy: 'Root > Child 1 > Grandchild'},
+    ]
+
+    expect(buildHierarchyPath({sectionsData})).toEqual(expectedOutput)
   })
 
-  it('should correctly handle deep hierarchies', () => {
+  it('should handle sections with missing parent references', () => {
+    const sectionsData: IGetAllSectionsResponse[] = [
+      {
+        sectionId: 1,
+        sectionName: 'Valid Root',
+        sectionDescription: null,
+        parentId: null,
+        projectId: 1,
+        createdBy: 1,
+        updatedBy: 1,
+        createdOn: new Date(),
+        updatedOn: new Date(),
+      },
+      {
+        sectionId: 2,
+        sectionName: 'Invalid Parent',
+        sectionDescription: null,
+        parentId: 99,
+        projectId: 1,
+        createdBy: 1,
+        updatedBy: 1,
+        createdOn: new Date(),
+        updatedOn: new Date(),
+      },
+    ]
+
+    const expectedOutput: SectionWithHierarchy[] = [
+      {...sectionsData[0], sectionHierarchy: 'Valid Root'},
+      {...sectionsData[1], sectionHierarchy: 'Invalid Parent'},
+    ]
+
+    expect(buildHierarchyPath({sectionsData})).toEqual(expectedOutput)
+  })
+
+  it('should correctly handle a deeply nested hierarchy', () => {
     const sectionsData: IGetAllSectionsResponse[] = [
       {
         sectionId: 1,
@@ -85,9 +190,7 @@ describe('buildHierarchyPath', () => {
       },
     ]
 
-    const result = buildHierarchyPath({sectionsData})
-
-    expect(result).toEqual([
+    const expectedOutput: SectionWithHierarchy[] = [
       {...sectionsData[0], sectionHierarchy: 'Level 1'},
       {...sectionsData[1], sectionHierarchy: 'Level 1 > Level 2'},
       {...sectionsData[2], sectionHierarchy: 'Level 1 > Level 2 > Level 3'},
@@ -95,85 +198,9 @@ describe('buildHierarchyPath', () => {
         ...sectionsData[3],
         sectionHierarchy: 'Level 1 > Level 2 > Level 3 > Level 4',
       },
-    ])
-  })
-
-  it('should handle multiple root-level sections correctly', () => {
-    const sectionsData: IGetAllSectionsResponse[] = [
-      {
-        sectionId: 1,
-        sectionName: 'Root 1',
-        sectionDescription: null,
-        parentId: null,
-        projectId: 1,
-        createdBy: 1,
-        updatedBy: 1,
-        createdOn: new Date(),
-        updatedOn: new Date(),
-      },
-      {
-        sectionId: 2,
-        sectionName: 'Root 2',
-        sectionDescription: null,
-        parentId: null,
-        projectId: 1,
-        createdBy: 1,
-        updatedBy: 1,
-        createdOn: new Date(),
-        updatedOn: new Date(),
-      },
-      {
-        sectionId: 3,
-        sectionName: 'Child of Root 1',
-        sectionDescription: null,
-        parentId: 1,
-        projectId: 1,
-        createdBy: 1,
-        updatedBy: 1,
-        createdOn: new Date(),
-        updatedOn: new Date(),
-      },
-      {
-        sectionId: 4,
-        sectionName: 'Child of Root 2',
-        sectionDescription: null,
-        parentId: 2,
-        projectId: 1,
-        createdBy: 1,
-        updatedBy: 1,
-        createdOn: new Date(),
-        updatedOn: new Date(),
-      },
     ]
 
-    const result = buildHierarchyPath({sectionsData})
-
-    expect(result).toEqual([
-      {...sectionsData[0], sectionHierarchy: 'Root 1'},
-      {...sectionsData[1], sectionHierarchy: 'Root 2'},
-      {...sectionsData[2], sectionHierarchy: 'Root 1 > Child of Root 1'},
-      {...sectionsData[3], sectionHierarchy: 'Root 2 > Child of Root 2'},
-    ])
-  })
-
-  it('should handle missing parent references gracefully', () => {
-    const sectionsData: IGetAllSectionsResponse[] = [
-      {
-        sectionId: 1,
-        sectionName: 'Orphan',
-        sectionDescription: null,
-        parentId: 99,
-        projectId: 1,
-        createdBy: 1,
-        updatedBy: 1,
-        createdOn: new Date(),
-        updatedOn: new Date(),
-      },
-    ]
-
-    const result = buildHierarchyPath({sectionsData})
-
-    expect(result).toEqual([{...sectionsData[0], sectionHierarchy: 'Orphan'}])
+    expect(buildHierarchyPath({sectionsData})).toEqual(expectedOutput)
   })
 
   it('should handle sections with duplicate names but different parents', () => {
@@ -213,50 +240,13 @@ describe('buildHierarchyPath', () => {
       },
     ]
 
-    const result = buildHierarchyPath({sectionsData})
-
-    expect(result).toEqual([
+    expect(buildHierarchyPath({sectionsData})).toEqual([
       {...sectionsData[0], sectionHierarchy: 'Common'},
       {...sectionsData[1], sectionHierarchy: 'Common > Common'},
       {...sectionsData[2], sectionHierarchy: 'Common > Common > Common'},
     ])
   })
-
-  it('should handle cyclic dependencies (prevents infinite loops)', () => {
-    const sectionsData: IGetAllSectionsResponse[] = [
-      {
-        sectionId: 1,
-        sectionName: 'A',
-        sectionDescription: null,
-        parentId: 2,
-        projectId: 1,
-        createdBy: 1,
-        updatedBy: 1,
-        createdOn: new Date(),
-        updatedOn: new Date(),
-      },
-      {
-        sectionId: 2,
-        sectionName: 'B',
-        sectionDescription: null,
-        parentId: 1,
-        projectId: 1,
-        createdBy: 1,
-        updatedBy: 1,
-        createdOn: new Date(),
-        updatedOn: new Date(),
-      },
-    ]
-
-    const result = buildHierarchyPath({sectionsData})
-
-    expect(result).toEqual([
-      {...sectionsData[0], sectionHierarchy: 'A'}, // Fallback in case of loop
-      {...sectionsData[1], sectionHierarchy: 'B'}, // Fallback in case of loop
-    ])
-  })
 })
-
 describe('buildSectionHierarchy', () => {
   it('should return an empty array when sectionsData is empty', () => {
     const result = buildSectionHierarchy([])
