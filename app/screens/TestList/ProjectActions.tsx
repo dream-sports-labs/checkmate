@@ -62,12 +62,12 @@ export const ProjectActions = () => {
     if (saveChanges.data?.error === null) {
       let toastMessage = ''
 
-      if (saveChanges.data?.data?.success?.message) {
+      if (saveChanges.data?.data?.success?.message)
         toastMessage += saveChanges.data?.data?.success?.message
-      }
-      if (saveChanges.data?.data?.failed?.message) {
-        toastMessage += saveChanges.data?.data?.failed?.message
-      }
+
+      if (saveChanges.data?.data?.failed?.message)
+        toastMessage += ' ' + saveChanges.data?.data?.failed?.message
+
       if (saveChanges.data?.data?.message)
         toastMessage = saveChanges.data?.data?.message
 

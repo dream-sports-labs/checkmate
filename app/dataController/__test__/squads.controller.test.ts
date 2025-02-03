@@ -95,15 +95,6 @@ describe('SquadsController', () => {
       jest.clearAllMocks()
     })
 
-    // beforeEach(() => {
-    //   jest.mock('~/dataController/squads.controller', () => ({
-    //     __esModule: true, // Ensure ES module compatibility
-    //     default: {
-    //       checkAndCreateSquad: jest.fn(),
-    //     },
-    //   }))
-    // })
-
     it('should return success for valid squads', async () => {
       const mockSquads = ['Alpha', 'Bravo', 'Charlie']
       const mockProjectId = 1
