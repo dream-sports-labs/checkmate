@@ -27,7 +27,6 @@ const SectionsDao = {
           .innerJoin(tests, eq(testRunMap.testId, tests.testId))
           .where(eq(testRunMap.runId, runId))
 
-
         const sectionIdList = sectionIds
           .map((row) => row.sectionId)
           .filter((sectionId) => sectionId !== null)

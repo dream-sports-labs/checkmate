@@ -156,14 +156,16 @@ export const SectionList = () => {
           selectedSections={selectedSections}
           toggleSection={toggleSection}
         />
-        <button
-          onClick={() => {
-            addSubsectionClicked(null)
-          }}
-          className="flex text-sm flex-row items-center gap-2 truncate ml-2 mt-2">
-          <CirclePlus color="green" size={16} />
-          <span>{`Add Section`}</span>
-        </button>
+        {!runId && (
+          <button
+            onClick={() => {
+              addSubsectionClicked(null)
+            }}
+            className="flex text-sm flex-row items-center gap-2 truncate ml-2 mt-2">
+            <CirclePlus color="green" size={16} />
+            <span>{`Add Section`}</span>
+          </button>
+        )}
       </div>
       <AddSectionDialogue
         sectionHierarchy={sectionHierarchy}

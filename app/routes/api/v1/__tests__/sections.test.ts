@@ -5,14 +5,14 @@ import {
   responseHandler,
   errorResponseHandler,
 } from '~/routes/utilities/responseHandler'
-import {checkForProjectId} from '~/routes/utilities/utils'
 import {API} from '~/routes/utilities/api'
 import {ErrorCause} from '~/constants'
+import SearchParams from '@route/utils/getSearchParams'
 
 jest.mock('~/dataController/sections.controller')
 jest.mock('~/routes/utilities/responseHandler')
 jest.mock('~/routes/utilities/checkForUserAndAccess')
-jest.mock('~/routes/utilities/utils')
+jest.mock('@route/utils/getSearchParams')
 
 describe('Get Sections - Loader Function', () => {
   beforeEach(() => {
@@ -23,17 +23,18 @@ describe('Get Sections - Loader Function', () => {
     const request = new Request('http://localhost?projectId=123', {
       method: 'GET',
     })
+
     const mockSectionsData = [
       {sectionId: 1, sectionName: 'Section A'},
       {sectionId: 2, sectionName: 'Section B'},
     ]
 
-    ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(true)
-    ;(checkForProjectId as jest.Mock).mockReturnValue(true)
+    ;(SearchParams.getSections as jest.Mock).mockReturnValue({projectId: 123})
+    ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue({userId: 123})
     ;(SectionsController.getAllSections as jest.Mock).mockResolvedValue(
       mockSectionsData,
     )
-    ;(responseHandler as jest.Mock).mockImplementation((response) => response)
+    ;(responseHandler as jest.Mock).mockImplementation((resp) => resp)
 
     const response = await loader({params: {}, request} as any)
 
@@ -41,7 +42,10 @@ describe('Get Sections - Loader Function', () => {
       request,
       resource: API.GetSections,
     })
-    expect(checkForProjectId).toHaveBeenCalledWith(123)
+    expect(SearchParams.getSections).toHaveBeenCalledWith({
+      params: {},
+      request,
+    })
     expect(SectionsController.getAllSections).toHaveBeenCalledWith({
       projectId: 123,
     })
@@ -49,6 +53,8 @@ describe('Get Sections - Loader Function', () => {
       data: mockSectionsData,
       status: 200,
     })
+    expect(response).toEqual({data: mockSectionsData, status: 200})
+    expect(response.status).toBe(200)
   })
 
   it('should throw an error for invalid projectId', async () => {
@@ -56,53 +62,64 @@ describe('Get Sections - Loader Function', () => {
       method: 'GET',
     })
 
-    ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(true)
-    ;(checkForProjectId as jest.Mock).mockReturnValue(false)
-    ;(errorResponseHandler as jest.Mock).mockImplementation(
-      (error) =>
-        new Response(
-          JSON.stringify({error: error.message, cause: error.cause}),
-          {status: 400},
-        ),
-    )
+    ;(SearchParams.getSections as jest.Mock).mockImplementation(() => {
+      throw new Error('Invalid projectId', {cause: ErrorCause.INVALID_PARAMS})
+    })
+    ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue({userId: 123})
+    ;(errorResponseHandler as jest.Mock).mockImplementation((error) => {
+      return {
+        error: error,
+        status: 400,
+      }
+    })
 
     const response = await loader({params: {}, request} as any)
 
-    expect(checkForProjectId).toHaveBeenCalledWith(NaN)
-    expect(errorResponseHandler).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: 'Invalid projectId',
-        cause: ErrorCause.INVALID_PARAMS,
-      }),
-    )
-    expect(response.status).toBe(400)
-    const responseData = await response.json()
-    expect(responseData).toEqual({
-      error: 'Invalid projectId',
-      cause: ErrorCause.INVALID_PARAMS,
+    expect(SearchParams.getSections).toHaveBeenCalledWith({
+      params: {},
+      request,
     })
+
+    expect(errorResponseHandler).toHaveBeenCalledWith(
+      new Error('Invalid projectId', {cause: ErrorCause.INVALID_PARAMS}),
+    )
+
+    expect(response).toEqual({
+      error: new Error('Invalid projectId', {cause: ErrorCause.INVALID_PARAMS}),
+      status: 400,
+    })
+    expect(SectionsController.getAllSections).not.toHaveBeenCalled()
   })
 
   it('should handle missing projectId', async () => {
     const request = new Request('http://localhost', {method: 'GET'})
 
-    ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(true)
-    ;(checkForProjectId as jest.Mock).mockReturnValue(false)
+    ;(SearchParams.getSections as jest.Mock).mockReturnValue({projectId: 0})
+    ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue({userId: 123})
+    const errorObj = new Error('Invalid projectId')
+    ;(SectionsController.getAllSections as jest.Mock).mockImplementation(() => {
+      throw errorObj
+    })
     ;(errorResponseHandler as jest.Mock).mockImplementation(
       (error) =>
         new Response(
-          JSON.stringify({error: error.message, cause: error.cause}),
+          JSON.stringify({
+            error: error.message,
+            cause: ErrorCause.INVALID_PARAMS,
+          }),
           {status: 400},
         ),
     )
 
     const response = await loader({params: {}, request} as any)
 
-    expect(checkForProjectId).toHaveBeenCalledWith(0)
+    expect(SearchParams.getSections).toHaveBeenCalledWith({
+      params: {},
+      request,
+    })
     expect(errorResponseHandler).toHaveBeenCalledWith(
       expect.objectContaining({
         message: 'Invalid projectId',
-        cause: ErrorCause.INVALID_PARAMS,
       }),
     )
     expect(response.status).toBe(400)
@@ -119,6 +136,10 @@ describe('Get Sections - Loader Function', () => {
     })
     const mockError = new Error('Unexpected error')
 
+    // Let the param parse succeed, but the user check fails for some reason:
+    ;(SearchParams.getSections as jest.Mock).mockReturnValue({
+      projectId: 123,
+    })
     ;(getUserAndCheckAccess as jest.Mock).mockRejectedValue(mockError)
     ;(errorResponseHandler as jest.Mock).mockImplementation(
       (error) =>

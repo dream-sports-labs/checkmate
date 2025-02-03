@@ -4,6 +4,7 @@ import {Checkbox} from '@ui/checkbox'
 import {cn} from '@ui/utils'
 import {ChevronDown, ChevronRight, CirclePlus, Pencil} from 'lucide-react'
 import React, {memo, useCallback} from 'react'
+import {useParams} from 'react-router'
 
 const RenderSections = memo(
   ({
@@ -30,6 +31,7 @@ const RenderSections = memo(
     addSubsectionClicked: (sectionHierarchy: string) => void
   }) => {
     sections = sections.sort((a, b) => a.name.localeCompare(b.name))
+    const runId = useParams().runId ? Number(useParams().runId) : 0
 
     const renderSubSections = useCallback(
       (section: DisplaySection, parentHierarchy: string | null) => {
@@ -128,32 +130,34 @@ const RenderSections = memo(
                     }
                   />
                 </div>
-                <div className="flex flex-row items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 absolute top-1/2 left-full transform -translate-y-1/2 ml-2">
-                  <button
-                    onClick={() =>
-                      addSubsectionClicked(
-                        parentSectionHeirarchy
-                          ? `${parentSectionHeirarchy} > ${section.name}`
-                          : section.name,
-                      )
-                    }
-                    className="flex text-sm flex-row items-center gap-2">
-                    <Tooltip
-                      anchor={<CirclePlus color="green" size={16} />}
-                      content="Add SubSection"
-                    />
-                  </button>
-                  {false && (
+                {!runId && (
+                  <div className="flex flex-row items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 absolute top-1/2 left-full transform -translate-y-1/2 ml-2">
                     <button
-                      onClick={() => {}}
+                      onClick={() =>
+                        addSubsectionClicked(
+                          parentSectionHeirarchy
+                            ? `${parentSectionHeirarchy} > ${section.name}`
+                            : section.name,
+                        )
+                      }
                       className="flex text-sm flex-row items-center gap-2">
                       <Tooltip
-                        anchor={<Pencil size={14} stroke="grey" />}
-                        content="Edit Section"
+                        anchor={<CirclePlus color="green" size={16} />}
+                        content="Add SubSection"
                       />
                     </button>
-                  )}
-                </div>
+                    {false && (
+                      <button
+                        onClick={() => {}}
+                        className="flex text-sm flex-row items-center gap-2">
+                        <Tooltip
+                          anchor={<Pencil size={14} stroke="grey" />}
+                          content="Edit Section"
+                        />
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
             {renderSubSections(
