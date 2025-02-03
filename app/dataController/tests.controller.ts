@@ -9,8 +9,12 @@ import SquadsDao from '@dao/squads.dao'
 import TestCoveredByDao from '@dao/testCoveredBy.dao'
 import TestsDao, {IBulkAddTestsDao} from '~/db/dao/test.dao'
 import {handleNewSectionAndSquad} from './utils'
-import SectionsController from './sections.controller'
+import SectionsController, {
+  ICreateSectionFromHierarchyStringResponse,
+} from './sections.controller'
 import SquadsController from './squads.controller'
+import {buildHierarchyPath} from '@components/SectionList/utils'
+import {SectionWithHierarchy} from '@components/SectionList/interfaces'
 
 export interface ITestStatus {
   projectId: number
@@ -121,7 +125,7 @@ const TestsController = {
     try {
       //Get all squads and sections
       const squadsAdded = []
-      const sectionsAdded = []
+      const sectionsAdded: ICreateSectionFromHierarchyStringResponse[] = []
       const allSquads = await SquadsDao.getAllSquads({
         projectId: param.projectId,
       })
@@ -147,15 +151,21 @@ const TestsController = {
         sectionName: string
         sectionId: number
         projectId: number
-        sectionHierarchy: string | null
+        parentId: number | null
+        sectionHierarchy: string
       }[] = []
       if (allSections) {
-        sectionsData = allSections.map((section) => {
+        const x: SectionWithHierarchy[] = buildHierarchyPath({
+          sectionsData: allSections,
+        })
+
+        sectionsData = x.map((item) => {
           return {
-            sectionName: section.sectionName,
-            sectionId: section.sectionId,
-            projectId: section.projectId,
-            sectionHierarchy: section.sectionHierarchy,
+            sectionName: item.sectionName,
+            sectionId: item.sectionId,
+            projectId: item.projectId,
+            parentId: item.parentId,
+            sectionHierarchy: item.sectionHierarchy,
           }
         })
       }
@@ -207,31 +217,31 @@ const TestsController = {
           }
         }
 
+        const testSectionHierarchy = test.section
+          .split('>')
+          .map((item) => item?.trim())
+          .join(' > ')
+
         let sectionId = sectionsData.find((section) => {
           return (
-            section.sectionName === test.sectionName?.trim() &&
-            section.sectionHierarchy === test.sectionHierarchy?.trim()
+            section.sectionHierarchy === testSectionHierarchy &&
+            section.projectId === param.projectId
           )
         })?.sectionId
         if (!sectionId) {
-          const sectionHierarchyArray = test.sectionHierarchy
-            .split('>')
-            .map((item) => item?.trim())
-
-          if (test.sectionName !== sectionHierarchyArray.pop()) {
-            throw new Error('Section name and hierarchy do not match')
-          }
-
           const newSection =
             await SectionsController.createSectionFromHierarchyString({
               createdBy: param.createdBy,
               projectId: param.projectId,
-              sectionHierarchyString: test.sectionHierarchy,
+              sectionHierarchyString: testSectionHierarchy,
               sectionDescription: test.sectionDescription,
             })
 
           if (newSection) {
-            sectionsData.push(newSection)
+            sectionsData.push({
+              ...newSection,
+              sectionHierarchy: testSectionHierarchy,
+            })
             sectionsAdded.push(newSection)
             sectionId = newSection.sectionId
           }

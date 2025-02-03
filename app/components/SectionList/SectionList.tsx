@@ -1,6 +1,6 @@
 import {DisplaySection} from '@components/SectionList/interfaces'
 import {
-  createHierarchy,
+  buildSectionHierarchy,
   getChildSections,
   getInitialOpenSections,
   getInitialSelectedSections,
@@ -14,6 +14,7 @@ import {API} from '~/routes/utilities/api'
 import {AddSectionDialogue} from './AddSectionDialogue'
 import RenderSections from './RenderSections'
 import {SectionInfoBox} from './SectionInfoBox'
+import {IGetAllSectionsResponse} from '@controllers/sections.controller'
 
 export const SectionList = () => {
   const [searchParams, setSearchParams] = useSearchParams([])
@@ -21,7 +22,7 @@ export const SectionList = () => {
   const [addSectionDialogue, setAddSectionDialogue] = useState<boolean>(false)
   const [sectionHierarchy, setSectionHierarchy] = useState<string | null>(null)
   const sectionFetcher = useFetcher<{
-    data: Sections[]
+    data: IGetAllSectionsResponse[]
   }>()
   const projectId = useParams().projectId ? Number(useParams().projectId) : 0
   const runId = useParams().runId ? Number(useParams().runId) : 0
@@ -33,10 +34,8 @@ export const SectionList = () => {
   }, [])
 
   useEffect(() => {
-    if (sectionFetcher.data?.data) {
-      const x = createHierarchy(sectionFetcher.data?.data)
-      setSectionsData(x)
-    }
+    if (sectionFetcher.data?.data)
+      setSectionsData(buildSectionHierarchy(sectionFetcher.data?.data))
   }, [sectionFetcher.data])
 
   const initialSelectedSections = getInitialSelectedSections(searchParams)

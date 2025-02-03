@@ -42,8 +42,15 @@ export interface IGetAllSectionsResponse {
   projectId: number
   createdBy: number | null
   updatedBy: number | null
-  createdOn: Date
-  updatedOn: Date
+  createdOn?: Date
+  updatedOn?: Date
+}
+
+export interface ICreateSectionFromHierarchyStringResponse {
+  sectionId: number
+  sectionName: string
+  projectId: number
+  parentId: number | null
 }
 
 const SectionsController = {
@@ -68,17 +75,9 @@ const SectionsController = {
     }
   },
 
-  createSectionByHierarchyString: async (
+  createSectionFromHierarchyString: async (
     param: ICreateSectionByHierarchyString,
-  ): Promise<
-    | {
-        sectionId: number
-        sectionName: string
-        projectId: number
-        parentId: number | null
-      }
-    | undefined
-  > => {
+  ): Promise<ICreateSectionFromHierarchyStringResponse | undefined> => {
     const hierarchy = param.sectionHierarchyString
       .split('>')
       .map((name) => name?.trim())

@@ -18,7 +18,7 @@ async function insertSectionsData() {
   for (let item of sectionsData) {
     try {
       const sectionInserted =
-        await SectionsController.createSectionByHierarchyString({
+        await SectionsController.createSectionFromHierarchyString({
           sectionHierarchyString: item['Section'],
           projectId: PROJECT_ID,
           createdBy: CREATED_BY,

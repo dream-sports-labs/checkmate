@@ -61,61 +61,10 @@ export const getChildSections = (
   return childSections
 }
 
-export const createHierarchy = (data: SectionData[]) => {
-  const root: DisplaySection[] = []
-
-  const sortedData = data.sort((a, b) => b.sectionDepth - a.sectionDepth)
-
-  sortedData.forEach((item) => {
-    const hierarchy = item.sectionHierarchy.split(' > ')
-    let currentLevel = root
-
-    let currentSectionHierarchy = ''
-    hierarchy.forEach((sectionName: string, index: number) => {
-      if (+index === 0) currentSectionHierarchy = sectionName
-      else
-        currentSectionHierarchy = currentSectionHierarchy + ' > ' + sectionName
-
-      let existingSection = currentLevel.find((s) => s.name === sectionName)
-
-      if (!existingSection) {
-        const newSection = {
-          id: findSectionId(
-            sectionName,
-            sortedData,
-            index,
-            currentSectionHierarchy,
-          ),
-          name: sectionName,
-          subSections: [],
-        }
-        parentChildMap.set(
-          newSection.id,
-          index > 0
-            ? findSectionId(
-                hierarchy[index - 1],
-                sortedData,
-                index - 1,
-                currentSectionHierarchy,
-              )
-            : -1,
-        )
-
-        currentLevel.push(newSection)
-        existingSection = newSection
-      }
-
-      currentLevel = existingSection.subSections
-    })
-  })
-
-  return root
-}
-
 export const buildHierarchyPath = ({
   sectionsData,
 }: {
-  sectionsData: IGetAllSectionsResponse[] | undefined
+  sectionsData: IGetAllSectionsResponse[]
 }): SectionWithHierarchy[] => {
   let allSections: SectionWithHierarchy[] = []
 
@@ -126,24 +75,23 @@ export const buildHierarchyPath = ({
     return acc
   }, {})
 
-  function buildHierarchyPath(sectionId: number): string {
+  function buildPath(sectionId: number): string {
     const names: string[] = []
     let currentId: number | null = sectionId
 
     while (currentId) {
       const currentSection: any = sectionMap?.[currentId]
-      if (!currentSection) break // Safety check if data is incomplete
-      names.unshift(currentSection.sectionName) // insert at the front
+      if (!currentSection) break
+      names.unshift(currentSection.sectionName)
       currentId = currentSection.parentId
     }
 
-    // Join them with ' > '
     return names.join(' > ')
   }
 
   if (sectionsData) {
     allSections = sectionsData.map((row) => {
-      const hierarchy = buildHierarchyPath(row.sectionId)
+      const hierarchy = buildPath(row.sectionId)
 
       return {
         ...row,
@@ -153,4 +101,28 @@ export const buildHierarchyPath = ({
   }
 
   return allSections
+}
+
+export const buildSectionHierarchy = (
+  sectionsData: {
+    sectionId: number
+    sectionName: string
+    parentId: number | null
+  }[],
+): DisplaySection[] => {
+  const sectionMap: Record<number, DisplaySection> = {}
+  const rootSections: DisplaySection[] = []
+
+  sectionsData.forEach(({sectionId, sectionName}) => {
+    sectionMap[sectionId] = {id: sectionId, name: sectionName, subSections: []}
+  })
+
+  sectionsData.forEach(({sectionId, parentId}) => {
+    if (parentId !== null && sectionMap[parentId]) {
+      sectionMap[parentId].subSections.push(sectionMap[sectionId])
+    } else {
+      rootSections.push(sectionMap[sectionId])
+    }
+  })
+  return rootSections
 }

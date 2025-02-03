@@ -1,3 +1,5 @@
+import {IGetAllSectionsResponse} from '@controllers/sections.controller'
+
 export interface DisplaySection {
   id: number
   name: string
@@ -11,15 +13,6 @@ export interface SectionData {
   sectionHierarchy: string
 }
 
-export interface SectionWithHierarchy {
-  sectionName: string
-  sectionDescription: string | null
-  parentId: number | null
-  sectionId: number
-  projectId: number
-  createdBy: number | null
-  createdOn: Date
-  updatedBy: number | null
-  updatedOn: Date
+export interface SectionWithHierarchy extends IGetAllSectionsResponse {
   sectionHierarchy: string
 }

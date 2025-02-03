@@ -26,20 +26,18 @@ describe('SectionsController', () => {
     it('should call SectionsDao.getSectionIdByNameAndHierarcy with the correct parameters', async () => {
       const mockParams = {
         sectionName: 'Section A',
-        sectionHierarchy: 'Root > Section A',
+        parentId: null,
         projectId: 123,
       }
       const mockResponse = [{sectionId: 1}]
 
-      ;(
-        SectionsDao.getSectionIdByNameAndHierarcy as jest.Mock
-      ).mockResolvedValue(mockResponse)
-
-      const result = await SectionsController.getSectionIdByNameAndHierarcy(
-        mockParams,
+      ;(SectionsDao.getSectionIdByHierarcy as jest.Mock).mockResolvedValue(
+        mockResponse,
       )
 
-      expect(SectionsDao.getSectionIdByNameAndHierarcy).toHaveBeenCalledWith(
+      const result = await SectionsController.getSectionIdByHierarcy(mockParams)
+
+      expect(SectionsDao.getSectionIdByHierarcy).toHaveBeenCalledWith(
         mockParams,
       )
       expect(result).toEqual(mockResponse)
@@ -50,7 +48,7 @@ describe('SectionsController', () => {
     it('should call SectionsDao.addSection with the correct parameters', async () => {
       const mockParams = {
         sectionName: 'New Section',
-        sectionHierarchy: 'Root > New Section',
+        parentId: 12,
         projectId: 123,
         createdBy: 456,
         sectionDescription: 'Description',
@@ -70,19 +68,19 @@ describe('SectionsController', () => {
     it('should return an existing section if found', async () => {
       const mockParams = {
         sectionName: 'Existing Section',
-        sectionHierarchy: 'Root > Existing Section',
+        parentId: null,
         projectId: 123,
         createdBy: 456,
       }
       const mockResponse = [{sectionId: 1}]
 
-      ;(
-        SectionsDao.getSectionIdByNameAndHierarcy as jest.Mock
-      ).mockResolvedValue(mockResponse)
+      ;(SectionsDao.getSectionIdByHierarcy as jest.Mock).mockResolvedValue(
+        mockResponse,
+      )
 
       const result = await SectionsController.checkAndCreateSection(mockParams)
 
-      expect(SectionsDao.getSectionIdByNameAndHierarcy).toHaveBeenCalledWith(
+      expect(SectionsDao.getSectionIdByHierarcy).toHaveBeenCalledWith(
         mockParams,
       )
       expect(result).toEqual(mockResponse[0])
@@ -91,20 +89,18 @@ describe('SectionsController', () => {
     it('should create a new section if not found', async () => {
       const mockParams = {
         sectionName: 'New Section',
-        sectionHierarchy: 'Root > New Section',
+        parentId: null,
         projectId: 123,
         createdBy: 456,
       }
       const mockResponse = {sectionId: 2}
 
-      ;(
-        SectionsDao.getSectionIdByNameAndHierarcy as jest.Mock
-      ).mockResolvedValue([])
+      ;(SectionsDao.getSectionIdByHierarcy as jest.Mock).mockResolvedValue([])
       ;(SectionsDao.addSection as jest.Mock).mockResolvedValue(mockResponse)
 
       const result = await SectionsController.checkAndCreateSection(mockParams)
 
-      expect(SectionsDao.getSectionIdByNameAndHierarcy).toHaveBeenCalledWith(
+      expect(SectionsDao.getSectionIdByHierarcy).toHaveBeenCalledWith(
         mockParams,
       )
       expect(SectionsDao.addSection).toHaveBeenCalledWith(mockParams)
