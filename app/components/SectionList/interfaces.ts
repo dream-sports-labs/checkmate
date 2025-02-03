@@ -10,3 +10,16 @@ export interface SectionData {
   sectionName: string
   sectionHierarchy: string
 }
+
+export interface SectionWithHierarchy {
+  sectionName: string
+  sectionDescription: string | null
+  parentId: number | null
+  sectionId: number
+  projectId: number
+  createdBy: number | null
+  createdOn: Date
+  updatedBy: number | null
+  updatedOn: Date
+  sectionHierarchy: string
+}

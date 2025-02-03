@@ -38,5 +38,5 @@ async function insertSquadsData() {
       process.exit(1)
     })
 }
-console.log('Inserting Squads Data...')
+console.log('🧨 Inserting Squads Data...')
 insertSquadsData()

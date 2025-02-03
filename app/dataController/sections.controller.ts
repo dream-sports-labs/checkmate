@@ -1,8 +1,8 @@
 import SectionsDao from '~/db/dao/sections.dao'
 
-export interface IGetSectionIdByNameAndHierarcy {
+export interface IGetSectionIdByHierarcy {
   sectionName: string
-  sectionHierarchy: string
+  parentId: number | null
   projectId: number
 }
 
@@ -13,7 +13,7 @@ export interface IGetAllSections {
 
 export interface IAddSection {
   sectionName: string
-  sectionHierarchy: string
+  parentId: number | null
   projectId: number
   createdBy: number
   sectionDescription?: string
@@ -21,26 +21,45 @@ export interface IAddSection {
 
 export interface ICheckAndCreateSection {
   sectionName: string
-  sectionHierarchy: string
+  parentId: number | null
   projectId: number
   createdBy: number
   sectionDescription?: string
 }
 
-export interface ICreateSectionFromHierarchyString {
-  sectionHierarchyString: string // Example: 'Section1>Section2>Section3'
+export interface ICreateSectionByHierarchyString {
+  sectionHierarchyString: string // Example: 'Section1 > Section2 > Section3'
   sectionDescription?: string
   projectId: number
   createdBy: number
+}
+
+export interface IGetAllSectionsResponse {
+  sectionId: number
+  sectionName: string
+  sectionDescription: string | null
+  parentId: number | null
+  projectId: number
+  createdBy: number | null
+  updatedBy: number | null
+  createdOn: Date
+  updatedOn: Date
 }
 
 const SectionsController = {
-  getAllSections: (param: IGetAllSections) => SectionsDao.getAllSections(param),
-  getSectionIdByNameAndHierarcy: (param: IGetSectionIdByNameAndHierarcy) =>
-    SectionsDao.getSectionIdByNameAndHierarcy(param),
+  getAllSections: (
+    param: IGetAllSections,
+  ): Promise<IGetAllSectionsResponse[] | undefined> =>
+    SectionsDao.getAllSections(param),
+
+  getSectionIdByHierarcy: (param: IGetSectionIdByHierarcy) =>
+    SectionsDao.getSectionIdByHierarcy(param),
+
   addSection: (param: IAddSection) => SectionsDao.addSection(param),
+
   checkAndCreateSection: async (param: ICheckAndCreateSection) => {
-    const section = await SectionsDao.getSectionIdByNameAndHierarcy(param)
+    const section = await SectionsController.getSectionIdByHierarcy(param)
+
     if (section && section.length > 0) {
       return section?.[0] ?? section
     } else {
@@ -49,25 +68,48 @@ const SectionsController = {
     }
   },
 
-  createSectionFromHierarchyString: async (
-    param: ICreateSectionFromHierarchyString,
-  ) => {
-    const sectionHierarchyArray = param.sectionHierarchyString.split('>')
-    let sectionHierarchy = ''
+  createSectionByHierarchyString: async (
+    param: ICreateSectionByHierarchyString,
+  ): Promise<
+    | {
+        sectionId: number
+        sectionName: string
+        projectId: number
+        parentId: number | null
+      }
+    | undefined
+  > => {
+    const hierarchy = param.sectionHierarchyString
+      .split('>')
+      .map((name) => name?.trim())
+
+    hierarchy.forEach((name) => {
+      if (!name) {
+        throw new Error(
+          'Invalid section hierarchy string, empty section name found',
+        )
+      }
+    })
+
+    let parentId: number | null = null
     let section
-    for (let i = 0; i < sectionHierarchyArray.length; i++) {
-      sectionHierarchy = sectionHierarchy
-        ? sectionHierarchy?.trim() + ' > ' + sectionHierarchyArray?.[i]?.trim()
-        : sectionHierarchyArray?.[i]?.trim()
+
+    for (let i = 0; i < hierarchy.length; i++) {
+      const sectionName = hierarchy[i]
 
       section = await SectionsController.checkAndCreateSection({
-        sectionName: sectionHierarchyArray?.[i]?.trim(),
-        sectionHierarchy: sectionHierarchy,
+        sectionName,
+        parentId,
         projectId: param.projectId,
         createdBy: param.createdBy,
         sectionDescription: param.sectionDescription,
       })
+      if (section?.sectionId) parentId = section?.sectionId
+      else throw new Error('Error in creating section')
     }
+
+    if (!section) throw new Error('Error in creating section')
+
     return section
   },
 }

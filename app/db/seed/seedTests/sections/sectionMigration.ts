@@ -23,14 +23,7 @@ Papa.parse(csvFileContent, {
     // Filter out unwanted keys
     jsonObj.forEach((obj: any) => {
       for (let key in obj) {
-        if (
-          !(
-            key === 'Section' ||
-            key === 'Section Depth' ||
-            key === 'Section Hierarchy' ||
-            key === 'Section Description'
-          )
-        ) {
+        if (!(key === 'Section' || key === 'Section Description')) {
           delete obj[key]
         }
       }

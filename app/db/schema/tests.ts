@@ -1,12 +1,15 @@
 import {sql} from 'drizzle-orm'
 import {
+  AnyMySqlColumn,
   index,
   int,
   json,
+  MySqlColumn,
   mysqlEnum,
   mysqlTable,
   text,
   timestamp,
+  unique,
   varchar,
 } from 'drizzle-orm/mysql-core'
 import {organisations} from './organisations'
@@ -35,8 +38,10 @@ export const sections = mysqlTable(
     sectionId: int('sectionId').primaryKey().autoincrement(),
     sectionName: varchar('sectionName', {length: 250}).notNull(),
     sectionDescription: text('sectionDescription'),
-    sectionHierarchy: varchar('sectionHierarchy', {length: 500}),
-    sectionDepth: int('sectionDepth').notNull().default(0),
+    parentId: int('parentId').references(
+      (): MySqlColumn => sections.sectionId,
+      {onDelete: 'set null'},
+    ),
     editInfo: json('editHistory').$type<history[]>().default([]),
     projectId: int('projectId')
       .references(() => projects.projectId, {onDelete: 'cascade'})
@@ -58,6 +63,10 @@ export const sections = mysqlTable(
   (sections) => {
     return {
       sectionNameIndex: index('sectionNameIndex').on(sections.sectionName),
+      sectionHierarchyUnique: unique('sectionHierarchyUnique').on(
+        sections.parentId,
+        sections.sectionName,
+      ),
     }
   },
 )

@@ -10,7 +10,7 @@ async function insertSectionsData() {
         sectionId: number
         sectionName: string
         projectId: number
-        sectionHierarchy: string | null
+        parentId: number | null
       }
     | undefined
   >[] = []
@@ -18,8 +18,8 @@ async function insertSectionsData() {
   for (let item of sectionsData) {
     try {
       const sectionInserted =
-        await SectionsController.createSectionFromHierarchyString({
-          sectionHierarchyString: item['Section Hierarchy'],
+        await SectionsController.createSectionByHierarchyString({
+          sectionHierarchyString: item['Section'],
           projectId: PROJECT_ID,
           createdBy: CREATED_BY,
         })
@@ -29,10 +29,7 @@ async function insertSectionsData() {
         value: sectionInserted,
       })
     } catch (error) {
-      console.log(
-        `❌ Error in inserting section ${item['Section Hierarchy']}`,
-        error,
-      )
+      console.log(`❌ Error in inserting section ${item['Section']}`, error)
       results.push({
         status: 'rejected',
         reason: error,
@@ -48,8 +45,7 @@ async function insertSectionsData() {
     .filter((result) => result?.status === 'rejected')
     .map((result) => ({
       error: result?.reason,
-      sectionHierarchy:
-        sectionsData[results.indexOf(result)]['Section Hierarchy'],
+      sectionHierarchy: sectionsData[results.indexOf(result)]['Section'],
     }))
 
   if (success.length > 0) {

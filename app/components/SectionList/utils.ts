@@ -1,5 +1,10 @@
 import {jsonParseWithError} from '~/routes/utilities/utils'
-import {DisplaySection, SectionData} from '@components/SectionList/interfaces'
+import {
+  DisplaySection,
+  SectionData,
+  SectionWithHierarchy,
+} from '@components/SectionList/interfaces'
+import {IGetAllSectionsResponse} from '@controllers/sections.controller'
 
 export const findSectionId = (
   sectionName: string,
@@ -105,4 +110,47 @@ export const createHierarchy = (data: SectionData[]) => {
   })
 
   return root
+}
+
+export const buildHierarchyPath = ({
+  sectionsData,
+}: {
+  sectionsData: IGetAllSectionsResponse[] | undefined
+}): SectionWithHierarchy[] => {
+  let allSections: SectionWithHierarchy[] = []
+
+  const sectionMap = sectionsData?.reduce<
+    Record<number, (typeof sectionsData)[number]>
+  >((acc, row) => {
+    acc[row.sectionId] = row
+    return acc
+  }, {})
+
+  function buildHierarchyPath(sectionId: number): string {
+    const names: string[] = []
+    let currentId: number | null = sectionId
+
+    while (currentId) {
+      const currentSection: any = sectionMap?.[currentId]
+      if (!currentSection) break // Safety check if data is incomplete
+      names.unshift(currentSection.sectionName) // insert at the front
+      currentId = currentSection.parentId
+    }
+
+    // Join them with ' > '
+    return names.join(' > ')
+  }
+
+  if (sectionsData) {
+    allSections = sectionsData.map((row) => {
+      const hierarchy = buildHierarchyPath(row.sectionId)
+
+      return {
+        ...row,
+        sectionHierarchy: hierarchy,
+      }
+    })
+  }
+
+  return allSections
 }

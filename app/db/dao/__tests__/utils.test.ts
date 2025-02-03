@@ -1,4 +1,4 @@
-import {checkForSquadAndLabelIds, errorHandling} from '@dao/utils'
+import {errorHandling} from '@dao/utils'
 import {SqlError} from '@services/ErrorTypes'
 
 jest.mock('../../../services/ErrorTypes')
@@ -30,27 +30,5 @@ describe('errorHandling', () => {
     const error = {message: 'Some other error'}
     expect(() => errorHandling(error)).toThrow(SqlError)
     expect(SqlError).toHaveBeenCalledWith(error)
-  })
-})
-
-describe('checkForSquadAndLabelIds', () => {
-  it('should throw "No Squad Selected" if squadIds is an empty array', () => {
-    const params = {squadIds: [], labelIds: [1, 2, 3]}
-    expect(() => checkForSquadAndLabelIds(params)).toThrow('No Squad Selected')
-  })
-
-  it('should throw "No Label Selected" if labelIds is an empty array', () => {
-    const params = {squadIds: [1, 2, 3], labelIds: []}
-    expect(() => checkForSquadAndLabelIds(params)).toThrow('No Label Selected')
-  })
-
-  it('should not throw an error if both squadIds and labelIds are undefined', () => {
-    const params = {squadIds: undefined, labelIds: undefined}
-    expect(() => checkForSquadAndLabelIds(params)).not.toThrow()
-  })
-
-  it('should not throw an error if both squadIds and labelIds are valid arrays', () => {
-    const params = {squadIds: [1, 2, 3], labelIds: [1, 2, 3]}
-    expect(() => checkForSquadAndLabelIds(params)).not.toThrow()
   })
 })

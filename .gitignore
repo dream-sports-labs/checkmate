@@ -10,5 +10,5 @@ playground.*
 .vscode
 coverage/*
 app/config.json
-drizzle/*
+drizzle
 app/db/seed/seedTests/*.json

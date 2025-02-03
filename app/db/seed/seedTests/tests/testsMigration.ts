@@ -1,3 +1,4 @@
+import {buildHierarchyPath} from '@components/SectionList/utils'
 import AutomationStatusController from '@controllers/automationStatus.controller'
 import PlatformController from '@controllers/platform.controller'
 import PriorityController from '@controllers/priority.controller'
@@ -22,7 +23,7 @@ Papa.parse(csvFileContent, {
   complete: async (results) => {
     let jsonObj: any = results.data
 
-    const allSections = await SectionsController.getAllSections({
+    const allSectionsData = await SectionsController.getAllSections({
       projectId: PROJECT_ID,
     })
     const allSquads = await SquadsController.getAllSquads({
@@ -37,6 +38,12 @@ Papa.parse(csvFileContent, {
     const allTestCoveredBy = await TestCoveredByController.getAllTestCoveredBy({
       orgId: ORG_ID,
     })
+
+
+    const allSections = buildHierarchyPath({
+      sectionsData: allSectionsData,
+    })
+
 
     for (const obj of jsonObj) {
       const test: any = {}
@@ -69,9 +76,7 @@ Papa.parse(csvFileContent, {
       if (obj['Description']) test['description'] = obj['Description']?.trim()
 
       const sectionId = allSections?.find(
-        (section) =>
-          section.sectionName === obj['Section']?.trim() &&
-          section.sectionHierarchy === obj['Section Hierarchy']?.trim(),
+        (section) => section.sectionHierarchy === obj['Section']?.trim(),
       )?.sectionId
 
       if (sectionId) test['sectionId'] = sectionId
