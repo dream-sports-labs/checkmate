@@ -1,7 +1,7 @@
 import {HoverCard, HoverCardContent, HoverCardTrigger} from '@ui/hover-card'
 import {Info} from 'lucide-react'
 
-export const ImportTestInfoBox = () => {
+export const UploadTestsInfoBox = () => {
   return (
     <HoverCard>
       <HoverCardTrigger>
@@ -15,7 +15,7 @@ export const ImportTestInfoBox = () => {
         </div>
         <ul className="ml-6 list-disc [&>li]:mt-2">
           <li>Title, character length must be greater then 5</li>
-          <li>Section and Section Hierarchy</li>
+          <li>{"Section, add '>' if nested"}</li>
         </ul>
         <div className="flex flex-row mt-4 ">
           <h6 className="scroll-m-20 font-semibold tracking-tight">

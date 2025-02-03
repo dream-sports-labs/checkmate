@@ -25,6 +25,8 @@ export const TestRequestSchema = z.object({
   additionalGroups: z.string().optional(),
   automationId: z.string().optional(),
   description: z.string().optional(),
+  jiraTicket: z.string().optional(),
+  defects: z.string().optional(),
 })
 
 const BulkAddTestRequestSchema = z.object({

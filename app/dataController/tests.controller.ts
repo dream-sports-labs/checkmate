@@ -123,9 +123,9 @@ const TestsController = {
 
   bulkAddTests: async (param: IBulkAddTestsController) => {
     try {
-      //Get all squads and sections
       const squadsAdded = []
       const sectionsAdded: ICreateSectionFromHierarchyStringResponse[] = []
+
       const allSquads = await SquadsDao.getAllSquads({
         projectId: param.projectId,
       })
@@ -296,6 +296,8 @@ const TestsController = {
             automationId: test.automationId,
             additionalGroups: test.additionalGroups,
             description: test.description,
+            jiraTicket: test.jiraTicket,
+            defects: test.defects,
           })
       }
 
