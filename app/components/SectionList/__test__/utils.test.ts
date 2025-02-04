@@ -1,5 +1,5 @@
 import {
-  ICreateSectionFromHierarchyStringResponse,
+  ICreateSectionResponse,
   IGetAllSectionsResponse,
 } from '@controllers/sections.controller'
 import {
@@ -479,7 +479,7 @@ describe('buildSectionHierarchy', () => {
 })
 
 describe('getSectionsWithParents', () => {
-  const allSections: ICreateSectionFromHierarchyStringResponse[] = [
+  const allSections: ICreateSectionResponse[] = [
     {sectionId: 1, sectionName: 'Tag Management', parentId: null, projectId: 1},
     {sectionId: 2, sectionName: 'Tag Management', parentId: 1, projectId: 1},
     {
@@ -515,7 +515,7 @@ describe('getSectionsWithParents', () => {
   ]
 
   test('should return runSections with their parent sections', () => {
-    const runSections: ICreateSectionFromHierarchyStringResponse[] = [
+    const runSections: ICreateSectionResponse[] = [
       {
         sectionId: 12,
         sectionName: 'Comment System',
@@ -543,7 +543,7 @@ describe('getSectionsWithParents', () => {
   })
 
   test('should return multiple runSections with their parents', () => {
-    const runSections: ICreateSectionFromHierarchyStringResponse[] = [
+    const runSections: ICreateSectionResponse[] = [
       {
         sectionId: 12,
         sectionName: 'Comment System',
@@ -579,13 +579,13 @@ describe('getSectionsWithParents', () => {
   })
 
   test('should return empty array if runSections is empty', () => {
-    const runSections: ICreateSectionFromHierarchyStringResponse[] = []
+    const runSections: ICreateSectionResponse[] = []
     const result = getSectionsWithParents({runSections, allSections})
     expect(result).toEqual([])
   })
 
   test('should return only existing sections and their parents', () => {
-    const runSections: ICreateSectionFromHierarchyStringResponse[] = [
+    const runSections: ICreateSectionResponse[] = [
       {
         sectionId: 999,
         sectionName: 'Non-existent',
@@ -599,7 +599,7 @@ describe('getSectionsWithParents', () => {
   })
 
   test('should handle cases where parentId is null', () => {
-    const runSections: ICreateSectionFromHierarchyStringResponse[] = [
+    const runSections: ICreateSectionResponse[] = [
       {
         sectionId: 6,
         sectionName: 'Voting System',

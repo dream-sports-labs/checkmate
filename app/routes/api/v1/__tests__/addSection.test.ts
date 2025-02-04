@@ -38,7 +38,7 @@ describe('Add Section - Action Function', () => {
     ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(mockUser)
     ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
     ;(
-      SectionsController.createSectionFromHierarchyString as jest.Mock
+      SectionsController.createSectionFromHierarchy as jest.Mock
     ).mockResolvedValue(mockResponse)
     ;(responseHandler as jest.Mock).mockImplementation((response) => response)
 
@@ -48,9 +48,7 @@ describe('Add Section - Action Function', () => {
       request,
       resource: API.AddSection,
     })
-    expect(
-      SectionsController.createSectionFromHierarchyString,
-    ).toHaveBeenCalledWith({
+    expect(SectionsController.createSectionFromHierarchy).toHaveBeenCalledWith({
       sectionHierarchyString: 'Parent/Child',
       sectionDescription: 'Test description',
       projectId: 1,
@@ -96,15 +94,13 @@ describe('Add Section - Action Function', () => {
     ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(mockUser)
     ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
     ;(
-      SectionsController.createSectionFromHierarchyString as jest.Mock
+      SectionsController.createSectionFromHierarchy as jest.Mock
     ).mockResolvedValue(null)
     ;(responseHandler as jest.Mock).mockImplementation((response) => response)
 
     const response = await action({request} as any)
 
-    expect(
-      SectionsController.createSectionFromHierarchyString,
-    ).toHaveBeenCalledWith({
+    expect(SectionsController.createSectionFromHierarchy).toHaveBeenCalledWith({
       sectionHierarchyString: 'Parent/Child',
       sectionDescription: '',
       projectId: 1,

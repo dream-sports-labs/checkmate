@@ -84,12 +84,11 @@ export async function handleNewSectionAndSquad(params: {
   }
 
   if (params.new_section) {
-    const createNewSection =
-      SectionsController.createSectionFromHierarchyString({
-        sectionHierarchyString: params.new_section,
-        projectId: params.projectId,
-        createdBy: params.createdBy,
-      })
+    const createNewSection = SectionsController.createSectionFromHierarchy({
+      sectionHierarchyString: params.new_section,
+      projectId: params.projectId,
+      createdBy: params.createdBy,
+    })
     addPromise('newSection', createNewSection)
   }
 

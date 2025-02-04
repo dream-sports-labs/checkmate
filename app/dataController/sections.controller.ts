@@ -46,11 +46,20 @@ export interface IGetAllSectionsResponse {
   updatedOn: Date
 }
 
-export interface ICreateSectionFromHierarchyStringResponse {
+export interface ICreateSectionResponse {
   sectionId: number
   sectionName: string
   projectId: number
   parentId: number | null
+  sectionDescription?: string | null
+}
+
+export interface IEditSection {
+  sectionId: number
+  sectionName: string
+  sectionDescription?: string | null
+  projectId?: number
+  userId: number
 }
 
 const SectionsController = {
@@ -75,9 +84,9 @@ const SectionsController = {
     }
   },
 
-  createSectionFromHierarchyString: async (
+  createSectionFromHierarchy: async (
     param: ICreateSectionByHierarchyString,
-  ): Promise<ICreateSectionFromHierarchyStringResponse | undefined> => {
+  ): Promise<ICreateSectionResponse | undefined> => {
     const hierarchy = param.sectionHierarchyString
       .split('>')
       .map((name) => name?.trim())
@@ -111,6 +120,8 @@ const SectionsController = {
 
     return section
   },
+
+  editSection: async (param: IEditSection) => SectionsDao.editSection(param),
 }
 
 export default SectionsController

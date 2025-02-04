@@ -10,11 +10,10 @@ import {API} from '../../utilities/api'
 import {getRequestParams} from '../../utilities/utils'
 
 const AddSectionSchema = z.object({
-  sectionHierarchyString: z
-    .string()
-    .min(5, 'Number of characters are less than 5'),
-  projectId: z.number().gt(0),
+  sectionId: z.number().gt(0),
+  projectId: z.number().gt(0).optional(),
   sectionDescription: z.string().optional().nullable(),
+  sectionName: z.string(),
 })
 
 type AddSectionsType = z.infer<typeof AddSectionSchema>
@@ -37,27 +36,20 @@ export const action = async ({request}: ActionFunctionArgs) => {
       request,
       AddSectionSchema,
     )
-
-    const resp = await SectionsController.createSectionFromHierarchy({
-      sectionHierarchyString: data.sectionHierarchyString,
-      sectionDescription: data.sectionDescription ?? '',
-      projectId: data.projectId,
-      createdBy: user?.userId ?? 0,
+    const resp = await SectionsController.editSection({
+      ...data,
+      userId: user?.userId ?? 0,
     })
 
-    if (resp) {
-      return responseHandler({
-        data: {
-          message: `${resp.sectionName} section added with id ${resp.sectionId}`,
-        },
-        status: 200,
-      })
-    } else {
-      return responseHandler({
-        error: 'Error adding section due to duplicate entries',
-        status: 409,
-      })
-    }
+
+
+    return responseHandler({
+      data:
+        resp?.[0]?.affectedRows === 1
+          ? 'Section Updated'
+          : 'Failed to update section',
+      status: 200,
+    })
   } catch (error: any) {
     return errorResponseHandler(error)
   }

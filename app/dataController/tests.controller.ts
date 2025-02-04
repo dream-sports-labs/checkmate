@@ -9,9 +9,7 @@ import SquadsDao from '@dao/squads.dao'
 import TestCoveredByDao from '@dao/testCoveredBy.dao'
 import TestsDao, {IBulkAddTestsDao} from '~/db/dao/test.dao'
 import {handleNewSectionAndSquad} from './utils'
-import SectionsController, {
-  ICreateSectionFromHierarchyStringResponse,
-} from './sections.controller'
+import SectionsController, {ICreateSectionResponse} from './sections.controller'
 import SquadsController from './squads.controller'
 import {addSectionHierarchy} from '@components/SectionList/utils'
 import {SectionWithHierarchy} from '@components/SectionList/interfaces'
@@ -124,7 +122,7 @@ const TestsController = {
   bulkAddTests: async (param: IBulkAddTestsController) => {
     try {
       const squadsAdded = []
-      const sectionsAdded: ICreateSectionFromHierarchyStringResponse[] = []
+      const sectionsAdded: ICreateSectionResponse[] = []
 
       const allSquads = await SquadsDao.getAllSquads({
         projectId: param.projectId,
@@ -228,7 +226,7 @@ const TestsController = {
         })?.sectionId
         if (!sectionId) {
           const newSection =
-            await SectionsController.createSectionFromHierarchyString({
+            await SectionsController.createSectionFromHierarchy({
               createdBy: param.createdBy,
               projectId: param.projectId,
               sectionHierarchyString: testSectionHierarchy,

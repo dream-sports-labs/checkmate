@@ -16,6 +16,7 @@ const RenderSections = memo(
     selectedSections,
     applySectionFilter,
     addSubsectionClicked,
+    editSubsectionClicked,
   }: {
     sections: DisplaySection[]
     level: number
@@ -29,6 +30,7 @@ const RenderSections = memo(
       e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     ) => void
     addSubsectionClicked: (sectionHierarchy: string) => void
+    editSubsectionClicked: (sectionId: number) => void
   }) => {
     sections = sections.sort((a, b) =>
       a.sectionName.localeCompare(b.sectionName),
@@ -52,6 +54,7 @@ const RenderSections = memo(
                 selectedSections={selectedSections}
                 applySectionFilter={applySectionFilter}
                 addSubsectionClicked={addSubsectionClicked}
+                editSubsectionClicked={editSubsectionClicked}
               />
             </div>
           )
@@ -139,31 +142,36 @@ const RenderSections = memo(
                   />
                 </div>
                 {!runId && (
-                  <div className="flex flex-row items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 absolute top-1/2 left-full transform -translate-y-1/2 ml-2">
-                    <button
-                      onClick={() =>
-                        addSubsectionClicked(
-                          parentSectionHeirarchy
-                            ? `${parentSectionHeirarchy} > ${section.sectionName}`
-                            : section.sectionName,
-                        )
-                      }
-                      className="flex text-sm flex-row items-center gap-2">
-                      <Tooltip
-                        anchor={<CirclePlus color="green" size={16} />}
-                        content="Add SubSection"
-                      />
-                    </button>
-                    {false && (
-                      <button
-                        onClick={() => {}}
-                        className="flex text-sm flex-row items-center gap-2">
-                        <Tooltip
-                          anchor={<Pencil size={14} stroke="grey" />}
-                          content="Edit Section"
+                  <div className="flex flex-row items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 absolute top-1/2 left-full transform -translate-y-1/2 ml-2">
+                    <Tooltip
+                      anchor={
+                        <CirclePlus
+                          color="green"
+                          onClick={() =>
+                            addSubsectionClicked(
+                              parentSectionHeirarchy
+                                ? `${parentSectionHeirarchy} > ${section.sectionName}`
+                                : section.sectionName,
+                            )
+                          }
+                          size={16}
                         />
-                      </button>
-                    )}
+                      }
+                      content="Add SubSection"
+                    />
+
+                    <Tooltip
+                      anchor={
+                        <Pencil
+                          onClick={() => {
+                            editSubsectionClicked(section.sectionId)
+                          }}
+                          color="#2d7071"
+                          size={14}
+                        />
+                      }
+                      content="Edit Section"
+                    />
                   </div>
                 )}
               </div>

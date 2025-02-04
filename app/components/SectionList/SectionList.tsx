@@ -15,11 +15,15 @@ import {API} from '~/routes/utilities/api'
 import {AddSectionDialogue} from './AddSectionDialogue'
 import RenderSections from './RenderSections'
 import {SectionInfoBox} from './SectionInfoBox'
+import {EditSectionDialogue} from './EditSectionDialogue'
 
 export const SectionList = () => {
   const [searchParams, setSearchParams] = useSearchParams([])
   const [sectionsData, setSectionsData] = useState<DisplaySection[]>([])
   const [addSectionDialogue, setAddSectionDialogue] = useState<boolean>(false)
+  const [editSectionDialogue, setEditSectionDialogue] = useState<boolean>(false)
+
+  const [editSectionId, setEditSectionId] = useState<number>(0)
   const [sectionHierarchy, setSectionHierarchy] = useState<string | null>(null)
   const sectionFetcher = useFetcher<{
     data: IGetAllSectionsResponse[]
@@ -47,10 +51,9 @@ export const SectionList = () => {
 
       setSectionsData(buildSectionHierarchy({sectionsData: x}))
     } else if (!runId && sectionFetcher.data?.data) {
-      if (sectionsData.length === 0)
-        setSectionsData(
-          buildSectionHierarchy({sectionsData: sectionFetcher.data?.data}),
-        )
+      setSectionsData(
+        buildSectionHierarchy({sectionsData: sectionFetcher.data?.data}),
+      )
     }
   }, [sectionFetcher.data, runSectionFetcher.data])
 
@@ -142,6 +145,15 @@ export const SectionList = () => {
     setAddSectionDialogue(true)
   }
 
+  const editSubsectionClicked = (sectionId: number) => {
+    setEditSectionId(sectionId)
+    setEditSectionDialogue(true)
+  }
+
+  const reloadSections = () => {
+    sectionFetcher.load(`/${API.GetSections}?projectId=${projectId}`)
+  }
+
   return (
     <div className="flex flex-col flex-grow ml-4 h-full overflow-y-scroll bg-slate-200 p-4 pb-12 flex-nowrap">
       <div>
@@ -170,6 +182,7 @@ export const SectionList = () => {
           sections={sectionsData}
           selectedSections={selectedSections}
           toggleSection={toggleSection}
+          editSubsectionClicked={editSubsectionClicked}
         />
         {!runId && (
           <button
@@ -186,7 +199,17 @@ export const SectionList = () => {
         sectionHierarchy={sectionHierarchy}
         state={addSectionDialogue}
         setState={setAddSectionDialogue}
+        reloadSections={reloadSections}
       />
+      {sectionFetcher?.data?.data && (
+        <EditSectionDialogue
+          state={editSectionDialogue}
+          setState={setEditSectionDialogue}
+          sectionId={editSectionId}
+          sectionData={sectionFetcher?.data?.data}
+          reloadSections={reloadSections}
+        />
+      )}
     </div>
   )
 }

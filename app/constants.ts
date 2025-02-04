@@ -20,3 +20,5 @@ export const REMOVE_TEST = 'Are you sure you want to remove the selected tests?'
 
 export const APP_NAME = 'Checkmate'
 export const UPPERCASE_APP_NAME = 'CHECKMATE'
+
+export const ADDING_SECTION_AT_ROOT = 'Adding Section At Root'

@@ -5,6 +5,7 @@ import {errorHandling} from './utils'
 import {sections, tests} from '../schema/tests'
 import {
   IAddSection,
+  IEditSection,
   IGetAllSections,
   IGetSectionIdByHierarcy,
 } from '@controllers/sections.controller'
@@ -118,6 +119,28 @@ const SectionsDao = {
       logger({
         type: LogType.SQL_ERROR,
         tag: 'Error while adding section',
+        message: error,
+      })
+      errorHandling(error)
+    }
+  },
+  editSection: async (param: IEditSection) => {
+    try {
+      const data = await dbClient
+        .update(sections)
+        .set({
+          sectionName: param.sectionName,
+          sectionDescription: param.sectionDescription,
+          updatedBy: param.userId,
+        })
+        .where(eq(sections.sectionId, param.sectionId))
+
+      return data
+    } catch (error: any) {
+      // FOR DEV PURPOSE
+      logger({
+        type: LogType.SQL_ERROR,
+        tag: 'Error while editing section',
         message: error,
       })
       errorHandling(error)

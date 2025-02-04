@@ -5,7 +5,7 @@ import {
   SectionWithHierarchy,
 } from '@components/SectionList/interfaces'
 import {
-  ICreateSectionFromHierarchyStringResponse,
+  ICreateSectionResponse,
   IGetAllSectionsResponse,
 } from '@controllers/sections.controller'
 
@@ -71,7 +71,7 @@ export function getSectionHierarchy({
   sectionsData,
 }: {
   sectionId: number
-  sectionsData: ICreateSectionFromHierarchyStringResponse[] | undefined
+  sectionsData: ICreateSectionResponse[] | undefined
 }): string {
   const names: string[] = []
   let currentId: number | null = sectionId
@@ -148,17 +148,14 @@ export const getSectionsWithParents = ({
   runSections,
   allSections,
 }: {
-  runSections: ICreateSectionFromHierarchyStringResponse[]
-  allSections: ICreateSectionFromHierarchyStringResponse[]
-}): ICreateSectionFromHierarchyStringResponse[] => {
-  const sectionMap = new Map<number, ICreateSectionFromHierarchyStringResponse>(
+  runSections: ICreateSectionResponse[]
+  allSections: ICreateSectionResponse[]
+}): ICreateSectionResponse[] => {
+  const sectionMap = new Map<number, ICreateSectionResponse>(
     allSections.map((section) => [section.sectionId, section]),
   )
 
-  const resultSections = new Map<
-    number,
-    ICreateSectionFromHierarchyStringResponse
-  >()
+  const resultSections = new Map<number, ICreateSectionResponse>()
 
   const collectSectionAndParents = (sectionId: number) => {
     if (!resultSections.has(sectionId)) {

@@ -1,5 +1,4 @@
 import {Link, useFetcher, useParams, useSearchParams} from '@remix-run/react'
-
 import {PlusCircledIcon} from '@radix-ui/react-icons'
 import {Skeleton} from '@ui/skeleton'
 import {useEffect, useState} from 'react'
