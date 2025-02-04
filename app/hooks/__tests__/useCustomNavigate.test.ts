@@ -1,9 +1,9 @@
 /**
  * @jest-environment jsdom
  */
-import {renderHook} from '@testing-library/react-hooks'
 import {useCustomNavigate} from '@hooks/useCustomNavigate'
 import {useNavigate} from '@remix-run/react'
+import {renderHook} from '@testing-library/react'
 
 jest.mock('@remix-run/react', () => ({
   useNavigate: jest.fn(),
