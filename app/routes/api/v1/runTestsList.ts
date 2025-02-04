@@ -8,6 +8,34 @@ import {
 } from '~/routes/utilities/responseHandler'
 import {API} from '../../utilities/api'
 
+export interface Tests {
+  automationStatus: string
+  testedBy: string
+  testId: number
+  title: string
+  testStatus: string
+  priority: string
+  platform: string
+  squadName: string
+  runStatus: string
+  labelNames: string
+  testCoveredBy: string
+  projectId: number
+  sectionName: string
+  sectionParentId: number | null
+  sectionId: number
+}
+
+export interface RunTestListResponseType {
+  data?: {
+    testsList: Tests[]
+    totalCount: number
+    error: any
+  }
+  status: number
+  error?: any
+}
+
 export async function loader({params, request}: LoaderFunctionArgs) {
   try {
     await getUserAndCheckAccess({

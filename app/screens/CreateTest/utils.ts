@@ -1,4 +1,3 @@
-import {IGetAllSectionsResponse} from '@controllers/sections.controller'
 import {Squad} from '../RunTestList/interfaces'
 
 export const isMandatory = (attribute: string): boolean => {

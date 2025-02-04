@@ -1,8 +1,12 @@
-import {IGetAllSectionsResponse} from '@controllers/sections.controller'
+import {
+  ICreateSectionFromHierarchyStringResponse,
+  IGetAllSectionsResponse,
+} from '@controllers/sections.controller'
 import {
   addSectionHierarchy,
   getSectionHierarchy,
   buildSectionHierarchy,
+  getSectionsWithParents,
 } from '../utils'
 import {DisplaySection, SectionWithHierarchy} from '../interfaces'
 
@@ -14,15 +18,17 @@ describe('getSectionHierarchy', () => {
   })
 
   it('should return the section name when there is no parent', () => {
-    const sectionsData = [{sectionId: 1, sectionName: 'Root', parentId: null}]
+    const sectionsData = [
+      {sectionId: 1, sectionName: 'Root', parentId: null, projectId: 1},
+    ]
     expect(getSectionHierarchy({sectionId: 1, sectionsData})).toBe('Root')
   })
 
   it('should return the full hierarchy path', () => {
     const sectionsData = [
-      {sectionId: 1, sectionName: 'Root', parentId: null},
-      {sectionId: 2, sectionName: 'Child', parentId: 1},
-      {sectionId: 3, sectionName: 'Grandchild', parentId: 2},
+      {sectionId: 1, sectionName: 'Root', parentId: null, projectId: 1},
+      {sectionId: 2, sectionName: 'Child', parentId: 1, projectId: 1},
+      {sectionId: 3, sectionName: 'Grandchild', parentId: 2, projectId: 1},
     ]
     expect(getSectionHierarchy({sectionId: 3, sectionsData})).toBe(
       'Root > Child > Grandchild',
@@ -31,21 +37,23 @@ describe('getSectionHierarchy', () => {
 
   it('should handle missing parent references gracefully', () => {
     const sectionsData = [
-      {sectionId: 1, sectionName: 'Root', parentId: null},
-      {sectionId: 2, sectionName: 'Child', parentId: 10}, // ParentId does not exist
+      {sectionId: 1, sectionName: 'Root', projectId: 1, parentId: null},
+      {sectionId: 2, sectionName: 'Child', projectId: 1, parentId: 10}, // ParentId does not exist
     ]
     expect(getSectionHierarchy({sectionId: 2, sectionsData})).toBe('Child')
   })
 
   it('should return only the section name when it has no known parent', () => {
-    const sectionsData = [{sectionId: 5, sectionName: 'Orphan', parentId: null}]
+    const sectionsData = [
+      {sectionId: 5, projectId: 1, sectionName: 'Orphan', parentId: null},
+    ]
     expect(getSectionHierarchy({sectionId: 5, sectionsData})).toBe('Orphan')
   })
 
   it('should handle cyclic dependencies gracefully', () => {
     const sectionsData = [
-      {sectionId: 1, sectionName: 'A', parentId: 2},
-      {sectionId: 2, sectionName: 'B', parentId: 1},
+      {sectionId: 1, sectionName: 'A', projectId: 1, parentId: 2},
+      {sectionId: 2, sectionName: 'B', projectId: 1, parentId: 1},
     ]
     expect(getSectionHierarchy({sectionId: 1, sectionsData})).toBe('B > A')
   })
@@ -467,5 +475,148 @@ describe('buildSectionHierarchy', () => {
     expect(result[0].sectionName).toBe('Section 1')
     expect(result[0].subSections.length).toBe(1)
     expect(result[0].subSections[0].sectionName).toBe('Section 2')
+  })
+})
+
+describe('getSectionsWithParents', () => {
+  const allSections: ICreateSectionFromHierarchyStringResponse[] = [
+    {sectionId: 1, sectionName: 'Tag Management', parentId: null, projectId: 1},
+    {sectionId: 2, sectionName: 'Tag Management', parentId: 1, projectId: 1},
+    {
+      sectionId: 3,
+      sectionName: 'User Management',
+      parentId: null,
+      projectId: 1,
+    },
+    {sectionId: 4, sectionName: 'Posting', parentId: 3, projectId: 1},
+    {sectionId: 5, sectionName: 'Answer Submission', parentId: 4, projectId: 1},
+    {sectionId: 6, sectionName: 'Voting System', parentId: null, projectId: 1},
+    {sectionId: 7, sectionName: 'Voting System', parentId: 6, projectId: 1},
+    {
+      sectionId: 8,
+      sectionName: 'Account Management',
+      parentId: null,
+      projectId: 1,
+    },
+    {sectionId: 9, sectionName: 'User Profile', parentId: 8, projectId: 1},
+    {
+      sectionId: 10,
+      sectionName: 'Question Creation',
+      parentId: 4,
+      projectId: 1,
+    },
+    {
+      sectionId: 11,
+      sectionName: 'Comment System',
+      parentId: null,
+      projectId: 1,
+    },
+    {sectionId: 12, sectionName: 'Comment System', parentId: 11, projectId: 1},
+  ]
+
+  test('should return runSections with their parent sections', () => {
+    const runSections: ICreateSectionFromHierarchyStringResponse[] = [
+      {
+        sectionId: 12,
+        sectionName: 'Comment System',
+        parentId: 11,
+        projectId: 1,
+      },
+    ]
+
+    const result = getSectionsWithParents({runSections, allSections})
+
+    expect(result).toEqual([
+      {
+        sectionId: 12,
+        sectionName: 'Comment System',
+        parentId: 11,
+        projectId: 1,
+      },
+      {
+        sectionId: 11,
+        sectionName: 'Comment System',
+        parentId: null,
+        projectId: 1,
+      },
+    ])
+  })
+
+  test('should return multiple runSections with their parents', () => {
+    const runSections: ICreateSectionFromHierarchyStringResponse[] = [
+      {
+        sectionId: 12,
+        sectionName: 'Comment System',
+        parentId: 11,
+        projectId: 1,
+      },
+      {sectionId: 9, sectionName: 'User Profile', parentId: 8, projectId: 1},
+    ]
+
+    const result = getSectionsWithParents({runSections, allSections})
+
+    expect(result).toEqual([
+      {
+        sectionId: 12,
+        sectionName: 'Comment System',
+        parentId: 11,
+        projectId: 1,
+      },
+      {
+        sectionId: 11,
+        sectionName: 'Comment System',
+        parentId: null,
+        projectId: 1,
+      },
+      {sectionId: 9, sectionName: 'User Profile', parentId: 8, projectId: 1},
+      {
+        sectionId: 8,
+        sectionName: 'Account Management',
+        parentId: null,
+        projectId: 1,
+      },
+    ])
+  })
+
+  test('should return empty array if runSections is empty', () => {
+    const runSections: ICreateSectionFromHierarchyStringResponse[] = []
+    const result = getSectionsWithParents({runSections, allSections})
+    expect(result).toEqual([])
+  })
+
+  test('should return only existing sections and their parents', () => {
+    const runSections: ICreateSectionFromHierarchyStringResponse[] = [
+      {
+        sectionId: 999,
+        sectionName: 'Non-existent',
+        parentId: null,
+        projectId: 1,
+      },
+    ]
+
+    const result = getSectionsWithParents({runSections, allSections})
+    expect(result).toEqual([]) // No section 999 in allSections
+  })
+
+  test('should handle cases where parentId is null', () => {
+    const runSections: ICreateSectionFromHierarchyStringResponse[] = [
+      {
+        sectionId: 6,
+        sectionName: 'Voting System',
+        parentId: null,
+        projectId: 1,
+      },
+    ]
+
+    const result = getSectionsWithParents({runSections, allSections})
+
+    expect(result).toEqual([
+      {
+        sectionId: 6,
+        sectionName: 'Voting System',
+        parentId: null,
+        projectId: 1,
+      },
+    ])
   })
 })

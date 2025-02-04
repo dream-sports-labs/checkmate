@@ -5,17 +5,21 @@ import {Info} from 'lucide-react'
 export const SectionInfoBox = () => {
   const instructions = [
     {
-      action: 'Clicking on a section',
-      description:
-        'will replace the current filter with the clicked section and its subsections.',
+      action: 'Select a section',
+      description: 'by clicking on checkbox.',
     },
     {
-      action: 'Holding CMD (⌘) and clicking',
+      action: 'Selecting on a section',
       description:
-        'on a section will add the clicked section and its subsections to the existing filter.',
+        'will replace the current filter with the selected section and its subsections.',
     },
     {
-      action: 'Clicking on an already selected section',
+      action: 'Holding CMD (⌘) and selecting a section ',
+      description:
+        'will add the selected section and its subsections to the existing selected sections.',
+    },
+    {
+      action: 'Selecting an already selected section',
       description:
         'will remove that section and its subsections from the filter.',
     },
@@ -34,7 +38,7 @@ export const SectionInfoBox = () => {
       <HoverCardTrigger>
         <Info size={16} className="self-center align-middle ml-2 mt-1" />
       </HoverCardTrigger>
-      <HoverCardContent className="min-w-80 text-sm font-normal">
+      <HoverCardContent className="min-w-80 text-sm font-normal text-wrap mr-4">
         <ul className="ml-6 list-disc [&>li]:mt-2">
           {instructions.map((item, index) => (
             <li key={index}>

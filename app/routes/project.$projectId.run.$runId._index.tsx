@@ -4,19 +4,8 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@ui/resizable'
-import {Tests} from '~/screens/RunTestList/interfaces'
 import RunTestList from '~/screens/RunTestList/RunTestList'
 import {loader as testRunsDataApi} from './api/v1/runTestsList'
-import {useState} from 'react'
-
-export interface RunTestListResponseType {
-  data: {
-    testsList: Tests[]
-    totalCount: number
-    error: any
-    status: number
-  }
-}
 
 export const loader = testRunsDataApi
 

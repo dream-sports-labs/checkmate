@@ -4,7 +4,10 @@ import {
   SectionData,
   SectionWithHierarchy,
 } from '@components/SectionList/interfaces'
-import {IGetAllSectionsResponse} from '@controllers/sections.controller'
+import {
+  ICreateSectionFromHierarchyStringResponse,
+  IGetAllSectionsResponse,
+} from '@controllers/sections.controller'
 
 export const findSectionId = (
   sectionName: string,
@@ -68,9 +71,7 @@ export function getSectionHierarchy({
   sectionsData,
 }: {
   sectionId: number
-  sectionsData:
-    | {sectionId: number; sectionName: string; parentId: number | null}[]
-    | undefined
+  sectionsData: ICreateSectionFromHierarchyStringResponse[] | undefined
 }): string {
   const names: string[] = []
   let currentId: number | null = sectionId
@@ -143,197 +144,35 @@ export const buildSectionHierarchy = ({
   return rootSections
 }
 
-export const sectionssss = [
-  {
-    sectionId: 1,
-    sectionName: 'Tag Management',
-    sectionDescription: null,
-    parentId: 2,
-    editHistory: [],
-    projectId: 1,
-    createdBy: 1,
-    createdOn: '2025-02-03T15:09:13.000Z',
-    updatedOn: '2025-02-03T15:09:13.000Z',
-    updatedBy: null,
-  },
-  {
-    sectionId: 2,
-    sectionName: 'Tag Management',
-    sectionDescription: null,
-    parentId: 1,
-    editHistory: [],
-    projectId: 1,
-    createdBy: 1,
-    createdOn: '2025-02-03T15:09:13.000Z',
-    updatedOn: '2025-02-03T15:09:13.000Z',
-    updatedBy: null,
-  },
-  {
-    sectionId: 3,
-    sectionName: 'User Management',
-    sectionDescription: null,
-    parentId: null,
-    editHistory: [],
-    projectId: 1,
-    createdBy: 1,
-    createdOn: '2025-02-03T15:09:13.000Z',
-    updatedOn: '2025-02-03T15:09:13.000Z',
-    updatedBy: null,
-  },
-  {
-    sectionId: 4,
-    sectionName: 'Posting',
-    sectionDescription: null,
-    parentId: 3,
-    editHistory: [],
-    projectId: 1,
-    createdBy: 1,
-    createdOn: '2025-02-03T15:09:13.000Z',
-    updatedOn: '2025-02-03T15:09:13.000Z',
-    updatedBy: null,
-  },
-  {
-    sectionId: 5,
-    sectionName: 'Answer Submission',
-    sectionDescription: null,
-    parentId: 4,
-    editHistory: [],
-    projectId: 1,
-    createdBy: 1,
-    createdOn: '2025-02-03T15:09:13.000Z',
-    updatedOn: '2025-02-03T15:09:13.000Z',
-    updatedBy: null,
-  },
-  {
-    sectionId: 6,
-    sectionName: 'Voting System',
-    sectionDescription: null,
-    parentId: null,
-    editHistory: [],
-    projectId: 1,
-    createdBy: 1,
-    createdOn: '2025-02-03T15:09:13.000Z',
-    updatedOn: '2025-02-03T15:09:13.000Z',
-    updatedBy: null,
-  },
-  {
-    sectionId: 7,
-    sectionName: 'Voting System',
-    sectionDescription: null,
-    parentId: 6,
-    editHistory: [],
-    projectId: 1,
-    createdBy: 1,
-    createdOn: '2025-02-03T15:09:13.000Z',
-    updatedOn: '2025-02-03T15:09:13.000Z',
-    updatedBy: null,
-  },
-  {
-    sectionId: 8,
-    sectionName: 'Account Management',
-    sectionDescription: null,
-    parentId: null,
-    editHistory: [],
-    projectId: 1,
-    createdBy: 1,
-    createdOn: '2025-02-03T15:09:13.000Z',
-    updatedOn: '2025-02-03T15:09:13.000Z',
-    updatedBy: null,
-  },
-  {
-    sectionId: 9,
-    sectionName: 'User Profile',
-    sectionDescription: null,
-    parentId: 8,
-    editHistory: [],
-    projectId: 1,
-    createdBy: 1,
-    createdOn: '2025-02-03T15:09:13.000Z',
-    updatedOn: '2025-02-03T15:09:13.000Z',
-    updatedBy: null,
-  },
-  {
-    sectionId: 10,
-    sectionName: 'Question Creation',
-    sectionDescription: null,
-    parentId: 4,
-    editHistory: [],
-    projectId: 1,
-    createdBy: 1,
-    createdOn: '2025-02-03T15:09:13.000Z',
-    updatedOn: '2025-02-03T15:09:13.000Z',
-    updatedBy: null,
-  },
-  {
-    sectionId: 11,
-    sectionName: 'Comment System',
-    sectionDescription: null,
-    parentId: null,
-    editHistory: [],
-    projectId: 1,
-    createdBy: 1,
-    createdOn: '2025-02-03T15:09:13.000Z',
-    updatedOn: '2025-02-03T15:09:13.000Z',
-    updatedBy: null,
-  },
-  {
-    sectionId: 12,
-    sectionName: 'Comment System',
-    sectionDescription: null,
-    parentId: 11,
-    editHistory: [],
-    projectId: 1,
-    createdBy: 1,
-    createdOn: '2025-02-03T15:09:13.000Z',
-    updatedOn: '2025-02-03T15:09:13.000Z',
-    updatedBy: null,
-  },
-  {
-    sectionId: 13,
-    sectionName: 'Search Functionality',
-    sectionDescription: null,
-    parentId: null,
-    editHistory: [],
-    projectId: 1,
-    createdBy: 1,
-    createdOn: '2025-02-03T15:09:13.000Z',
-    updatedOn: '2025-02-03T15:09:13.000Z',
-    updatedBy: null,
-  },
-  {
-    sectionId: 14,
-    sectionName: 'Search Functionality',
-    sectionDescription: null,
-    parentId: 13,
-    editHistory: [],
-    projectId: 1,
-    createdBy: 1,
-    createdOn: '2025-02-03T15:09:13.000Z',
-    updatedOn: '2025-02-03T15:09:13.000Z',
-    updatedBy: null,
-  },
-  {
-    sectionId: 15,
-    sectionName: 'aaass',
-    sectionDescription: null,
-    parentId: null,
-    editHistory: [],
-    projectId: 1,
-    createdBy: 4,
-    createdOn: '2025-02-03T15:41:49.000Z',
-    updatedOn: '2025-02-03T15:41:49.000Z',
-    updatedBy: null,
-  },
-  {
-    sectionId: 16,
-    sectionName: 'pplll',
-    sectionDescription: null,
-    parentId: 15,
-    editHistory: [],
-    projectId: 1,
-    createdBy: 4,
-    createdOn: '2025-02-03T15:41:49.000Z',
-    updatedOn: '2025-02-03T15:41:49.000Z',
-    updatedBy: null,
-  },
-]
+export const getSectionsWithParents = ({
+  runSections,
+  allSections,
+}: {
+  runSections: ICreateSectionFromHierarchyStringResponse[]
+  allSections: ICreateSectionFromHierarchyStringResponse[]
+}): ICreateSectionFromHierarchyStringResponse[] => {
+  const sectionMap = new Map<number, ICreateSectionFromHierarchyStringResponse>(
+    allSections.map((section) => [section.sectionId, section]),
+  )
+
+  const resultSections = new Map<
+    number,
+    ICreateSectionFromHierarchyStringResponse
+  >()
+
+  const collectSectionAndParents = (sectionId: number) => {
+    if (!resultSections.has(sectionId)) {
+      const section = sectionMap.get(sectionId)
+      if (section) {
+        resultSections.set(sectionId, section)
+        if (section.parentId !== null) {
+          collectSectionAndParents(section.parentId)
+        }
+      }
+    }
+  }
+
+  runSections.forEach((section) => collectSectionAndParents(section.sectionId))
+
+  return Array.from(resultSections.values())
+}

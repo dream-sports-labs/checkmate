@@ -24,7 +24,7 @@ const TEST_STATUS_OPTIONS = [
 ]
 
 interface AddResultsDialogProps {
-  getSelectedRows: () => {testId: string}[]
+  getSelectedRows: () => {testId: number}[]
   runId: number
   onAddResultSubmit?: () => void
   variant?: 'bulkUpdate' | 'detailPageUpdate' | 'runRowUpdate'

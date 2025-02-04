@@ -4,8 +4,10 @@ import {
   getChildSections,
   getInitialOpenSections,
   getInitialSelectedSections,
+  getSectionsWithParents,
 } from '@components/SectionList/utils'
 import {Tooltip} from '@components/Tooltip/Tooltip'
+import {IGetAllSectionsResponse} from '@controllers/sections.controller'
 import {useFetcher, useParams, useSearchParams} from '@remix-run/react'
 import {CirclePlus, ListRestart} from 'lucide-react'
 import React, {useEffect, useState} from 'react'
@@ -13,7 +15,6 @@ import {API} from '~/routes/utilities/api'
 import {AddSectionDialogue} from './AddSectionDialogue'
 import RenderSections from './RenderSections'
 import {SectionInfoBox} from './SectionInfoBox'
-import {IGetAllSectionsResponse} from '@controllers/sections.controller'
 
 export const SectionList = () => {
   const [searchParams, setSearchParams] = useSearchParams([])
@@ -23,21 +24,35 @@ export const SectionList = () => {
   const sectionFetcher = useFetcher<{
     data: IGetAllSectionsResponse[]
   }>()
+  const runSectionFetcher = useFetcher<{
+    data: IGetAllSectionsResponse[]
+  }>()
   const projectId = useParams().projectId ? Number(useParams().projectId) : 0
   const runId = useParams().runId ? Number(useParams().runId) : 0
 
   useEffect(() => {
-    sectionFetcher.load(
-      `/${API.GetSections}?projectId=${projectId}&runId=${runId}`,
-    )
+    sectionFetcher.load(`/${API.GetSections}?projectId=${projectId}`)
+    if (runId)
+      runSectionFetcher.load(
+        `/${API.GetSections}?projectId=${projectId}&runId=${runId}`,
+      )
   }, [])
 
   useEffect(() => {
-    if (sectionFetcher.data?.data)
-      setSectionsData(
-        buildSectionHierarchy({sectionsData: sectionFetcher.data?.data}),
-      )
-  }, [sectionFetcher.data])
+    if (runId && runSectionFetcher.data?.data && sectionFetcher.data?.data) {
+      const x = getSectionsWithParents({
+        allSections: sectionFetcher.data?.data,
+        runSections: runSectionFetcher.data?.data,
+      })
+
+      setSectionsData(buildSectionHierarchy({sectionsData: x}))
+    } else if (!runId && sectionFetcher.data?.data) {
+      if (sectionsData.length === 0)
+        setSectionsData(
+          buildSectionHierarchy({sectionsData: sectionFetcher.data?.data}),
+        )
+    }
+  }, [sectionFetcher.data, runSectionFetcher.data])
 
   const initialSelectedSections = getInitialSelectedSections(searchParams)
   const initialOpenSections = getInitialOpenSections(initialSelectedSections)
