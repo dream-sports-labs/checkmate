@@ -24,7 +24,7 @@ export const AllowedColumns = {
   Description: 'description',
   'Section Description': 'sectionDescription',
   'Jira Ticket': 'jiraTicket',
-  Defects: 'efects',
+  Defects: 'defects',
 }
 
 export const TestListingColumns = {

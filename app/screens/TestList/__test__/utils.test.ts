@@ -1,4 +1,11 @@
-import {convertKeys, createTestAddedMessage, throttle} from '../utils'
+import {PropertyListFilter} from '../AddPropertyDialog'
+import {EditableProperties} from '../testTable.interface'
+import {
+  convertKeys,
+  createTestAddedMessage,
+  getPropertyNameAndValue,
+  throttle,
+} from '../utils'
 
 describe('convertKeys', () => {
   it('should correctly map keys based on AllowedColumns', () => {
@@ -201,5 +208,109 @@ describe('throttle', () => {
 
     throttledFunc()
     expect(mockFunc).toHaveBeenCalledTimes(2) // Should execute again after delay
+  })
+})
+
+describe('getPropertyNameAndValue', () => {
+  const mockPropertiesArray: PropertyListFilter[] = [
+    {
+      propertyName: EditableProperties.Squad,
+      propertyOptions: [
+        {id: 1, optionName: 'Backend'},
+        {id: 2, optionName: 'Frontend'},
+      ],
+    },
+    {
+      propertyName: EditableProperties.Label,
+      propertyOptions: [
+        {id: 101, optionName: 'iOS'},
+        {id: 102, optionName: 'Android'},
+      ],
+    },
+    {
+      propertyName: EditableProperties.Priority,
+      propertyOptions: [
+        {id: 201, optionName: 'High'},
+        {id: 202, optionName: 'Low'},
+      ],
+    },
+    {
+      propertyName: EditableProperties.AutomationStatus,
+      propertyOptions: [
+        {id: 301, optionName: 'Automatable'},
+        {id: 302, optionName: 'Manual'},
+      ],
+    },
+  ]
+
+  it('should return squadId with the correct value', () => {
+    expect(
+      getPropertyNameAndValue({
+        propertyName: EditableProperties.Squad,
+        propertyValue: 'Backend',
+        propertiesArray: mockPropertiesArray,
+      }),
+    ).toEqual({name: 'squadId', value: 1})
+  })
+
+  it('should return labelId with the correct value', () => {
+    expect(
+      getPropertyNameAndValue({
+        propertyName: EditableProperties.Label,
+        propertyValue: 'Android',
+        propertiesArray: mockPropertiesArray,
+      }),
+    ).toEqual({name: 'labelId', value: 102})
+  })
+
+  it('should return priorityId with the correct value', () => {
+    expect(
+      getPropertyNameAndValue({
+        propertyName: EditableProperties.Priority,
+        propertyValue: 'High',
+        propertiesArray: mockPropertiesArray,
+      }),
+    ).toEqual({name: 'priorityId', value: 201})
+  })
+
+  it('should return automationStatusId with the correct value', () => {
+    expect(
+      getPropertyNameAndValue({
+        propertyName: EditableProperties.AutomationStatus,
+        propertyValue: 'Automatable',
+        propertiesArray: mockPropertiesArray,
+      }),
+    ).toEqual({name: 'automationStatusId', value: 301})
+  })
+
+  it('should return the original property name and value if the property is not in EditableProperties', () => {
+    expect(
+      getPropertyNameAndValue({
+        // @ts-expect-error: Testing unexpected property case
+        propertyName: 'UnknownProperty',
+        propertyValue: 'Some Value',
+        propertiesArray: mockPropertiesArray,
+      }),
+    ).toEqual({name: 'UnknownProperty', value: 'Some Value'})
+  })
+
+  it('should return property name and value if property option does not exist', () => {
+    expect(
+      getPropertyNameAndValue({
+        propertyName: EditableProperties.Label,
+        propertyValue: 'NonExistentLabel',
+        propertiesArray: mockPropertiesArray,
+      }),
+    ).toEqual({name: 'labelId', value: undefined})
+  })
+
+  it('should return property name and value if property list is empty', () => {
+    expect(
+      getPropertyNameAndValue({
+        propertyName: EditableProperties.Label,
+        propertyValue: 'iOS',
+        propertiesArray: [],
+      }),
+    ).toEqual({name: 'labelId', value: undefined})
   })
 })

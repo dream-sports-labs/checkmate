@@ -5,7 +5,6 @@ import {
   getInitialOpenSections,
   getInitialSelectedSections,
 } from '@components/SectionList/utils'
-import {Sections} from '~/screens/CreateRun/RunFilter'
 import {Tooltip} from '@components/Tooltip/Tooltip'
 import {useFetcher, useParams, useSearchParams} from '@remix-run/react'
 import {CirclePlus, ListRestart} from 'lucide-react'

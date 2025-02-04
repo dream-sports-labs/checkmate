@@ -17,13 +17,6 @@ export interface Lables {
   labelType: string
 }
 
-export interface Sections {
-  sectionName: string
-  sectionId: number
-  sectionHierarchy: string
-  sectionDepth: number
-}
-
 export interface Priority {
   priorityName: string
   priorityId: number
