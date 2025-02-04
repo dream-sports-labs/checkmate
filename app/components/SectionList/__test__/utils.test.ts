@@ -1,15 +1,21 @@
 import {IGetAllSectionsResponse} from '@controllers/sections.controller'
-import {buildHierarchyPath, buildPath, buildSectionHierarchy} from '../utils'
+import {
+  addSectionHierarchy,
+  getSectionHierarchy,
+  buildSectionHierarchy,
+} from '../utils'
 import {DisplaySection, SectionWithHierarchy} from '../interfaces'
 
-describe('buildPath', () => {
+describe('getSectionHierarchy', () => {
   it('should return an empty string when sectionsData is undefined', () => {
-    expect(buildPath({sectionId: 1, sectionsData: undefined})).toBe('')
+    expect(getSectionHierarchy({sectionId: 1, sectionsData: undefined})).toBe(
+      '',
+    )
   })
 
   it('should return the section name when there is no parent', () => {
     const sectionsData = [{sectionId: 1, sectionName: 'Root', parentId: null}]
-    expect(buildPath({sectionId: 1, sectionsData})).toBe('Root')
+    expect(getSectionHierarchy({sectionId: 1, sectionsData})).toBe('Root')
   })
 
   it('should return the full hierarchy path', () => {
@@ -18,7 +24,7 @@ describe('buildPath', () => {
       {sectionId: 2, sectionName: 'Child', parentId: 1},
       {sectionId: 3, sectionName: 'Grandchild', parentId: 2},
     ]
-    expect(buildPath({sectionId: 3, sectionsData})).toBe(
+    expect(getSectionHierarchy({sectionId: 3, sectionsData})).toBe(
       'Root > Child > Grandchild',
     )
   })
@@ -28,26 +34,26 @@ describe('buildPath', () => {
       {sectionId: 1, sectionName: 'Root', parentId: null},
       {sectionId: 2, sectionName: 'Child', parentId: 10}, // ParentId does not exist
     ]
-    expect(buildPath({sectionId: 2, sectionsData})).toBe('Child')
+    expect(getSectionHierarchy({sectionId: 2, sectionsData})).toBe('Child')
   })
 
   it('should return only the section name when it has no known parent', () => {
     const sectionsData = [{sectionId: 5, sectionName: 'Orphan', parentId: null}]
-    expect(buildPath({sectionId: 5, sectionsData})).toBe('Orphan')
+    expect(getSectionHierarchy({sectionId: 5, sectionsData})).toBe('Orphan')
   })
 
   it('should handle cyclic dependencies gracefully', () => {
     const sectionsData = [
       {sectionId: 1, sectionName: 'A', parentId: 2},
-      {sectionId: 2, sectionName: 'B', parentId: 1}, // Cyclic reference
+      {sectionId: 2, sectionName: 'B', parentId: 1},
     ]
-    expect(buildPath({sectionId: 1, sectionsData})).toBe('A') // Should prevent infinite loop
+    expect(getSectionHierarchy({sectionId: 1, sectionsData})).toBe('B > A')
   })
 })
 
-describe('buildHierarchyPath', () => {
+describe('addSectionHierarchy', () => {
   it('should return an empty array when sectionsData is empty', () => {
-    expect(buildHierarchyPath({sectionsData: []})).toEqual([])
+    expect(addSectionHierarchy({sectionsData: []})).toEqual([])
   })
 
   it('should return sections with correct hierarchy paths', () => {
@@ -105,7 +111,7 @@ describe('buildHierarchyPath', () => {
       {...sectionsData[3], sectionHierarchy: 'Root > Child 1 > Grandchild'},
     ]
 
-    expect(buildHierarchyPath({sectionsData})).toEqual(expectedOutput)
+    expect(addSectionHierarchy({sectionsData})).toEqual(expectedOutput)
   })
 
   it('should handle sections with missing parent references', () => {
@@ -139,7 +145,7 @@ describe('buildHierarchyPath', () => {
       {...sectionsData[1], sectionHierarchy: 'Invalid Parent'},
     ]
 
-    expect(buildHierarchyPath({sectionsData})).toEqual(expectedOutput)
+    expect(addSectionHierarchy({sectionsData})).toEqual(expectedOutput)
   })
 
   it('should correctly handle a deeply nested hierarchy', () => {
@@ -200,7 +206,7 @@ describe('buildHierarchyPath', () => {
       },
     ]
 
-    expect(buildHierarchyPath({sectionsData})).toEqual(expectedOutput)
+    expect(addSectionHierarchy({sectionsData})).toEqual(expectedOutput)
   })
 
   it('should handle sections with duplicate names but different parents', () => {
@@ -240,7 +246,7 @@ describe('buildHierarchyPath', () => {
       },
     ]
 
-    expect(buildHierarchyPath({sectionsData})).toEqual([
+    expect(addSectionHierarchy({sectionsData})).toEqual([
       {...sectionsData[0], sectionHierarchy: 'Common'},
       {...sectionsData[1], sectionHierarchy: 'Common > Common'},
       {...sectionsData[2], sectionHierarchy: 'Common > Common > Common'},
@@ -249,7 +255,7 @@ describe('buildHierarchyPath', () => {
 })
 describe('buildSectionHierarchy', () => {
   it('should return an empty array when sectionsData is empty', () => {
-    const result = buildSectionHierarchy([])
+    const result = buildSectionHierarchy({sectionsData: []})
     expect(result).toEqual([])
   })
 
@@ -269,10 +275,10 @@ describe('buildSectionHierarchy', () => {
     ]
 
     const expectedOutput: DisplaySection[] = [
-      {id: 1, name: 'Root', subSections: []},
+      {sectionId: 1, sectionName: 'Root', subSections: []},
     ]
 
-    expect(buildSectionHierarchy(sectionsData)).toEqual(expectedOutput)
+    expect(buildSectionHierarchy({sectionsData})).toEqual(expectedOutput)
   })
 
   it('should create a simple parent-child hierarchy', () => {
@@ -303,13 +309,13 @@ describe('buildSectionHierarchy', () => {
 
     const expectedOutput: DisplaySection[] = [
       {
-        id: 1,
-        name: 'Root',
-        subSections: [{id: 2, name: 'Child', subSections: []}],
+        sectionId: 1,
+        sectionName: 'Root',
+        subSections: [{sectionId: 2, sectionName: 'Child', subSections: []}],
       },
     ]
 
-    expect(buildSectionHierarchy(sectionsData)).toEqual(expectedOutput)
+    expect(buildSectionHierarchy({sectionsData})).toEqual(expectedOutput)
   })
 
   it('should handle multiple root sections correctly', () => {
@@ -339,11 +345,11 @@ describe('buildSectionHierarchy', () => {
     ]
 
     const expectedOutput: DisplaySection[] = [
-      {id: 1, name: 'Root 1', subSections: []},
-      {id: 2, name: 'Root 2', subSections: []},
+      {sectionId: 1, sectionName: 'Root 1', subSections: []},
+      {sectionId: 2, sectionName: 'Root 2', subSections: []},
     ]
 
-    expect(buildSectionHierarchy(sectionsData)).toEqual(expectedOutput)
+    expect(buildSectionHierarchy({sectionsData})).toEqual(expectedOutput)
   })
 
   it('should create a nested hierarchy with multiple levels', () => {
@@ -385,16 +391,16 @@ describe('buildSectionHierarchy', () => {
 
     const expectedOutput: DisplaySection[] = [
       {
-        id: 1,
-        name: 'Level 1',
+        sectionId: 1,
+        sectionName: 'Level 1',
         subSections: [
           {
-            id: 2,
-            name: 'Level 2',
+            sectionId: 2,
+            sectionName: 'Level 2',
             subSections: [
               {
-                id: 3,
-                name: 'Level 3',
+                sectionId: 3,
+                sectionName: 'Level 3',
                 subSections: [],
               },
             ],
@@ -403,7 +409,7 @@ describe('buildSectionHierarchy', () => {
       },
     ]
 
-    expect(buildSectionHierarchy(sectionsData)).toEqual(expectedOutput)
+    expect(buildSectionHierarchy({sectionsData})).toEqual(expectedOutput)
   })
 
   it('should ignore sections with invalid parentId and treat them as root sections', () => {
@@ -433,11 +439,11 @@ describe('buildSectionHierarchy', () => {
     ]
 
     const expectedOutput: DisplaySection[] = [
-      {id: 1, name: 'Valid Root', subSections: []},
-      {id: 2, name: 'Invalid Parent', subSections: []}, // Treated as a root section
+      {sectionId: 1, sectionName: 'Valid Root', subSections: []},
+      {sectionId: 2, sectionName: 'Invalid Parent', subSections: []},
     ]
 
-    expect(buildSectionHierarchy(sectionsData)).toEqual(expectedOutput)
+    expect(buildSectionHierarchy({sectionsData})).toEqual(expectedOutput)
   })
 
   it('should handle a large dataset with multiple levels', () => {
@@ -456,10 +462,10 @@ describe('buildSectionHierarchy', () => {
       })
     }
 
-    const result = buildSectionHierarchy(sectionsData)
+    const result = buildSectionHierarchy({sectionsData})
     expect(result.length).toBe(1)
-    expect(result[0].name).toBe('Section 1')
+    expect(result[0].sectionName).toBe('Section 1')
     expect(result[0].subSections.length).toBe(1)
-    expect(result[0].subSections[0].name).toBe('Section 2')
+    expect(result[0].subSections[0].sectionName).toBe('Section 2')
   })
 })

@@ -13,7 +13,7 @@ import SectionsController, {
   ICreateSectionFromHierarchyStringResponse,
 } from './sections.controller'
 import SquadsController from './squads.controller'
-import {buildHierarchyPath} from '@components/SectionList/utils'
+import {addSectionHierarchy} from '@components/SectionList/utils'
 import {SectionWithHierarchy} from '@components/SectionList/interfaces'
 
 export interface ITestStatus {
@@ -155,11 +155,9 @@ const TestsController = {
         sectionHierarchy: string
       }[] = []
       if (allSections) {
-        const x: SectionWithHierarchy[] = buildHierarchyPath({
+        sectionsData = addSectionHierarchy({
           sectionsData: allSections,
-        })
-
-        sectionsData = x.map((item) => {
+        }).map((item) => {
           return {
             sectionName: item.sectionName,
             sectionId: item.sectionId,

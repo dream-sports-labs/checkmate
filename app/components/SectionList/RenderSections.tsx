@@ -30,13 +30,15 @@ const RenderSections = memo(
     ) => void
     addSubsectionClicked: (sectionHierarchy: string) => void
   }) => {
-    sections = sections.sort((a, b) => a.name.localeCompare(b.name))
+    sections = sections.sort((a, b) =>
+      a.sectionName.localeCompare(b.sectionName),
+    )
     const runId = useParams().runId ? Number(useParams().runId) : 0
 
     const renderSubSections = useCallback(
       (section: DisplaySection, parentHierarchy: string | null) => {
         if (
-          openSections.includes(section.id) &&
+          openSections.includes(section.sectionId) &&
           section.subSections?.length > 0
         ) {
           return (
@@ -69,13 +71,13 @@ const RenderSections = memo(
     return (
       <ul className="relative font-poppins" key={`${level}`}>
         {sections.map((section, index) => (
-          <li key={section.id} className="relative py-1">
+          <li key={section.sectionId} className="relative py-1">
             <div className="flex flex-row items-center cursor-pointer">
-              <div onClick={() => toggleSection(section.id)}>
-                {openSections.includes(section.id) &&
+              <div onClick={() => toggleSection(section.sectionId)}>
+                {openSections.includes(section.sectionId) &&
                 section.subSections?.length > 0 ? (
                   <ChevronDown size={14} stroke="grey" />
-                ) : !openSections.includes(section.id) &&
+                ) : !openSections.includes(section.sectionId) &&
                   section.subSections?.length > 0 ? (
                   <ChevronRight size={14} stroke="grey" />
                 ) : (
@@ -101,24 +103,30 @@ const RenderSections = memo(
                 <div
                   className={cn(
                     `flex items-center border border-transparent hover:bg-blue-200 rounded-lg px-2`,
-                    selectedSections.includes(section.id)
+                    selectedSections.includes(section.sectionId)
                       ? 'bg-blue-300 hover:bg-blue-300'
                       : '',
                   )}>
                   <Checkbox
                     checkIconClassName="h-3 w-3 align-middle flex items-center mr-2 cursor-pointer pr-0.5"
                     className="h-3 w-3 align-middle flex items-center mr-2 cursor-pointer"
-                    checked={selectedSections.includes(section.id)}
+                    checked={selectedSections.includes(section.sectionId)}
                     onClick={(e) =>
-                      applySectionFilter(section.id, section.subSections, e)
+                      applySectionFilter(
+                        section.sectionId,
+                        section.subSections,
+                        e,
+                      )
                     }
                   />
                   <Tooltip
                     anchor={
                       <div
-                        onClick={() => toggleSection(section.id)}
+                        onClick={() => toggleSection(section.sectionId)}
                         className="flex flex-row items-center gap-1">
-                        <span className="text-xs truncate">{section.name}</span>
+                        <span className="text-xs truncate">
+                          {section.sectionName}
+                        </span>
                       </div>
                     }
                     content={
@@ -126,7 +134,7 @@ const RenderSections = memo(
                         parentSectionHeirarchy
                           ? parentSectionHeirarchy + ' > '
                           : ''
-                      }${section.name}`}</div>
+                      }${section.sectionName}`}</div>
                     }
                   />
                 </div>
@@ -136,8 +144,8 @@ const RenderSections = memo(
                       onClick={() =>
                         addSubsectionClicked(
                           parentSectionHeirarchy
-                            ? `${parentSectionHeirarchy} > ${section.name}`
-                            : section.name,
+                            ? `${parentSectionHeirarchy} > ${section.sectionName}`
+                            : section.sectionName,
                         )
                       }
                       className="flex text-sm flex-row items-center gap-2">
@@ -163,8 +171,8 @@ const RenderSections = memo(
             {renderSubSections(
               section,
               parentSectionHeirarchy
-                ? `${parentSectionHeirarchy} > ${section.name}`
-                : section.name,
+                ? `${parentSectionHeirarchy} > ${section.sectionName}`
+                : section.sectionName,
             )}
           </li>
         ))}

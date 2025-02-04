@@ -32,7 +32,7 @@ import {
   sectionListPlaceholder,
   squadListPlaceholder,
 } from './utils'
-import {buildPath} from '@components/SectionList/utils'
+import {getSectionHierarchy} from '@components/SectionList/utils'
 
 export default function EditTestPage({
   source,
@@ -347,7 +347,7 @@ export default function EditTestPage({
                     return {
                       id: section.sectionId,
                       property: section.sectionName,
-                      name: buildPath({
+                      name: getSectionHierarchy({
                         sectionId: section.sectionId,
                         sectionsData: sectionFetcher.data?.data,
                       }),

@@ -1,4 +1,4 @@
-import {buildHierarchyPath} from '@components/SectionList/utils'
+import {addSectionHierarchy} from '@components/SectionList/utils'
 import AutomationStatusController from '@controllers/automationStatus.controller'
 import PlatformController from '@controllers/platform.controller'
 import PriorityController from '@controllers/priority.controller'
@@ -9,6 +9,7 @@ import {tests} from '@schema/tests'
 import fs from 'fs-extra'
 import Papa from 'papaparse'
 import {CREATED_BY, ORG_ID, PROJECT_ID} from '../contants'
+import {SectionWithHierarchy} from '@components/SectionList/interfaces'
 
 const csvFilePath = 'app/db/seed/seedTests/tests.csv'
 
@@ -39,11 +40,12 @@ Papa.parse(csvFileContent, {
       orgId: ORG_ID,
     })
 
-
-    const allSections = buildHierarchyPath({
-      sectionsData: allSectionsData,
-    })
-
+    let allSections: SectionWithHierarchy[] = []
+    if (allSectionsData) {
+      allSections = addSectionHierarchy({
+        sectionsData: allSectionsData,
+      })
+    }
 
     for (const obj of jsonObj) {
       const test: any = {}

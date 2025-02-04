@@ -1,8 +1,8 @@
 import {IGetAllSectionsResponse} from '@controllers/sections.controller'
 
 export interface DisplaySection {
-  id: number
-  name: string
+  sectionId: number
+  sectionName: string
   subSections: DisplaySection[]
 }
 

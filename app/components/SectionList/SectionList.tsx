@@ -34,7 +34,9 @@ export const SectionList = () => {
 
   useEffect(() => {
     if (sectionFetcher.data?.data)
-      setSectionsData(buildSectionHierarchy(sectionFetcher.data?.data))
+      setSectionsData(
+        buildSectionHierarchy({sectionsData: sectionFetcher.data?.data}),
+      )
   }, [sectionFetcher.data])
 
   const initialSelectedSections = getInitialSelectedSections(searchParams)

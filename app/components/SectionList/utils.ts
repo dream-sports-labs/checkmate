@@ -54,14 +54,16 @@ export const getChildSections = (
 
   if (subSections) {
     subSections.forEach((section) => {
-      childSections.push(...getChildSections(section.id, section.subSections))
+      childSections.push(
+        ...getChildSections(section.sectionId, section.subSections),
+      )
     })
   }
 
   return childSections
 }
 
-export function buildPath({
+export function getSectionHierarchy({
   sectionId,
   sectionsData,
 }: {
@@ -72,23 +74,15 @@ export function buildPath({
 }): string {
   const names: string[] = []
   let currentId: number | null = sectionId
-
-  const sectionMap = sectionsData?.reduce<
-    Record<number, (typeof sectionsData)[number]>
-  >((acc, row) => {
-    acc[row.sectionId] = row
-    return acc
-  }, {})
+  const visited = new Set<number>()
 
   while (currentId) {
-    const currentSection:
-      | {
-          sectionId: number
-          sectionName: string
-          parentId: number | null
-        }
-      | undefined = sectionMap?.[currentId]
+    if (visited.has(currentId)) break
+    visited.add(currentId)
+
+    const currentSection = sectionsData?.find((s) => s.sectionId === currentId)
     if (!currentSection) break
+
     names.unshift(currentSection.sectionName)
     currentId = currentSection.parentId
   }
@@ -96,7 +90,7 @@ export function buildPath({
   return names.join(' > ')
 }
 
-export const buildHierarchyPath = ({
+export const addSectionHierarchy = ({
   sectionsData,
 }: {
   sectionsData: IGetAllSectionsResponse[]
@@ -105,7 +99,10 @@ export const buildHierarchyPath = ({
 
   if (sectionsData) {
     allSections = sectionsData.map((row) => {
-      const hierarchy = buildPath({sectionId: row.sectionId, sectionsData})
+      const hierarchy = getSectionHierarchy({
+        sectionId: row.sectionId,
+        sectionsData,
+      })
       return {
         ...row,
         sectionHierarchy: hierarchy,
@@ -116,18 +113,24 @@ export const buildHierarchyPath = ({
   return allSections
 }
 
-export const buildSectionHierarchy = (
+export const buildSectionHierarchy = ({
+  sectionsData,
+}: {
   sectionsData: {
     sectionId: number
     sectionName: string
     parentId: number | null
-  }[],
-): DisplaySection[] => {
+  }[]
+}): DisplaySection[] => {
   const sectionMap: Record<number, DisplaySection> = {}
   const rootSections: DisplaySection[] = []
 
   sectionsData.forEach(({sectionId, sectionName}) => {
-    sectionMap[sectionId] = {id: sectionId, name: sectionName, subSections: []}
+    sectionMap[sectionId] = {
+      sectionId: sectionId,
+      sectionName: sectionName,
+      subSections: [],
+    }
   })
 
   sectionsData.forEach(({sectionId, parentId}) => {
@@ -139,3 +142,198 @@ export const buildSectionHierarchy = (
   })
   return rootSections
 }
+
+export const sectionssss = [
+  {
+    sectionId: 1,
+    sectionName: 'Tag Management',
+    sectionDescription: null,
+    parentId: 2,
+    editHistory: [],
+    projectId: 1,
+    createdBy: 1,
+    createdOn: '2025-02-03T15:09:13.000Z',
+    updatedOn: '2025-02-03T15:09:13.000Z',
+    updatedBy: null,
+  },
+  {
+    sectionId: 2,
+    sectionName: 'Tag Management',
+    sectionDescription: null,
+    parentId: 1,
+    editHistory: [],
+    projectId: 1,
+    createdBy: 1,
+    createdOn: '2025-02-03T15:09:13.000Z',
+    updatedOn: '2025-02-03T15:09:13.000Z',
+    updatedBy: null,
+  },
+  {
+    sectionId: 3,
+    sectionName: 'User Management',
+    sectionDescription: null,
+    parentId: null,
+    editHistory: [],
+    projectId: 1,
+    createdBy: 1,
+    createdOn: '2025-02-03T15:09:13.000Z',
+    updatedOn: '2025-02-03T15:09:13.000Z',
+    updatedBy: null,
+  },
+  {
+    sectionId: 4,
+    sectionName: 'Posting',
+    sectionDescription: null,
+    parentId: 3,
+    editHistory: [],
+    projectId: 1,
+    createdBy: 1,
+    createdOn: '2025-02-03T15:09:13.000Z',
+    updatedOn: '2025-02-03T15:09:13.000Z',
+    updatedBy: null,
+  },
+  {
+    sectionId: 5,
+    sectionName: 'Answer Submission',
+    sectionDescription: null,
+    parentId: 4,
+    editHistory: [],
+    projectId: 1,
+    createdBy: 1,
+    createdOn: '2025-02-03T15:09:13.000Z',
+    updatedOn: '2025-02-03T15:09:13.000Z',
+    updatedBy: null,
+  },
+  {
+    sectionId: 6,
+    sectionName: 'Voting System',
+    sectionDescription: null,
+    parentId: null,
+    editHistory: [],
+    projectId: 1,
+    createdBy: 1,
+    createdOn: '2025-02-03T15:09:13.000Z',
+    updatedOn: '2025-02-03T15:09:13.000Z',
+    updatedBy: null,
+  },
+  {
+    sectionId: 7,
+    sectionName: 'Voting System',
+    sectionDescription: null,
+    parentId: 6,
+    editHistory: [],
+    projectId: 1,
+    createdBy: 1,
+    createdOn: '2025-02-03T15:09:13.000Z',
+    updatedOn: '2025-02-03T15:09:13.000Z',
+    updatedBy: null,
+  },
+  {
+    sectionId: 8,
+    sectionName: 'Account Management',
+    sectionDescription: null,
+    parentId: null,
+    editHistory: [],
+    projectId: 1,
+    createdBy: 1,
+    createdOn: '2025-02-03T15:09:13.000Z',
+    updatedOn: '2025-02-03T15:09:13.000Z',
+    updatedBy: null,
+  },
+  {
+    sectionId: 9,
+    sectionName: 'User Profile',
+    sectionDescription: null,
+    parentId: 8,
+    editHistory: [],
+    projectId: 1,
+    createdBy: 1,
+    createdOn: '2025-02-03T15:09:13.000Z',
+    updatedOn: '2025-02-03T15:09:13.000Z',
+    updatedBy: null,
+  },
+  {
+    sectionId: 10,
+    sectionName: 'Question Creation',
+    sectionDescription: null,
+    parentId: 4,
+    editHistory: [],
+    projectId: 1,
+    createdBy: 1,
+    createdOn: '2025-02-03T15:09:13.000Z',
+    updatedOn: '2025-02-03T15:09:13.000Z',
+    updatedBy: null,
+  },
+  {
+    sectionId: 11,
+    sectionName: 'Comment System',
+    sectionDescription: null,
+    parentId: null,
+    editHistory: [],
+    projectId: 1,
+    createdBy: 1,
+    createdOn: '2025-02-03T15:09:13.000Z',
+    updatedOn: '2025-02-03T15:09:13.000Z',
+    updatedBy: null,
+  },
+  {
+    sectionId: 12,
+    sectionName: 'Comment System',
+    sectionDescription: null,
+    parentId: 11,
+    editHistory: [],
+    projectId: 1,
+    createdBy: 1,
+    createdOn: '2025-02-03T15:09:13.000Z',
+    updatedOn: '2025-02-03T15:09:13.000Z',
+    updatedBy: null,
+  },
+  {
+    sectionId: 13,
+    sectionName: 'Search Functionality',
+    sectionDescription: null,
+    parentId: null,
+    editHistory: [],
+    projectId: 1,
+    createdBy: 1,
+    createdOn: '2025-02-03T15:09:13.000Z',
+    updatedOn: '2025-02-03T15:09:13.000Z',
+    updatedBy: null,
+  },
+  {
+    sectionId: 14,
+    sectionName: 'Search Functionality',
+    sectionDescription: null,
+    parentId: 13,
+    editHistory: [],
+    projectId: 1,
+    createdBy: 1,
+    createdOn: '2025-02-03T15:09:13.000Z',
+    updatedOn: '2025-02-03T15:09:13.000Z',
+    updatedBy: null,
+  },
+  {
+    sectionId: 15,
+    sectionName: 'aaass',
+    sectionDescription: null,
+    parentId: null,
+    editHistory: [],
+    projectId: 1,
+    createdBy: 4,
+    createdOn: '2025-02-03T15:41:49.000Z',
+    updatedOn: '2025-02-03T15:41:49.000Z',
+    updatedBy: null,
+  },
+  {
+    sectionId: 16,
+    sectionName: 'pplll',
+    sectionDescription: null,
+    parentId: 15,
+    editHistory: [],
+    projectId: 1,
+    createdBy: 4,
+    createdOn: '2025-02-03T15:41:49.000Z',
+    updatedOn: '2025-02-03T15:41:49.000Z',
+    updatedBy: null,
+  },
+]
