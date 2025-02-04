@@ -11,6 +11,7 @@ import {
   responseHandler,
 } from '~/routes/utilities/responseHandler'
 import {getRequestParams} from '../../utilities/utils'
+import {RUN_IS_LOCKED} from '~/constants'
 
 const MarkPassedAsRetestSchema = z.object({
   runId: z.number().gt(0),
@@ -39,7 +40,7 @@ export const action = async ({request}: ActionFunctionArgs) => {
     }
     if (!(runInfo?.[0]?.status === 'Active')) {
       return responseHandler({
-        error: 'Run is locked',
+        error: RUN_IS_LOCKED,
         status: 423,
       })
     }

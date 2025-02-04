@@ -7,6 +7,7 @@ import {
 } from '~/routes/utilities/responseHandler'
 import {getRequestParams} from '~/routes/utilities/utils'
 import {API} from '~/routes/utilities/api'
+import {RUN_IS_LOCKED} from '~/constants'
 
 jest.mock('@controllers/runs.controller')
 jest.mock('~/routes/utilities/responseHandler')
@@ -121,7 +122,7 @@ describe('Edit Run - Action Function', () => {
       runId: requestData.runId,
     })
     expect(responseHandler).toHaveBeenCalledWith({
-      error: 'Run is locked',
+      error: RUN_IS_LOCKED,
       status: 423,
     })
   })
