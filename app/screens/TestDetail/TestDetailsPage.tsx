@@ -159,7 +159,7 @@ export default function TestDetailsPage({
           testStatus?.data?.[0].runStatus === 'Active' ? (
             <AddResultDialog
               getSelectedRows={() => {
-                return [{testId: testId.toString()}]
+                return [{testId: testId}]
               }}
               runId={runId}
               variant="detailPageUpdate"

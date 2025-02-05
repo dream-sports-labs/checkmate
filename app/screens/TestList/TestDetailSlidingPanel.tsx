@@ -167,7 +167,7 @@ export const TestDetailDrawer = ({
             {pageType === 'runTestDetail' && runActive && testStatusHistory && (
               <AddResultDialog
                 getSelectedRows={() => {
-                  return [{testId: props.testId.toString()}]
+                  return [{testId: props.testId}]
                 }}
                 runId={props?.runId ?? 0}
                 variant="detailPageUpdate"

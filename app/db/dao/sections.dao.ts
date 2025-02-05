@@ -100,6 +100,23 @@ const SectionsDao = {
         throw new Error('Section name cannot be empty')
       }
 
+      if (parentId === null) {
+        const data = await dbClient
+          .select()
+          .from(sections)
+          .where(
+            and(
+              eq(sections.sectionName, sectionName),
+              eq(sections.projectId, projectId),
+            ),
+          )
+        if (data.length > 0) {
+          if (data.find((section) => section.parentId === null)) {
+            throw new Error('Entry already exists')
+          }
+        }
+      }
+
       const data = await dbClient.insert(sections).values({
         sectionName,
         projectId,

@@ -21,7 +21,7 @@ export const TestRequestSchema = z.object({
   section: z.string(),
   sectionDescription: z.string().optional(),
   testCoveredBy: z.string().optional(),
-  testId: z.string().optional(),
+  testId: z.string().or(z.number()).optional(),
   additionalGroups: z.string().optional(),
   automationId: z.string().optional(),
   description: z.string().optional(),

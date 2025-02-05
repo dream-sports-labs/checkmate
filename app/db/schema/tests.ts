@@ -65,6 +65,7 @@ export const sections = mysqlTable(
       sectionHierarchyUnique: unique('sectionHierarchyUnique').on(
         sections.parentId,
         sections.sectionName,
+        sections.projectId,
       ),
     }
   },

@@ -12,7 +12,7 @@ async function insertSquadsData() {
       const {success, failed} = res
 
       console.log(
-        `✅ ${success.length} Squads Data Inserted Successfully 🚀`,
+        `✅ ${success.length} Squads Data Inserted Successfully ✅`,
         // success.map((s) => {
         //   return {
         //     squadName: s?.squadName,

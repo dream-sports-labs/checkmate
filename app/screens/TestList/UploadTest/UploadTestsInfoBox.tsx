@@ -25,6 +25,7 @@ export const UploadTestsInfoBox = () => {
         <ul className="ml-6 list-disc [&>li]:mt-2">
           <li>ID, must me less then 30lac</li>
           <li>Squad</li>
+          <li>Steps</li>
           <li>Priority</li>
           <li>Platform</li>
           <li>Test Covered By</li>
