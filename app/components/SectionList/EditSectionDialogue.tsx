@@ -1,51 +1,58 @@
-import {AddSectionsType} from '@api/addSection'
 import {StateDialog} from '@components/Dialog/StateDialogue'
 import {Loader} from '@components/Loader/Loader'
+import {ICreateSectionResponse} from '@controllers/sections.controller'
 import {useFetcher, useParams} from '@remix-run/react'
 import {API} from '@route/utils/api'
 import {Button} from '@ui/button'
-import {
-  DialogClose,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@ui/dialog'
+import {DialogClose, DialogHeader, DialogTitle} from '@ui/dialog'
 import {Input} from '@ui/input'
 import {Label} from '@ui/label'
 import {toast} from '@ui/use-toast'
 import {useEffect, useState} from 'react'
-import {ADDING_SECTION_AT_ROOT} from '~/constants'
 
-export const AddSectionDialogue = (param: {
-  sectionHierarchy: null | string
+export const EditSectionDialogue = (param: {
   state: boolean
   setState: React.Dispatch<React.SetStateAction<boolean>>
+  sectionId: number
+  sectionData: ICreateSectionResponse[]
   reloadSections: () => void
-  parentId: number | null
 }) => {
   const params = useParams()
   const projectId = +(params['projectId'] ?? 0)
-  const [sectionName, setSectionName] = useState<string>('')
-  const [sectionDescription, setSectionDescription] = useState<string | null>(
-    null,
+
+  const getSelectedSection = () =>
+    param.sectionData.find((section) => section.sectionId === param.sectionId)
+
+  const [sectionName, setSectionName] = useState<string>(
+    getSelectedSection()?.sectionName ?? '',
+  )
+  const [sectionDescription, setSectionDescription] = useState<string>(
+    getSelectedSection()?.sectionDescription ?? '',
   )
 
   const addSectionFetcher = useFetcher<any>()
 
-  const addSectionButtonClicked = () => {
-    const data: AddSectionsType = {
-      projectId,
-      sectionName,
-      sectionDescription,
-      parentId: param.parentId,
-    }
+  useEffect(() => {
+    const selectedSection = getSelectedSection()
+    setSectionName(selectedSection?.sectionName ?? '')
+    setSectionDescription(selectedSection?.sectionDescription ?? '')
+  }, [param.sectionId, param.sectionData])
 
+  const editSectionButtonClicked = () => {
     param.setState(false)
-    addSectionFetcher.submit(data, {
-      method: 'POST',
-      action: `/${API.AddSection}`,
-      encType: 'application/json',
-    })
+    addSectionFetcher.submit(
+      {
+        projectId: projectId,
+        sectionId: param.sectionId,
+        sectionName: sectionName,
+        sectionDescription: sectionDescription,
+      },
+      {
+        method: 'PUT',
+        action: `/${API.EditSection}`,
+        encType: 'application/json',
+      },
+    )
   }
 
   useEffect(() => {
@@ -53,12 +60,12 @@ export const AddSectionDialogue = (param: {
       addSectionFetcher.data?.data
         ? toast({
             variant: 'success',
-            description: `Section ${sectionName} added successfully`,
+            description: `Section ${sectionName} updated successfully`,
           })
         : toast({
             variant: 'destructive',
             description:
-              addSectionFetcher.data?.error ?? 'Error Adding Section',
+              addSectionFetcher.data?.error?.message ?? 'Error while updating',
           })
       param.reloadSections()
     }
@@ -68,28 +75,16 @@ export const AddSectionDialogue = (param: {
 
   return (
     <StateDialog
-      variant="add"
+      variant="edit"
       headerComponent={
-        <>
-          <DialogHeader className="font-bold">
-            <DialogTitle>Add Section</DialogTitle>{' '}
-          </DialogHeader>
-          <DialogDescription>
-            {param.sectionHierarchy ? (
-              <div className="flex flex-col">
-                <span>{`SubSection will be added in section`}</span>
-                <span className="text-blue-600">{param.sectionHierarchy}</span>
-              </div>
-            ) : (
-              <span>{ADDING_SECTION_AT_ROOT}</span>
-            )}
-          </DialogDescription>
-        </>
+        <DialogHeader className="font-bold">
+          <DialogTitle>Edit Section</DialogTitle>{' '}
+        </DialogHeader>
       }
       contentComponent={
         <div className="flex flex-col mt-2 gap-2">
           <div className="gap-1">
-            <Label htmlFor="addingSection">Section Name</Label>
+            <Label htmlFor="addingSection">Edit Section Name</Label>
             <Input
               id={'addingSection'}
               placeholder={'Enter Section Name'}
@@ -114,7 +109,7 @@ export const AddSectionDialogue = (param: {
       }
       footerComponent={
         <DialogClose className="mt-4">
-          <Button onClick={addSectionButtonClicked}>Add Section</Button>
+          <Button onClick={editSectionButtonClicked}>Update Section</Button>
         </DialogClose>
       }
       setState={param.setState}

@@ -1,12 +1,14 @@
 import {DisplaySection} from '@components/SectionList/interfaces'
 import {
-  createHierarchy,
+  buildSectionHierarchy,
   getChildSections,
   getInitialOpenSections,
   getInitialSelectedSections,
+  getSectionHierarchy,
+  getSectionsWithParents,
 } from '@components/SectionList/utils'
-import {Sections} from '~/screens/CreateRun/RunFilter'
 import {Tooltip} from '@components/Tooltip/Tooltip'
+import {IGetAllSectionsResponse} from '@controllers/sections.controller'
 import {useFetcher, useParams, useSearchParams} from '@remix-run/react'
 import {CirclePlus, ListRestart} from 'lucide-react'
 import React, {useEffect, useState} from 'react'
@@ -14,30 +16,46 @@ import {API} from '~/routes/utilities/api'
 import {AddSectionDialogue} from './AddSectionDialogue'
 import RenderSections from './RenderSections'
 import {SectionInfoBox} from './SectionInfoBox'
+import {EditSectionDialogue} from './EditSectionDialogue'
 
 export const SectionList = () => {
   const [searchParams, setSearchParams] = useSearchParams([])
   const [sectionsData, setSectionsData] = useState<DisplaySection[]>([])
   const [addSectionDialogue, setAddSectionDialogue] = useState<boolean>(false)
-  const [sectionHierarchy, setSectionHierarchy] = useState<string | null>(null)
+  const [editSectionDialogue, setEditSectionDialogue] = useState<boolean>(false)
+
+  const [sectionId, setSectionId] = useState<number | null>(null)
   const sectionFetcher = useFetcher<{
-    data: Sections[]
+    data: IGetAllSectionsResponse[]
+  }>()
+  const runSectionFetcher = useFetcher<{
+    data: IGetAllSectionsResponse[]
   }>()
   const projectId = useParams().projectId ? Number(useParams().projectId) : 0
   const runId = useParams().runId ? Number(useParams().runId) : 0
 
   useEffect(() => {
-    sectionFetcher.load(
-      `/${API.GetSections}?projectId=${projectId}&runId=${runId}`,
-    )
+    sectionFetcher.load(`/${API.GetSections}?projectId=${projectId}`)
+    if (runId)
+      runSectionFetcher.load(
+        `/${API.GetSections}?projectId=${projectId}&runId=${runId}`,
+      )
   }, [])
 
   useEffect(() => {
-    if (sectionFetcher.data?.data) {
-      const x = createHierarchy(sectionFetcher.data?.data)
-      setSectionsData(x)
+    if (runId && runSectionFetcher.data?.data && sectionFetcher.data?.data) {
+      const x = getSectionsWithParents({
+        allSections: sectionFetcher.data?.data,
+        runSections: runSectionFetcher.data?.data,
+      })
+
+      setSectionsData(buildSectionHierarchy({sectionsData: x}))
+    } else if (!runId && sectionFetcher.data?.data) {
+      setSectionsData(
+        buildSectionHierarchy({sectionsData: sectionFetcher.data?.data}),
+      )
     }
-  }, [sectionFetcher.data])
+  }, [sectionFetcher.data, runSectionFetcher.data])
 
   const initialSelectedSections = getInitialSelectedSections(searchParams)
   const initialOpenSections = getInitialOpenSections(initialSelectedSections)
@@ -122,9 +140,18 @@ export const SectionList = () => {
     )
   }
 
-  const addSubsectionClicked = (parentSectionHeirarchy: string | null) => {
-    setSectionHierarchy(parentSectionHeirarchy)
+  const addSubsectionClicked = (sectionId: number | null) => {
+    setSectionId(sectionId)
     setAddSectionDialogue(true)
+  }
+
+  const editSubsectionClicked = (sectionId: number) => {
+    setSectionId(sectionId)
+    setEditSectionDialogue(true)
+  }
+
+  const reloadSections = () => {
+    sectionFetcher.load(`/${API.GetSections}?projectId=${projectId}`)
   }
 
   return (
@@ -146,16 +173,19 @@ export const SectionList = () => {
             />
           ) : null}
         </h2>
-        <RenderSections
-          addSubsectionClicked={addSubsectionClicked}
-          applySectionFilter={applySectionFilter}
-          level={0}
-          openSections={openSections}
-          parentSectionHeirarchy={null}
-          sections={sectionsData}
-          selectedSections={selectedSections}
-          toggleSection={toggleSection}
-        />
+        {sectionFetcher?.data?.data && (
+          <RenderSections
+            addSubsectionClicked={addSubsectionClicked}
+            applySectionFilter={applySectionFilter}
+            level={0}
+            openSections={openSections}
+            sections={sectionsData}
+            selectedSections={selectedSections}
+            toggleSection={toggleSection}
+            sectionData={sectionFetcher?.data?.data}
+            editSubsectionClicked={editSubsectionClicked}
+          />
+        )}
         {!runId && (
           <button
             onClick={() => {
@@ -168,10 +198,24 @@ export const SectionList = () => {
         )}
       </div>
       <AddSectionDialogue
-        sectionHierarchy={sectionHierarchy}
+        sectionHierarchy={getSectionHierarchy({
+          sectionId: sectionId ? sectionId : 0,
+          sectionsData: sectionFetcher?.data?.data,
+        })}
         state={addSectionDialogue}
         setState={setAddSectionDialogue}
+        reloadSections={reloadSections}
+        parentId={sectionId}
       />
+      {sectionId && sectionFetcher?.data?.data && (
+        <EditSectionDialogue
+          state={editSectionDialogue}
+          setState={setEditSectionDialogue}
+          sectionId={sectionId}
+          sectionData={sectionFetcher?.data?.data}
+          reloadSections={reloadSections}
+        />
+      )}
     </div>
   )
 }

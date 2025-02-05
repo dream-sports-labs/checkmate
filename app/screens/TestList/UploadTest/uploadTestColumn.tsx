@@ -52,27 +52,6 @@ export const UploadTestTableColumn: ColumnDef<any>[] = [
     },
   },
   {
-    accessorKey: TestListingColumns.sectionHierarchy,
-    header: () => (
-      <HeaderComponent
-        heading={TestListingColumns.sectionHierarchy}
-        position={'left'}
-      />
-    ),
-    cell: ({row}) => {
-      return (
-        <Tooltip
-          anchor={
-            <div className="text-left text-xs max-w-28 truncate">
-              {row.original['Section Hierarchy']}
-            </div>
-          }
-          content={row.original['Section Hierarchy']}
-        />
-      )
-    },
-  },
-  {
     accessorKey: TestListingColumns.squad,
     header: () => (
       <HeaderComponent heading={TestListingColumns.squad} position={'left'} />

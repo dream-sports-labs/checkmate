@@ -1,3 +1,4 @@
+import {addSectionHierarchy} from '@components/SectionList/utils'
 import AutomationStatusController from '@controllers/automationStatus.controller'
 import PlatformController from '@controllers/platform.controller'
 import PriorityController from '@controllers/priority.controller'
@@ -8,6 +9,7 @@ import {tests} from '@schema/tests'
 import fs from 'fs-extra'
 import Papa from 'papaparse'
 import {CREATED_BY, ORG_ID, PROJECT_ID} from '../contants'
+import {SectionWithHierarchy} from '@components/SectionList/interfaces'
 
 const csvFilePath = 'app/db/seed/seedTests/tests.csv'
 
@@ -22,7 +24,7 @@ Papa.parse(csvFileContent, {
   complete: async (results) => {
     let jsonObj: any = results.data
 
-    const allSections = await SectionsController.getAllSections({
+    const allSectionsData = await SectionsController.getAllSections({
       projectId: PROJECT_ID,
     })
     const allSquads = await SquadsController.getAllSquads({
@@ -37,6 +39,13 @@ Papa.parse(csvFileContent, {
     const allTestCoveredBy = await TestCoveredByController.getAllTestCoveredBy({
       orgId: ORG_ID,
     })
+
+    let allSections: SectionWithHierarchy[] = []
+    if (allSectionsData) {
+      allSections = addSectionHierarchy({
+        sectionsData: allSectionsData,
+      })
+    }
 
     for (const obj of jsonObj) {
       const test: any = {}
@@ -69,9 +78,7 @@ Papa.parse(csvFileContent, {
       if (obj['Description']) test['description'] = obj['Description']?.trim()
 
       const sectionId = allSections?.find(
-        (section) =>
-          section.sectionName === obj['Section']?.trim() &&
-          section.sectionHierarchy === obj['Section Hierarchy']?.trim(),
+        (section) => section.sectionHierarchy === obj['Section']?.trim(),
       )?.sectionId
 
       if (sectionId) test['sectionId'] = sectionId

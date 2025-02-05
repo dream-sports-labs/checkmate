@@ -3,13 +3,7 @@ export const ConstantStrings = {
 }
 
 //Columns that are mandatory in the CSV file while uplading the tests
-export const MandatoryColumns = [
-  'Title',
-  'Section',
-  'Section Hierarchy',
-  'Steps',
-
-]
+export const MandatoryColumns = ['Title', 'Section']
 
 //Columns to be processed and insterted into the database
 export const AllowedColumns = {
@@ -18,8 +12,7 @@ export const AllowedColumns = {
   Squad: 'squad',
   Priority: 'priority',
   Platform: 'platform',
-  Section: 'sectionName',
-  'Section Hierarchy': 'sectionHierarchy',
+  Section: 'section',
   Preconditions: 'preConditions',
   'Expected Result': 'expectedResult',
   Type: 'type',
@@ -30,6 +23,8 @@ export const AllowedColumns = {
   'Automation Id': 'automationId',
   Description: 'description',
   'Section Description': 'sectionDescription',
+  'Jira Ticket': 'jiraTicket',
+  Defects: 'defects',
 }
 
 export const TestListingColumns = {
@@ -47,7 +42,6 @@ export const TestListingColumns = {
   steps: 'Steps',
   expectedResult: 'Expected Result',
   section: 'Section',
-  sectionHierarchy: 'Section Hierarchy',
   type: 'Type',
   preconditions: 'Preconditions',
   additionalGroups: 'Additional Groups',

@@ -1,5 +1,6 @@
 import {RunDetails} from '@api/runData'
 import {TestRunSummary} from '@api/runMetaInfo'
+import {RunTestListResponseType} from '@api/runTestsList'
 import {Loader} from '@components/Loader/Loader'
 import {
   MultipleUnifiedFilterProps,
@@ -25,7 +26,6 @@ import {
 import {useEffect, useState} from 'react'
 import {DataTable} from '~/components/DataTable/DataTable'
 import {SearchBar} from '~/components/SearchBar/SearchBar'
-import {RunTestListResponseType} from '~/routes/project.$projectId.run.$runId._index'
 import {API} from '~/routes/utilities/api'
 import {MED_PAGE_SIZE, ORG_ID} from '~/routes/utilities/constants'
 import {Lables, Platforms} from '~/screens/CreateRun/RunFilter'
@@ -109,9 +109,9 @@ export default function RunTestList() {
     }
   }, [])
 
-  const testRunsData = resp.data?.testsList || []
+  const testRunsData = resp?.data?.testsList || []
 
-  const totalCount = resp.data.totalCount
+  const totalCount = resp?.data?.totalCount ?? 0
 
   useEffect(() => {
     if (runDetailsFetcher?.data?.data) setRunData(runDetailsFetcher?.data?.data)

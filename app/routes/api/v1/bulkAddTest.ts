@@ -18,14 +18,15 @@ export const TestRequestSchema = z.object({
   steps: z.string().optional().nullable(),
   preConditions: z.string().optional(),
   expectedResult: z.string().optional(),
-  sectionName: z.string(),
-  sectionHierarchy: z.string(),
+  section: z.string(),
   sectionDescription: z.string().optional(),
   testCoveredBy: z.string().optional(),
-  testId: z.string().optional(),
+  testId: z.string().or(z.number()).optional(),
   additionalGroups: z.string().optional(),
   automationId: z.string().optional(),
   description: z.string().optional(),
+  jiraTicket: z.string().optional(),
+  defects: z.string().optional(),
 })
 
 const BulkAddTestRequestSchema = z.object({

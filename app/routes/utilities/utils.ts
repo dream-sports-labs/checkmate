@@ -1,5 +1,5 @@
 import {z} from 'zod'
-import {ErrorCause} from '~/constants'
+import {DUP_ENTRY, ErrorCause} from '~/constants'
 
 export const checkForValidId = (id?: number): boolean => {
   return !!(id && id !== null && !Number.isNaN(id))
@@ -51,7 +51,7 @@ export const jsonParseWithError = (
 
 export const sqlErroMessage = (error: any) => {
   if (error.message.includes('Duplicate entry')) {
-    return 'Entry Already Exists'
+    return DUP_ENTRY
   }
   return error.cause ? `${error.message}, cause: ${error.cause}` : error.message
 }

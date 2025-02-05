@@ -5,8 +5,9 @@ import {errorHandling} from './utils'
 import {sections, tests} from '../schema/tests'
 import {
   IAddSection,
+  IEditSection,
   IGetAllSections,
-  IGetSectionIdByNameAndHierarcy,
+  IGetSectionIdByHierarcy,
 } from '@controllers/sections.controller'
 import {runs, testRunMap} from '@schema/runs'
 
@@ -51,25 +52,28 @@ const SectionsDao = {
     }
   },
 
-  getSectionIdByNameAndHierarcy: async (
-    param: IGetSectionIdByNameAndHierarcy,
-  ) => {
+  getSectionIdByHierarcy: async (param: IGetSectionIdByHierarcy) => {
     try {
+      const whereClauses: any[] = [
+        eq(sections.sectionName, param.sectionName),
+        eq(sections.projectId, param.projectId),
+      ]
+
+      if (param.parentId)
+        whereClauses.push(eq(sections.parentId, param.parentId))
+
       const data = await dbClient
         .select({
           sectionId: sections.sectionId,
           sectionName: sections.sectionName,
           projectId: sections.projectId,
-          sectionHierarchy: sections.sectionHierarchy,
+          parentId: sections.parentId,
         })
         .from(sections)
-        .where(
-          and(
-            eq(sections.sectionName, param.sectionName),
-            eq(sections.sectionHierarchy, param.sectionHierarchy),
-            eq(sections.projectId, param.projectId),
-          ),
-        )
+        .where(and(...whereClauses))
+
+      if (data?.length > 1)
+        return data.filter((section) => section.parentId === param.parentId)
 
       return data
     } catch (error: any) {
@@ -85,33 +89,46 @@ const SectionsDao = {
 
   addSection: async ({
     sectionName,
-    sectionHierarchy,
+    parentId,
     projectId,
     createdBy,
     sectionDescription,
   }: IAddSection) => {
     try {
       sectionName = sectionName.trim()
-      if (sectionName === '' || sectionHierarchy === '') {
-        throw new Error('Section name or hierarchy cannot be empty')
+      if (sectionName === '') {
+        throw new Error('Section name cannot be empty')
       }
-      if (sectionName !== sectionHierarchy.split('>').pop()?.trim()) {
-        throw new Error('Section name and hierarchy do not match')
+
+      if (parentId === null) {
+        const data = await dbClient
+          .select()
+          .from(sections)
+          .where(
+            and(
+              eq(sections.sectionName, sectionName),
+              eq(sections.projectId, projectId),
+            ),
+          )
+        if (data.length > 0) {
+          if (data.find((section) => section.parentId === null)) {
+            throw new Error('Entry already exists')
+          }
+        }
       }
 
       const data = await dbClient.insert(sections).values({
         sectionName,
-        sectionHierarchy: sectionHierarchy.trim(),
         projectId,
         createdBy,
+        parentId,
         sectionDescription: sectionDescription ?? null,
-        sectionDepth: sectionHierarchy.split('>').length - 1,
       })
 
       return {
         sectionId: data[0]?.insertId,
         sectionName,
-        sectionHierarchy,
+        parentId,
         projectId,
       }
     } catch (error: any) {
@@ -119,6 +136,28 @@ const SectionsDao = {
       logger({
         type: LogType.SQL_ERROR,
         tag: 'Error while adding section',
+        message: error,
+      })
+      errorHandling(error)
+    }
+  },
+  editSection: async (param: IEditSection) => {
+    try {
+      const data = await dbClient
+        .update(sections)
+        .set({
+          sectionName: param.sectionName,
+          sectionDescription: param.sectionDescription,
+          updatedBy: param.userId,
+        })
+        .where(eq(sections.sectionId, param.sectionId))
+
+      return data
+    } catch (error: any) {
+      // FOR DEV PURPOSE
+      logger({
+        type: LogType.SQL_ERROR,
+        tag: 'Error while editing section',
         message: error,
       })
       errorHandling(error)

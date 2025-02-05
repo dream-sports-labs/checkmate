@@ -60,6 +60,7 @@ export function generateRbacPolicy(): IRbacPolicy[] {
       case API.EditTest:
       case API.EditTestsInBulk:
       case API.EditRun:
+      case API.EditSection:
         role = AccessType.USER
         action = ApiTypes.PUT
         break

@@ -41,7 +41,7 @@ if (createNewLabel && labelsSet.size > 0) {
     newLabels.map((item) => item.labelName),
   )
   await dbClient.insert(labels).values(newLabels)
-  console.log('🚀 Inserted new labels')
+  console.log('✅ Inserted new labels')
 }
 
 allLabels = (await LabelsController.getAllLabels({projectId: PROJECT_ID})) ?? []
@@ -79,7 +79,7 @@ for (let test of testData) {
               .then(() => {
                 labelMapArrayInserted = labelMapArrayInserted + 1
                 if (labelMapArrayInserted === testLength) {
-                  console.log('🚀  All tests inserted successfully')
+                  console.log('✅  All tests inserted successfully')
                   client.end()
                 }
               })

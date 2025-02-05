@@ -1,4 +1,3 @@
-import {testRunMap} from '@schema/runs'
 import {
   automationStatus,
   platform,
@@ -24,18 +23,6 @@ export const errorHandling = (error: any) => {
       })
   }
   throw new SqlError(error)
-}
-
-export const checkForSquadAndLabelIds = ({
-  squadIds,
-  labelIds,
-}: {
-  squadIds: number[] | undefined
-  labelIds: number[] | undefined
-}) => {
-  if (squadIds && squadIds.length === 0) throw new Error('No Squad Selected')
-
-  if (labelIds && labelIds.length === 0) throw new Error('No Label Selected')
 }
 
 function getForeignKeyConstraint(errorString: string) {

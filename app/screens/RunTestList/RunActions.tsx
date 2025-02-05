@@ -18,7 +18,6 @@ import {
   LockIcon,
 } from 'lucide-react'
 import {ReactElement, useEffect, useMemo, useRef, useState} from 'react'
-import {Tests} from './interfaces'
 import {LockRunDialogue} from './LockRunDialog'
 import {RemoveTestsDialogue} from './RemoveTestsDialog'
 import {ResetRunsDialogue} from './ResetRunDialogue'
@@ -26,6 +25,7 @@ import React from 'react'
 import {toast} from '@ui/use-toast'
 import {downloadReport} from './utils'
 import {API} from '@route/utils/api'
+import {Tests} from '@api/runTestsList'
 
 enum ACTIONS {
   EDIT = 'EDIT',

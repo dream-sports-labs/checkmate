@@ -8,6 +8,28 @@ import {
 } from '~/routes/utilities/responseHandler'
 import {checkForProjectId, checkForTestId} from '../../utilities/utils'
 
+export interface TestDetailsResponse {
+  title: string
+  section: string
+  squad: string
+  priority: string
+  automationStatus: string
+  type: string
+  platform: string
+  testCoveredBy: string
+  jiraTicket: string
+  defects: string
+  preConditions: string
+  steps: string
+  expectedResult: string
+  labelNames: string
+  additionalGroups: string
+  automationId: string
+  sectionId: number
+  sectionParentId: number | null
+  description: string
+}
+
 export async function loader({params, request}: LoaderFunctionArgs) {
   try {
     await getUserAndCheckAccess({request, resource: API.GetTestDetails})

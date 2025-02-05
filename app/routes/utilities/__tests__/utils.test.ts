@@ -6,6 +6,7 @@ import {
   sqlErroMessage,
   zodErrorMessage,
 } from '../utils'
+import {DUP_ENTRY} from '~/constants'
 
 describe('checkForValidId', () => {
   it('should return true for a valid number', () => {
@@ -60,7 +61,7 @@ describe('jsonParseWithError', () => {
 describe('sqlErroMessage', () => {
   it('should return "Entry Already Exists" for duplicate entry errors', () => {
     const error = {message: 'Duplicate entry'}
-    expect(sqlErroMessage(error)).toBe('Entry Already Exists')
+    expect(sqlErroMessage(error)).toBe(DUP_ENTRY)
   })
 
   it('should return detailed error message for other errors', () => {

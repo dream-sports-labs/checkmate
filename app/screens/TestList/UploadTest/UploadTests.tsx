@@ -17,8 +17,8 @@ import {ConstantStrings, MandatoryColumns} from '../../constants'
 
 import {useCustomNavigate} from '@hooks/useCustomNavigate'
 import {ORG_ID} from '~/routes/utilities/constants'
-import {transformObject} from '../utils'
-import {ImportTestInfoBox} from './UploadTestsInfoBox'
+import {convertKeys} from '../utils'
+import {UploadTestsInfoBox} from './UploadTestsInfoBox'
 import {UploadDataTable} from './UploadDataTable'
 import {API} from '@route/utils/api'
 
@@ -118,7 +118,7 @@ export default function UploadTests() {
       .map((label) => label.id)
 
     const tests = data.map((tests) => {
-      return transformObject(tests)
+      return convertKeys(tests)
     })
 
     const ids = tests.filter((item) => item?.testId)
@@ -173,7 +173,7 @@ export default function UploadTests() {
             accept=".csv"
             onChange={changeHandler}
           />
-          <ImportTestInfoBox />
+          <UploadTestsInfoBox />
         </div>
         <span className="text-xs mt-1 ml-2 text-slate-500">
           {`*${ConstantStrings.CsvValidColumnsMessage}`}

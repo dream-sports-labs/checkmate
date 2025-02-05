@@ -1,6 +1,7 @@
 import RunsController from '@controllers/runs.controller'
 import {ActionFunctionArgs} from '@remix-run/node'
 import {z} from 'zod'
+import {RUN_IS_LOCKED} from '~/constants'
 import {API} from '~/routes/utilities/api'
 import {getUserAndCheckAccess} from '~/routes/utilities/checkForUserAndAccess'
 import {
@@ -41,7 +42,7 @@ export const action = async ({request}: ActionFunctionArgs) => {
     }
     if (!(runInfo?.[0]?.status === 'Active')) {
       return responseHandler({
-        error: 'Run is locked',
+        error: RUN_IS_LOCKED,
         status: 423,
       })
     }

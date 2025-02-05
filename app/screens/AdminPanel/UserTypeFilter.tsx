@@ -1,8 +1,5 @@
-import {UserRole} from '@controllers/users.controller'
-import {useSearchParams} from '@remix-run/react'
 import {Tooltip} from '@components/Tooltip/Tooltip'
-import {Separator} from '@ui/separator'
-import {FilterIconShuffle} from '../RunTestList/FilterIcon'
+import {useSearchParams} from '@remix-run/react'
 import {Button} from '@ui/button'
 import {
   DropdownMenu,
@@ -10,9 +7,10 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@ui/dropdown-menu'
+import {Separator} from '@ui/separator'
 import {cn} from '@ui/utils'
-import {FileKey, Filter, SlidersHorizontal} from 'lucide-react'
-import {use, useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
+import {FilterIconShuffle} from '../RunTestList/FilterIcon'
 
 export interface UserTypeFilterInterface {
   containerClassName?: string
@@ -140,7 +138,7 @@ export const UserTypeFilter = ({
         <div className="flex justify-center">
           <Button
             className={cn(
-              'flex flex-row justify-centre rounded-lg border-neutral-200 w-full w-24',
+              'flex flex-row justify-centre rounded-lg border-neutral-200 w-full',
             )}
             size={'sm'}
             onClick={applyUserSelection}>

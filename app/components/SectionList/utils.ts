@@ -1,5 +1,13 @@
 import {jsonParseWithError} from '~/routes/utilities/utils'
-import {DisplaySection, SectionData} from '@components/SectionList/interfaces'
+import {
+  DisplaySection,
+  SectionData,
+  SectionWithHierarchy,
+} from '@components/SectionList/interfaces'
+import {
+  ICreateSectionResponse,
+  IGetAllSectionsResponse,
+} from '@controllers/sections.controller'
 
 export const findSectionId = (
   sectionName: string,
@@ -49,60 +57,119 @@ export const getChildSections = (
 
   if (subSections) {
     subSections.forEach((section) => {
-      childSections.push(...getChildSections(section.id, section.subSections))
+      childSections.push(
+        ...getChildSections(section.sectionId, section.subSections),
+      )
     })
   }
 
   return childSections
 }
 
-export const createHierarchy = (data: SectionData[]) => {
-  const root: DisplaySection[] = []
+export function getSectionHierarchy({
+  sectionId,
+  sectionsData,
+}: {
+  sectionId: number
+  sectionsData: ICreateSectionResponse[] | undefined
+}): string {
+  const names: string[] = []
+  let currentId: number | null = sectionId
+  const visited = new Set<number>()
 
-  const sortedData = data.sort((a, b) => b.sectionDepth - a.sectionDepth)
+  while (currentId) {
+    if (visited.has(currentId)) break
+    visited.add(currentId)
 
-  sortedData.forEach((item) => {
-    const hierarchy = item.sectionHierarchy.split(' > ')
-    let currentLevel = root
+    const currentSection = sectionsData?.find((s) => s.sectionId === currentId)
+    if (!currentSection) break
 
-    let currentSectionHierarchy = ''
-    hierarchy.forEach((sectionName: string, index: number) => {
-      if (+index === 0) currentSectionHierarchy = sectionName
-      else
-        currentSectionHierarchy = currentSectionHierarchy + ' > ' + sectionName
+    names.unshift(currentSection.sectionName)
+    currentId = currentSection.parentId
+  }
 
-      let existingSection = currentLevel.find((s) => s.name === sectionName)
+  return names.join(' > ')
+}
 
-      if (!existingSection) {
-        const newSection = {
-          id: findSectionId(
-            sectionName,
-            sortedData,
-            index,
-            currentSectionHierarchy,
-          ),
-          name: sectionName,
-          subSections: [],
-        }
-        parentChildMap.set(
-          newSection.id,
-          index > 0
-            ? findSectionId(
-                hierarchy[index - 1],
-                sortedData,
-                index - 1,
-                currentSectionHierarchy,
-              )
-            : -1,
-        )
+export const addSectionHierarchy = ({
+  sectionsData,
+}: {
+  sectionsData: IGetAllSectionsResponse[]
+}): SectionWithHierarchy[] => {
+  let allSections: SectionWithHierarchy[] = []
 
-        currentLevel.push(newSection)
-        existingSection = newSection
+  if (sectionsData) {
+    allSections = sectionsData.map((row) => {
+      const hierarchy = getSectionHierarchy({
+        sectionId: row.sectionId,
+        sectionsData,
+      })
+      return {
+        ...row,
+        sectionHierarchy: hierarchy,
       }
-
-      currentLevel = existingSection.subSections
     })
+  }
+
+  return allSections
+}
+
+export const buildSectionHierarchy = ({
+  sectionsData,
+}: {
+  sectionsData: {
+    sectionId: number
+    sectionName: string
+    parentId: number | null
+  }[]
+}): DisplaySection[] => {
+  const sectionMap: Record<number, DisplaySection> = {}
+  const rootSections: DisplaySection[] = []
+
+  sectionsData.forEach(({sectionId, sectionName}) => {
+    sectionMap[sectionId] = {
+      sectionId: sectionId,
+      sectionName: sectionName,
+      subSections: [],
+    }
   })
 
-  return root
+  sectionsData.forEach(({sectionId, parentId}) => {
+    if (parentId !== null && sectionMap[parentId]) {
+      sectionMap[parentId].subSections.push(sectionMap[sectionId])
+    } else {
+      rootSections.push(sectionMap[sectionId])
+    }
+  })
+  return rootSections
+}
+
+export const getSectionsWithParents = ({
+  runSections,
+  allSections,
+}: {
+  runSections: ICreateSectionResponse[]
+  allSections: ICreateSectionResponse[]
+}): ICreateSectionResponse[] => {
+  const sectionMap = new Map<number, ICreateSectionResponse>(
+    allSections.map((section) => [section.sectionId, section]),
+  )
+
+  const resultSections = new Map<number, ICreateSectionResponse>()
+
+  const collectSectionAndParents = (sectionId: number) => {
+    if (!resultSections.has(sectionId)) {
+      const section = sectionMap.get(sectionId)
+      if (section) {
+        resultSections.set(sectionId, section)
+        if (section.parentId !== null) {
+          collectSectionAndParents(section.parentId)
+        }
+      }
+    }
+  }
+
+  runSections.forEach((section) => collectSectionAndParents(section.sectionId))
+
+  return Array.from(resultSections.values())
 }

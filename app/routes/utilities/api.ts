@@ -60,6 +60,7 @@ export enum API {
   GetAllUser = 'api/v1/all-users',
   UpdateUserRole = 'api/v1/user/update-role',
   AddSection = 'api/v1/project/add-section',
+  EditSection = 'api/v1/project/edit-section',
 }
 
 export const API_RESOLUTION_PATHS = {
@@ -111,6 +112,7 @@ export const API_RESOLUTION_PATHS = {
   [API.GetAllUser]: 'routes/api/v1/getAllUser.ts',
   [API.UpdateUserRole]: 'routes/api/v1/updateUserType.ts',
   [API.AddSection]: 'routes/api/v1/addSection.ts',
+  [API.EditSection]: 'routes/api/v1/editSection.ts',
 }
 
 export const CLOSED_API = {
@@ -168,4 +170,5 @@ export const ApiToTypeMap: {
   [API.GetAllUser]: ApiTypes.GET,
   [API.UpdateUserRole]: ApiTypes.PUT,
   [API.AddSection]: ApiTypes.POST,
+  [API.EditSection]: ApiTypes.PUT,
 }

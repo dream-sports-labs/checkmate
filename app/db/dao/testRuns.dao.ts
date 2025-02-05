@@ -144,7 +144,7 @@ const TestRunsDao = {
           squadName: squads.squadName,
           sectionId: sections.sectionId,
           sectionName: sections.sectionName,
-          sectionHierarchy: sections.sectionHierarchy,
+          sectionParentId: sections.parentId,
           runStatus: runs.status,
           testCoveredBy: testCoveredBy.testCoveredByName,
           testedBy: sql`MAX(${users.userName})`.as('testedBy'),
