@@ -1,3 +1,4 @@
+import {AddSectionsType} from '@api/addSection'
 import {StateDialog} from '@components/Dialog/StateDialogue'
 import {Loader} from '@components/Loader/Loader'
 import {useFetcher, useParams} from '@remix-run/react'
@@ -20,6 +21,7 @@ export const AddSectionDialogue = (param: {
   state: boolean
   setState: React.Dispatch<React.SetStateAction<boolean>>
   reloadSections: () => void
+  parentId: number | null
 }) => {
   const params = useParams()
   const projectId = +(params['projectId'] ?? 0)
@@ -31,21 +33,19 @@ export const AddSectionDialogue = (param: {
   const addSectionFetcher = useFetcher<any>()
 
   const addSectionButtonClicked = () => {
+    const data: AddSectionsType = {
+      projectId,
+      sectionName,
+      sectionDescription,
+      parentId: param.parentId,
+    }
+
     param.setState(false)
-    addSectionFetcher.submit(
-      {
-        projectId: projectId,
-        sectionHierarchyString: param.sectionHierarchy
-          ? param.sectionHierarchy + ' > ' + sectionName
-          : sectionName,
-        sectionDescription: sectionDescription,
-      },
-      {
-        method: 'POST',
-        action: `/${API.AddSection}`,
-        encType: 'application/json',
-      },
-    )
+    addSectionFetcher.submit(data, {
+      method: 'POST',
+      action: `/${API.AddSection}`,
+      encType: 'application/json',
+    })
   }
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export const AddSectionDialogue = (param: {
         : toast({
             variant: 'destructive',
             description:
-              addSectionFetcher.data?.error?.message ?? 'Error Adding Section',
+              addSectionFetcher.data?.error ?? 'Error Adding Section',
           })
       param.reloadSections()
     }

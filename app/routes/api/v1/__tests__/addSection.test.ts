@@ -20,9 +20,10 @@ describe('Add Section - Action Function', () => {
 
   it('should successfully add a section when request is valid', async () => {
     const requestData = {
-      sectionHierarchyString: 'Parent/Child',
+      sectionName: 'Child Section',
       projectId: 1,
       sectionDescription: 'Test description',
+      parentId: 2,
     }
     const request = new Request('http://localhost', {
       method: 'POST',
@@ -31,15 +32,15 @@ describe('Add Section - Action Function', () => {
     })
     const mockUser = {userId: 123}
     const mockResponse = {
-      sectionName: 'Child',
+      sectionName: 'Child Section',
       sectionId: 456,
     }
 
     ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(mockUser)
     ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
-    ;(
-      SectionsController.createSectionFromHierarchy as jest.Mock
-    ).mockResolvedValue(mockResponse)
+    ;(SectionsController.addSection as jest.Mock).mockResolvedValue(
+      mockResponse,
+    )
     ;(responseHandler as jest.Mock).mockImplementation((response) => response)
 
     const response = await action({request} as any)
@@ -48,15 +49,16 @@ describe('Add Section - Action Function', () => {
       request,
       resource: API.AddSection,
     })
-    expect(SectionsController.createSectionFromHierarchy).toHaveBeenCalledWith({
-      sectionHierarchyString: 'Parent/Child',
+    expect(SectionsController.addSection).toHaveBeenCalledWith({
+      createdBy: 123,
+      parentId: 2,
       sectionDescription: 'Test description',
       projectId: 1,
-      createdBy: 123,
+      sectionName: 'Child Section',
     })
     expect(responseHandler).toHaveBeenCalledWith({
       data: {
-        message: 'Child section added with id 456',
+        message: 'Child Section section added with id 456',
       },
       status: 200,
     })
@@ -80,9 +82,10 @@ describe('Add Section - Action Function', () => {
 
   it('should return 409 if section already exists (duplicate entry)', async () => {
     const requestData = {
-      sectionHierarchyString: 'Parent/Child',
+      sectionName: 'Child Section',
       projectId: 1,
       sectionDescription: null,
+      parentId: 2,
     }
     const request = new Request('http://localhost', {
       method: 'POST',
@@ -93,18 +96,17 @@ describe('Add Section - Action Function', () => {
 
     ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(mockUser)
     ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
-    ;(
-      SectionsController.createSectionFromHierarchy as jest.Mock
-    ).mockResolvedValue(null)
+    ;(SectionsController.addSection as jest.Mock).mockResolvedValue(null)
     ;(responseHandler as jest.Mock).mockImplementation((response) => response)
 
     const response = await action({request} as any)
 
-    expect(SectionsController.createSectionFromHierarchy).toHaveBeenCalledWith({
-      sectionHierarchyString: 'Parent/Child',
-      sectionDescription: '',
-      projectId: 1,
+    expect(SectionsController.addSection).toHaveBeenCalledWith({
       createdBy: 123,
+      parentId: 2,
+      sectionDescription: null,
+      projectId: 1,
+      sectionName: 'Child Section',
     })
     expect(responseHandler).toHaveBeenCalledWith({
       error: 'Error adding section due to duplicate entries',
@@ -114,9 +116,10 @@ describe('Add Section - Action Function', () => {
 
   it('should handle unexpected errors', async () => {
     const requestData = {
-      sectionHierarchyString: 'Parent/Child',
+      sectionName: 'Child Section',
       projectId: 1,
       sectionDescription: 'Test description',
+      parentId: 2,
     }
     const request = new Request('http://localhost', {
       method: 'POST',

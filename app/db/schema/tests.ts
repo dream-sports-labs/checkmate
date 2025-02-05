@@ -1,6 +1,5 @@
 import {sql} from 'drizzle-orm'
 import {
-  AnyMySqlColumn,
   index,
   int,
   json,

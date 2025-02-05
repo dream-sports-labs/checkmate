@@ -9,14 +9,14 @@ import {
 import {API} from '../../utilities/api'
 import {getRequestParams} from '../../utilities/utils'
 
-const AddSectionSchema = z.object({
+const EditSectionSchema = z.object({
   sectionId: z.number().gt(0),
   projectId: z.number().gt(0).optional(),
   sectionDescription: z.string().optional().nullable(),
   sectionName: z.string(),
 })
 
-type AddSectionsType = z.infer<typeof AddSectionSchema>
+type EditSectionsType = z.infer<typeof EditSectionSchema>
 
 export const action = async ({request}: ActionFunctionArgs) => {
   try {
@@ -29,19 +29,17 @@ export const action = async ({request}: ActionFunctionArgs) => {
 
     const user = await getUserAndCheckAccess({
       request,
-      resource: API.AddSection,
+      resource: API.EditSection,
     })
 
-    const data = await getRequestParams<AddSectionsType>(
+    const data = await getRequestParams<EditSectionsType>(
       request,
-      AddSectionSchema,
+      EditSectionSchema,
     )
     const resp = await SectionsController.editSection({
       ...data,
       userId: user?.userId ?? 0,
     })
-
-
 
     return responseHandler({
       data:

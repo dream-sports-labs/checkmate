@@ -16,7 +16,7 @@ export interface IAddSection {
   parentId: number | null
   projectId: number
   createdBy: number
-  sectionDescription?: string
+  sectionDescription?: string | null
 }
 
 export interface ICheckAndCreateSection {

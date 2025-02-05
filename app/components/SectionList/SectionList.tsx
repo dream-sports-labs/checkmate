@@ -4,6 +4,7 @@ import {
   getChildSections,
   getInitialOpenSections,
   getInitialSelectedSections,
+  getSectionHierarchy,
   getSectionsWithParents,
 } from '@components/SectionList/utils'
 import {Tooltip} from '@components/Tooltip/Tooltip'
@@ -23,8 +24,7 @@ export const SectionList = () => {
   const [addSectionDialogue, setAddSectionDialogue] = useState<boolean>(false)
   const [editSectionDialogue, setEditSectionDialogue] = useState<boolean>(false)
 
-  const [editSectionId, setEditSectionId] = useState<number>(0)
-  const [sectionHierarchy, setSectionHierarchy] = useState<string | null>(null)
+  const [sectionId, setSectionId] = useState<number | null>(null)
   const sectionFetcher = useFetcher<{
     data: IGetAllSectionsResponse[]
   }>()
@@ -140,13 +140,13 @@ export const SectionList = () => {
     )
   }
 
-  const addSubsectionClicked = (parentSectionHeirarchy: string | null) => {
-    setSectionHierarchy(parentSectionHeirarchy)
+  const addSubsectionClicked = (sectionId: number | null) => {
+    setSectionId(sectionId)
     setAddSectionDialogue(true)
   }
 
   const editSubsectionClicked = (sectionId: number) => {
-    setEditSectionId(sectionId)
+    setSectionId(sectionId)
     setEditSectionDialogue(true)
   }
 
@@ -173,17 +173,19 @@ export const SectionList = () => {
             />
           ) : null}
         </h2>
-        <RenderSections
-          addSubsectionClicked={addSubsectionClicked}
-          applySectionFilter={applySectionFilter}
-          level={0}
-          openSections={openSections}
-          parentSectionHeirarchy={null}
-          sections={sectionsData}
-          selectedSections={selectedSections}
-          toggleSection={toggleSection}
-          editSubsectionClicked={editSubsectionClicked}
-        />
+        {sectionFetcher?.data?.data && (
+          <RenderSections
+            addSubsectionClicked={addSubsectionClicked}
+            applySectionFilter={applySectionFilter}
+            level={0}
+            openSections={openSections}
+            sections={sectionsData}
+            selectedSections={selectedSections}
+            toggleSection={toggleSection}
+            sectionData={sectionFetcher?.data?.data}
+            editSubsectionClicked={editSubsectionClicked}
+          />
+        )}
         {!runId && (
           <button
             onClick={() => {
@@ -196,16 +198,20 @@ export const SectionList = () => {
         )}
       </div>
       <AddSectionDialogue
-        sectionHierarchy={sectionHierarchy}
+        sectionHierarchy={getSectionHierarchy({
+          sectionId: sectionId ? sectionId : 0,
+          sectionsData: sectionFetcher?.data?.data,
+        })}
         state={addSectionDialogue}
         setState={setAddSectionDialogue}
         reloadSections={reloadSections}
+        parentId={sectionId}
       />
-      {sectionFetcher?.data?.data && (
+      {sectionId && sectionFetcher?.data?.data && (
         <EditSectionDialogue
           state={editSectionDialogue}
           setState={setEditSectionDialogue}
-          sectionId={editSectionId}
+          sectionId={sectionId}
           sectionData={sectionFetcher?.data?.data}
           reloadSections={reloadSections}
         />

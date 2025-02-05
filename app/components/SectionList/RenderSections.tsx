@@ -5,40 +5,45 @@ import {cn} from '@ui/utils'
 import {ChevronDown, ChevronRight, CirclePlus, Pencil} from 'lucide-react'
 import React, {memo, useCallback} from 'react'
 import {useParams} from 'react-router'
+import {getSectionHierarchy} from './utils'
+import {ICreateSectionResponse} from '@controllers/sections.controller'
+
+interface IRenderSection {
+  sections: DisplaySection[]
+  level: number
+  openSections: number[]
+  toggleSection: (id: number) => void
+  selectedSections: number[]
+  sectionData: ICreateSectionResponse[]
+
+  applySectionFilter: (
+    id: number,
+    subSections: DisplaySection[] | undefined,
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => void
+  addSubsectionClicked: (sectionId: number | null) => void
+  editSubsectionClicked: (sectionId: number) => void
+}
 
 const RenderSections = memo(
   ({
     sections,
     level = 0,
-    parentSectionHeirarchy,
     openSections,
     toggleSection,
     selectedSections,
     applySectionFilter,
     addSubsectionClicked,
     editSubsectionClicked,
-  }: {
-    sections: DisplaySection[]
-    level: number
-    parentSectionHeirarchy: string | null
-    openSections: number[]
-    toggleSection: (id: number) => void
-    selectedSections: number[]
-    applySectionFilter: (
-      id: number,
-      subSections: DisplaySection[] | undefined,
-      e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    ) => void
-    addSubsectionClicked: (sectionHierarchy: string) => void
-    editSubsectionClicked: (sectionId: number) => void
-  }) => {
+    sectionData,
+  }: IRenderSection) => {
     sections = sections.sort((a, b) =>
       a.sectionName.localeCompare(b.sectionName),
     )
     const runId = useParams().runId ? Number(useParams().runId) : 0
 
     const renderSubSections = useCallback(
-      (section: DisplaySection, parentHierarchy: string | null) => {
+      (section: DisplaySection) => {
         if (
           openSections.includes(section.sectionId) &&
           section.subSections?.length > 0
@@ -48,13 +53,13 @@ const RenderSections = memo(
               <RenderSections
                 sections={section.subSections}
                 level={level + 1}
-                parentSectionHeirarchy={parentHierarchy}
                 openSections={openSections}
                 toggleSection={toggleSection}
                 selectedSections={selectedSections}
                 applySectionFilter={applySectionFilter}
                 addSubsectionClicked={addSubsectionClicked}
                 editSubsectionClicked={editSubsectionClicked}
+                sectionData={sectionData}
               />
             </div>
           )
@@ -133,11 +138,12 @@ const RenderSections = memo(
                       </div>
                     }
                     content={
-                      <div className="text-sm">{`${
-                        parentSectionHeirarchy
-                          ? parentSectionHeirarchy + ' > '
-                          : ''
-                      }${section.sectionName}`}</div>
+                      <div className="text-sm">
+                        {getSectionHierarchy({
+                          sectionId: section.sectionId,
+                          sectionsData: sectionData,
+                        })}
+                      </div>
                     }
                   />
                 </div>
@@ -148,11 +154,7 @@ const RenderSections = memo(
                         <CirclePlus
                           color="green"
                           onClick={() =>
-                            addSubsectionClicked(
-                              parentSectionHeirarchy
-                                ? `${parentSectionHeirarchy} > ${section.sectionName}`
-                                : section.sectionName,
-                            )
+                            addSubsectionClicked(section.sectionId)
                           }
                           size={16}
                         />
@@ -176,12 +178,7 @@ const RenderSections = memo(
                 )}
               </div>
             </div>
-            {renderSubSections(
-              section,
-              parentSectionHeirarchy
-                ? `${parentSectionHeirarchy} > ${section.sectionName}`
-                : section.sectionName,
-            )}
+            {renderSubSections(section)}
           </li>
         ))}
       </ul>
@@ -191,8 +188,7 @@ const RenderSections = memo(
     return (
       prevProps.sections === nextProps.sections &&
       prevProps.openSections === nextProps.openSections &&
-      prevProps.selectedSections === nextProps.selectedSections &&
-      prevProps.parentSectionHeirarchy === nextProps.parentSectionHeirarchy
+      prevProps.selectedSections === nextProps.selectedSections
     )
   },
 )

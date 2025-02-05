@@ -57,7 +57,7 @@ describe('Edit Section - Action Function', () => {
 
     expect(getUserAndCheckAccess).toHaveBeenCalledWith({
       request,
-      resource: API.AddSection,
+      resource: API.EditSection,
     })
 
     expect(SectionsController.editSection).toHaveBeenCalledWith({

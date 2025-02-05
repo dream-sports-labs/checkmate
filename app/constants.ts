@@ -23,3 +23,5 @@ export const UPPERCASE_APP_NAME = 'CHECKMATE'
 
 export const ADDING_SECTION_AT_ROOT = 'Adding Section At Root'
 export const RUN_IS_LOCKED = 'Run is not active'
+
+export const DUP_ENTRY = 'Entry Already Exists'

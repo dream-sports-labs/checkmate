@@ -1,7 +1,7 @@
 import {json} from '@remix-run/node'
 import {SqlError} from '@services/ErrorTypes'
 import {z} from 'zod'
-import {ErrorCause} from '~/constants'
+import {DUP_ENTRY, ErrorCause} from '~/constants'
 import {
   ACCESS_ERROR_MESSAGE,
   LOGOUT_ERROR_MESSAGE,
@@ -19,6 +19,11 @@ export const errorResponseHandler = (error: any) => {
   if (error.cause == ErrorCause.INVALID_PARAMS) {
     return responseHandler({error: error.message, status: 400})
   }
+
+  if (error.message?.includes('Duplicate entry')) {
+    return responseHandler({error: DUP_ENTRY, status: 409})
+  }
+
   if (error instanceof SqlError) {
     if (!!(error?.cause as any)?.includes('labelId')) {
       return responseHandler({

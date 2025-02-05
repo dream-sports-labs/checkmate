@@ -10,14 +10,13 @@ import {API} from '../../utilities/api'
 import {getRequestParams} from '../../utilities/utils'
 
 const AddSectionSchema = z.object({
-  sectionHierarchyString: z
-    .string()
-    .min(5, 'Number of characters are less than 5'),
+  sectionName: z.string().min(5, 'Number of characters are less than 5'),
   projectId: z.number().gt(0),
   sectionDescription: z.string().optional().nullable(),
+  parentId: z.number().optional().nullable(),
 })
 
-type AddSectionsType = z.infer<typeof AddSectionSchema>
+export type AddSectionsType = z.infer<typeof AddSectionSchema>
 
 export const action = async ({request}: ActionFunctionArgs) => {
   try {
@@ -38,11 +37,12 @@ export const action = async ({request}: ActionFunctionArgs) => {
       AddSectionSchema,
     )
 
-    const resp = await SectionsController.createSectionFromHierarchy({
-      sectionHierarchyString: data.sectionHierarchyString,
-      sectionDescription: data.sectionDescription ?? '',
-      projectId: data.projectId,
+    const resp = await SectionsController.addSection({
       createdBy: user?.userId ?? 0,
+      parentId: data?.parentId ?? null,
+      sectionDescription: data?.sectionDescription,
+      projectId: data.projectId,
+      sectionName: data.sectionName,
     })
 
     if (resp) {
