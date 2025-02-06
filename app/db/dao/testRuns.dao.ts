@@ -348,8 +348,10 @@ const TestRunsDao = {
       if (params.groupBy) {
         const groupByCountQuery = dbClient
           .select({
-            squadName: squads.squadName,
-            squadId: squads.squadId,
+            squadName: sql<string>`COALESCE(${squads.squadName}, 'None')`.as(
+              'squadName',
+            ),
+            squadId: sql<number>`COALESCE(${squads.squadId}, 0)`.as('squadId'),
             status: testRunMap.status,
             status_count: count(),
           })
@@ -357,7 +359,7 @@ const TestRunsDao = {
           .leftJoin(tests, eq(testRunMap.testId, tests.testId))
           .leftJoin(squads, eq(tests.squadId, squads.squadId))
           .where(and(...whereClauses))
-          .groupBy(squads.squadId, testRunMap.status)
+          .groupBy(squads.squadId, squads.squadName, testRunMap.status)
 
         const [statuCountArray, groupByData] = await Promise.all([
           statuCountArrayQuery.execute(),

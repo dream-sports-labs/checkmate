@@ -1,14 +1,8 @@
 import SectionsController from './sections.controller'
 import SquadsController from './squads.controller'
-import {ICreateTestController, IUpdateTestController} from './tests.controller'
 import {TestStatusType} from './types'
 
-export const isValidStatus = (status: string | undefined): boolean => {
-  if (!status) return false
-  return Object.values(TestStatusType).includes(status as TestStatusType)
-}
-
-interface InputData {
+interface SquadInputData {
   squadName: string | null
   squadId: number | null
   status: string
@@ -27,22 +21,27 @@ interface RunData {
   total: number
 }
 
-interface OutputData {
+interface SquadOutputData {
   squadName: string
   squadId: number
   runData: RunData
 }
 
+export const isValidStatus = (status: string | undefined): boolean => {
+  if (!status) return false
+  return Object.values(TestStatusType).includes(status as TestStatusType)
+}
+
 export function transformSquadWiseRunData(
-  data: InputData[] | undefined,
-): OutputData[] | null {
+  data: SquadInputData[] | undefined,
+): SquadOutputData[] | null {
   if (data) {
-    const result: Record<number, OutputData> = {}
+    const result: Record<number, SquadOutputData> = {}
 
     data.forEach((item) => {
       const {squadId, squadName, status, status_count} = item
 
-      if (squadId && squadName) {
+      if ((squadId || squadId === 0) && squadName) {
         if (!result[squadId]) {
           const runData: RunData = {total: 0} as RunData
 
