@@ -7,9 +7,8 @@ on:
       - '**'
 
 jobs:
-  build:
+  Unit Test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -27,4 +26,4 @@ jobs:
         run: yarn install --immutable
 
       - name: Run unit tests
-        run: yarn jest
+        run: yarn unit:test
