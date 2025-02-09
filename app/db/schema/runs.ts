@@ -24,7 +24,9 @@ export type statusUpdateHistory = {
 export const testRunsStatusHistory = mysqlTable(
   'testRunsStatusHistory',
   {
-    id: int('id').primaryKey().autoincrement(),
+    testRunsStatusHistoryId: int('testRunsStatusHistoryId')
+      .primaryKey()
+      .autoincrement(),
     runId: int('runId').references(() => runs.runId, {onDelete: 'cascade'}),
     testId: int('testId').references(() => tests.testId, {onDelete: 'cascade'}),
     status: varchar('status', {length: 25}).notNull(),
@@ -93,6 +95,7 @@ export const runs = mysqlTable(
 export const testRunMap = mysqlTable(
   'testRunMap',
   {
+    testRunMapId: int('testRunMapId').primaryKey().autoincrement(),
     runId: int('runId').references(() => runs.runId, {onDelete: 'cascade'}),
     testId: int('testId').references(() => tests.testId, {onDelete: 'cascade'}),
     projectId: int('projectId')
