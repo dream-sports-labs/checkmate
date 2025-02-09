@@ -1,4 +1,4 @@
-import {and, count, desc, eq, inArray, like, or} from 'drizzle-orm'
+import {and, count, desc, eq, inArray, like, or, sql} from 'drizzle-orm'
 import {dbClient} from '../client'
 import {runs, testRunMap} from '@schema/runs'
 import {logger, LogType} from '~/utils/logger'
@@ -14,6 +14,7 @@ import {tests} from '@schema/tests'
 import {labelTestMap} from '@schema/labels'
 import {ICreateTestRuns} from './testRuns.dao'
 import {IRunsMetaInfo} from '@controllers/testRuns.controller'
+import {ErrorCause} from '~/constants'
 
 const RunsDao = {
   getAllRuns: async (params: IGetAllRuns) => {
@@ -119,8 +120,20 @@ const RunsDao = {
         if (sectionIds?.length)
           andWhereCluase.push(inArray(tests.sectionId, sectionIds))
 
-        if (squadIds?.length)
-          whereClauses.push(inArray(tests.squadId, squadIds))
+        if (squadIds)
+          if (squadIds.length > 0) {
+            if (squadIds.includes(0)) {
+              whereClauses.push(
+                or(
+                  inArray(tests.squadId, squadIds),
+                  sql`${tests.squadId} IS NULL`,
+                ),
+              )
+            } else whereClauses.push(inArray(tests.squadId, squadIds))
+          } else
+            throw new Error('Empty squadIds provided', {
+              cause: ErrorCause.INVALID_PARAMS,
+            })
 
         const conditionType = filterType === 'or' ? or : and
 

@@ -178,17 +178,28 @@ export default function RunTestList() {
             ...prev,
             {
               filterName: FilterNames.Squad,
-              filterOptions: squads.map((squad) => {
-                return {
-                  id: squad.squadId,
-                  optionName: squad.squadName,
+              filterOptions: [
+                ...squads.map((squad) => {
+                  return {
+                    id: squad.squadId,
+                    optionName: squad.squadName,
+                    checked: isChecked({
+                      searchParams,
+                      filterName: 'squadIds',
+                      filterId: squad.squadId,
+                    }),
+                  }
+                }),
+                {
+                  id: 0,
+                  optionName: 'None',
                   checked: isChecked({
                     searchParams,
                     filterName: 'squadIds',
-                    filterId: squad.squadId,
+                    filterId: 0,
                   }),
-                }
-              }),
+                },
+              ],
             },
           ]
         })

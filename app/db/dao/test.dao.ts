@@ -72,9 +72,16 @@ const TestsDao = {
           })
 
       if (squadIds)
-        if (squadIds.length > 0)
-          whereClauses.push(inArray(tests.squadId, squadIds))
-        else
+        if (squadIds.length > 0) {
+          if (squadIds.includes(0)) {
+            whereClauses.push(
+              or(
+                inArray(tests.squadId, squadIds),
+                sql`${tests.squadId} IS NULL`,
+              ),
+            )
+          } else whereClauses.push(inArray(tests.squadId, squadIds))
+        } else
           throw new Error('Empty squadIds provided', {
             cause: ErrorCause.INVALID_PARAMS,
           })
@@ -191,9 +198,16 @@ const TestsDao = {
           })
 
       if (squadIds)
-        if (squadIds.length > 0)
-          whereClauses.push(inArray(tests.squadId, squadIds))
-        else
+        if (squadIds.length > 0) {
+          if (squadIds.includes(0)) {
+            whereClauses.push(
+              or(
+                inArray(tests.squadId, squadIds),
+                sql`${tests.squadId} IS NULL`,
+              ),
+            )
+          } else whereClauses.push(inArray(tests.squadId, squadIds))
+        } else
           throw new Error('Empty squadIds provided', {
             cause: ErrorCause.INVALID_PARAMS,
           })
