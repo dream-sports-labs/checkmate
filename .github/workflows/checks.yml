@@ -7,7 +7,7 @@ on:
       - '**'
 
 jobs:
-  Unit Test:
+  Unit-Test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
