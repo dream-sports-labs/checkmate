@@ -1,4 +1,4 @@
-name: Unit Test
+name: Checks
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
       - '**'
 
 jobs:
-  Unit-Test:
+  unit-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
