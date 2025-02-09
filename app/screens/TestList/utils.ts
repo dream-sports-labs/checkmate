@@ -1,4 +1,4 @@
-import {AllowedColumns} from '../constants'
+import {AllowedColumns} from './UploadTest/constants'
 import {PropertyListFilter} from './AddPropertyDialog'
 import {EditableProperties} from './testTable.interface'
 
@@ -71,6 +71,16 @@ export const AddConstantEditableProperty: PropertyListFilter[] = [
   },
 ]
 
+function extractNumber(input: any): number | null {
+  const strValue = String(input)
+  const match = strValue.match(/(\d+)$/)
+  if (match) {
+    const num = Number(match[1])
+    return isNaN(num) ? null : num
+  }
+  return null
+}
+
 export function convertKeys(input: {[key: string]: any}): {
   [key: string]: any
 } {
@@ -79,7 +89,9 @@ export function convertKeys(input: {[key: string]: any}): {
   Object.keys(input).forEach((key) => {
     const newKey = AllowedColumns[key as keyof typeof AllowedColumns] || key
     if (input[key] !== null && input[key] !== undefined) {
-      convertedObject[newKey] = input[key]
+      if (newKey === 'testId') {
+        convertedObject[newKey] = extractNumber(input[key])
+      } else convertedObject[newKey] = input[key]
     }
   })
   return convertedObject
@@ -111,10 +123,10 @@ export function throttle<T extends (...args: any[]) => any>(
 
   return function (...args: Parameters<T>) {
     if (!isThrottled) {
-      func(...args) // Execute the function immediately
-      isThrottled = true // Block subsequent calls
+      func(...args)
+      isThrottled = true
       setTimeout(() => {
-        isThrottled = false // Allow calls after delay
+        isThrottled = false
       }, delay)
     }
   }

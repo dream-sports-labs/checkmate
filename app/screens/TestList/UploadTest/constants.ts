@@ -18,7 +18,7 @@ export const AllowedColumns = {
   Type: 'type',
   Steps: 'steps',
   'Test Covered By': 'testCoveredBy',
-  ID: 'testId',
+  Id: 'testId',
   'Additional Groups': 'additionalGroups',
   'Automation Id': 'automationId',
   Description: 'description',

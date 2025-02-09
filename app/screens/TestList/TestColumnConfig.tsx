@@ -28,7 +28,7 @@ import {toast} from '@ui/use-toast'
 import {PencilIcon} from 'lucide-react'
 import {MouseEvent, useEffect, useState} from 'react'
 import {cn} from '~/ui/utils'
-import {TestListingColumns} from '../constants'
+import {TestListingColumns} from './UploadTest/constants'
 import {TestDetailDrawer} from './TestDetailSlidingPanel'
 import {
   HeaderComponent,

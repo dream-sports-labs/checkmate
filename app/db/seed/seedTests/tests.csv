@@ -1,5 +1,5 @@
 Title,Section,Squad,Priority,Platform,Test Covered By,Steps,Preconditions,Expected Result,Description,Additional Groups,Automation Id,Automation Status,Section Description,Label
-Validate comment system functionality under interaction > comments,Tag Management > Tag Management,Backend,,Only iOS,,"Step 1: Log in to the application.
+Validate comment system functionality under interaction > comments,Tag Management,Backend,,Only iOS,,"Step 1: Log in to the application.
 Step 2: Navigate to the tag management section.
 Step 3: Perform the required operations.","Ensure the user is logged in. Visit https://example.com/login if required.
 Check that tag management module is enabled.",The tag management functionality works as expected without any errors. Refer to https://example.com/docs/tag-management-module for detailed specifications.,This test validates the tag management feature and ensures it meets all functional requirements.,,TC-0001,Automatable,,iOS

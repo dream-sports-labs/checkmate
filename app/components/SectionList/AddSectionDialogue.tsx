@@ -114,7 +114,9 @@ export const AddSectionDialogue = (param: {
       }
       footerComponent={
         <DialogClose className="mt-4">
-          <Button onClick={addSectionButtonClicked}>Add Section</Button>
+          <Button asChild onClick={addSectionButtonClicked}>
+            Add Section
+          </Button>
         </DialogClose>
       }
       setState={param.setState}

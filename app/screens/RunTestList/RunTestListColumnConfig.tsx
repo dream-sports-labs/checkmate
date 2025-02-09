@@ -20,7 +20,7 @@ import {
   SortingHeaderComponent,
   TitleRowComponent,
 } from '../TestList/TestListRowColumns'
-import {TestListingColumns} from '../constants'
+import {TestListingColumns} from '../TestList/UploadTest/constants'
 import {AddResultDialog} from './AddResultDialog'
 
 export const priorityMapping: {[key: string]: ReactNode} = {

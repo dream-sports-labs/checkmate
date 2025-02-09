@@ -14,9 +14,9 @@ import {CirclePlus, ListRestart} from 'lucide-react'
 import React, {useEffect, useState} from 'react'
 import {API} from '~/routes/utilities/api'
 import {AddSectionDialogue} from './AddSectionDialogue'
+import {EditSectionDialogue} from './EditSectionDialogue'
 import RenderSections from './RenderSections'
 import {SectionInfoBox} from './SectionInfoBox'
-import {EditSectionDialogue} from './EditSectionDialogue'
 
 export const SectionList = () => {
   const [searchParams, setSearchParams] = useSearchParams([])
@@ -173,19 +173,17 @@ export const SectionList = () => {
             />
           ) : null}
         </h2>
-        {sectionFetcher?.data?.data && (
-          <RenderSections
-            addSubsectionClicked={addSubsectionClicked}
-            applySectionFilter={applySectionFilter}
-            level={0}
-            openSections={openSections}
-            sections={sectionsData}
-            selectedSections={selectedSections}
-            toggleSection={toggleSection}
-            sectionData={sectionFetcher?.data?.data}
-            editSubsectionClicked={editSubsectionClicked}
-          />
-        )}
+        <RenderSections
+          addSubsectionClicked={addSubsectionClicked}
+          applySectionFilter={applySectionFilter}
+          level={0}
+          openSections={openSections}
+          sections={sectionsData}
+          selectedSections={selectedSections}
+          toggleSection={toggleSection}
+          sectionData={sectionFetcher?.data?.data}
+          editSubsectionClicked={editSubsectionClicked}
+        />
         {!runId && (
           <button
             onClick={() => {

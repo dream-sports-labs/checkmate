@@ -109,7 +109,9 @@ export const EditSectionDialogue = (param: {
       }
       footerComponent={
         <DialogClose className="mt-4">
-          <Button onClick={editSectionButtonClicked}>Update Section</Button>
+          <Button asChild onClick={editSectionButtonClicked}>
+            Update Section
+          </Button>
         </DialogClose>
       }
       setState={param.setState}

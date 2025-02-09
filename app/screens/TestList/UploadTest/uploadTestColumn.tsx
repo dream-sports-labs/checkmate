@@ -1,6 +1,6 @@
 import {ColumnDef} from '@tanstack/react-table'
 import {Tooltip} from '@components/Tooltip/Tooltip'
-import {TestListingColumns} from '~/screens/constants'
+import {TestListingColumns} from '~/screens/TestList/UploadTest/constants'
 import {HeaderComponent, TitleRowComponent} from '../TestListRowColumns'
 
 export const UploadTestTableColumn: ColumnDef<any>[] = [

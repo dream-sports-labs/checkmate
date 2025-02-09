@@ -13,7 +13,7 @@ import {useToast} from '@ui/use-toast'
 import Papa from 'papaparse'
 import {ChangeEvent, useEffect, useState} from 'react'
 import {LARGE_PAGE_SIZE as PAGE_SIZE} from '~/routes/utilities/constants'
-import {ConstantStrings, MandatoryColumns} from '../../constants'
+import {ConstantStrings, MandatoryColumns} from './constants'
 
 import {useCustomNavigate} from '@hooks/useCustomNavigate'
 import {ORG_ID} from '~/routes/utilities/constants'
@@ -125,7 +125,7 @@ export default function UploadTests() {
     if (ids.length != 0 && ids.length != tests.length) {
       toast({
         variant: 'destructive',
-        description: `Some rows contain IDs and some does not`,
+        description: `Some rows contain Id and some does not`,
       })
       return
     }

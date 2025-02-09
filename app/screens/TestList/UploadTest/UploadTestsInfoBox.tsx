@@ -23,7 +23,7 @@ export const UploadTestsInfoBox = () => {
           </h6>
         </div>
         <ul className="ml-6 list-disc [&>li]:mt-2">
-          <li>ID, must me less then 30lac</li>
+          <li>Id</li>
           <li>Squad</li>
           <li>Steps</li>
           <li>Priority</li>

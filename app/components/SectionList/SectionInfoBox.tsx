@@ -11,7 +11,7 @@ export const SectionInfoBox = () => {
     {
       action: 'Selecting on a section',
       description:
-        'will replace the current filter with the selected section and its subsections.',
+        'will replace the current section filter with the selected section and its subsections.',
     },
     {
       action: 'Holding CMD (⌘) and selecting a section ',

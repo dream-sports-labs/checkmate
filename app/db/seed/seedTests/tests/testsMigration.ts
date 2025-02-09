@@ -53,7 +53,7 @@ Papa.parse(csvFileContent, {
       if (obj['Label']) {
         test['label'] = obj['Label']?.trim()
       }
-      if (obj['ID']) test['testId'] = Number(obj['ID'].match(/(\d+)/)[0])
+      if (obj['Id']) test['testId'] = Number(obj['Id'].match(/(\d+)/)[0])
       if (obj['Created By']) test['createdByName'] = obj['Created By']?.trim()
       test['title'] = obj['Title']?.trim()
       test['expectedResult'] = obj['Expected Result']?.trim()
