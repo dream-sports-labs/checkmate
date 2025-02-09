@@ -65,6 +65,7 @@ CREATE TABLE `runs` (
 );
 --> statement-breakpoint
 CREATE TABLE `testRunMap` (
+	`testRunMapId` int AUTO_INCREMENT NOT NULL,
 	`runId` int,
 	`testId` int,
 	`projectId` int NOT NULL,
@@ -74,10 +75,12 @@ CREATE TABLE `testRunMap` (
 	`updatedBy` int,
 	`createdOn` timestamp DEFAULT CURRENT_TIMESTAMP,
 	`updatedOn` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	`comment` varchar(200)
+	`comment` varchar(200),
+	CONSTRAINT `testRunMap_testRunMapId` PRIMARY KEY(`testRunMapId`)
 );
 --> statement-breakpoint
 CREATE TABLE `testRunsStatusHistory` (
+	`testRunsStatusHistoryId` int AUTO_INCREMENT NOT NULL,
 	`runId` int,
 	`testId` int,
 	`status` varchar(25) NOT NULL,
@@ -88,7 +91,8 @@ CREATE TABLE `testRunsStatusHistory` (
 	`totalTestCase` int DEFAULT 0,
 	`passedTestCase` int DEFAULT 0,
 	`failedTestCase` int DEFAULT 0,
-	`untestedTestCase` int DEFAULT 0
+	`untestedTestCase` int DEFAULT 0,
+	CONSTRAINT `testRunsStatusHistory_testRunsStatusHistoryId` PRIMARY KEY(`testRunsStatusHistoryId`)
 );
 --> statement-breakpoint
 CREATE TABLE `squads` (
@@ -141,15 +145,15 @@ CREATE TABLE `sections` (
 	`sectionId` int AUTO_INCREMENT NOT NULL,
 	`sectionName` varchar(250) NOT NULL,
 	`sectionDescription` text,
-	`sectionHierarchy` varchar(500),
-	`sectionDepth` int NOT NULL DEFAULT 0,
+	`parentId` int,
 	`editHistory` json DEFAULT ('[]'),
 	`projectId` int NOT NULL,
 	`createdBy` int,
 	`createdOn` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updatedOn` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	`updatedBy` int,
-	CONSTRAINT `sections_sectionId` PRIMARY KEY(`sectionId`)
+	CONSTRAINT `sections_sectionId` PRIMARY KEY(`sectionId`),
+	CONSTRAINT `sectionHierarchyUnique` UNIQUE(`parentId`,`sectionName`,`projectId`)
 );
 --> statement-breakpoint
 CREATE TABLE `testCoveredBy` (
@@ -261,6 +265,7 @@ ALTER TABLE `platform` ADD CONSTRAINT `platform_orgId_organisations_orgId_fk` FO
 ALTER TABLE `priority` ADD CONSTRAINT `priority_createdBy_users_userId_fk` FOREIGN KEY (`createdBy`) REFERENCES `users`(`userId`) ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `priority` ADD CONSTRAINT `priority_updatedBy_users_userId_fk` FOREIGN KEY (`updatedBy`) REFERENCES `users`(`userId`) ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `priority` ADD CONSTRAINT `priority_orgId_organisations_orgId_fk` FOREIGN KEY (`orgId`) REFERENCES `organisations`(`orgId`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `sections` ADD CONSTRAINT `sections_parentId_sections_sectionId_fk` FOREIGN KEY (`parentId`) REFERENCES `sections`(`sectionId`) ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `sections` ADD CONSTRAINT `sections_projectId_projects_projectId_fk` FOREIGN KEY (`projectId`) REFERENCES `projects`(`projectId`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `sections` ADD CONSTRAINT `sections_createdBy_users_userId_fk` FOREIGN KEY (`createdBy`) REFERENCES `users`(`userId`) ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `sections` ADD CONSTRAINT `sections_updatedBy_users_userId_fk` FOREIGN KEY (`updatedBy`) REFERENCES `users`(`userId`) ON DELETE set null ON UPDATE no action;--> statement-breakpoint
