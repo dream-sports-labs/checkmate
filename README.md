@@ -73,7 +73,7 @@ This Test Case Management Tool is designed to address the challenges faced by te
 
 ### 📖 API Documentation
 
-Postman collection of project APIs is currently on [discord](https://discord.com/channels/1317172052179943504/1329754684730380340), complete documentation is in progress.
+[Postman](https://www.postman.com/checkmate-2397/checkmate/collection/504lfpr/checkmate-api-endpoints-collection) collection of project APIs is currently available, complete documentation is in progress.
 
 ### ⚙️ TechStack Used:
 
