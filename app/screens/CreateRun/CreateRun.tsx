@@ -28,7 +28,7 @@ import {SubmitHandler, useForm} from 'react-hook-form'
 import {z} from 'zod'
 import {FILTER_TEST_CASES, INCLUDE_ALL_TEST_CASES} from '~/constants'
 import {API} from '~/routes/utilities/api'
-import {RunFilter} from '~/screens/CreateRun/RunFilter'
+import {RunFilter} from '~/screens/CreateRun/CreateRunFilter'
 
 const formSchema = z.object({
   runName: z

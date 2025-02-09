@@ -19,7 +19,7 @@ import {
   Priority,
   TestCoveredBy,
   Type,
-} from '~/screens/CreateRun/RunFilter'
+} from '~/screens/CreateRun/CreateRunFilter'
 import {Squad} from '~/screens/RunTestList/interfaces'
 import {
   OptionsInputComponent,

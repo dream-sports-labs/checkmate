@@ -1,16 +1,10 @@
 import {DataTable} from '@components/DataTable/DataTable'
-import {Loader} from '@components/Loader/Loader'
-import {
-  MultipleUnifiedFilterProps,
-  TestListFilter,
-} from '@components/MultipleUnifiedFilter/MultipleUnifiedFilter'
+import {TestListFilter} from '@components/MultipleUnifiedFilter/MultipleUnifiedFilter'
 import {SearchBar} from '@components/SearchBar/SearchBar'
-import {Lables, Platforms} from '~/screens/CreateRun/RunFilter'
 import {ToggleColumns} from '@components/ToggleColums'
 import {
   useFetcher,
   useLoaderData,
-  useNavigation,
   useParams,
   useSearchParams,
 } from '@remix-run/react'
@@ -25,8 +19,9 @@ import {cn} from '@ui/utils'
 import {useEffect, useState} from 'react'
 import {API} from '~/routes/utilities/api'
 import {ORG_ID} from '~/routes/utilities/constants'
-import {safeJsonParse} from '~/routes/utilities/utils'
+import {Lables, Platforms} from '~/screens/CreateRun/CreateRunFilter'
 import {Squad} from '../RunTestList/interfaces'
+import {isChecked} from '../RunTestList/utils'
 import {AddProperty, PropertyListFilter} from './AddPropertyDialog'
 import {DeleteTests} from './DeleteTests'
 import {TestListColumnConfig} from './TestColumnConfig'
@@ -37,7 +32,6 @@ import {
   FilterNames,
   PriorityData,
 } from './testTable.interface'
-import {isChecked} from '../RunTestList/utils'
 
 export default function TestList() {
   const resp: any = useLoaderData()
@@ -455,14 +449,6 @@ export default function TestList() {
     })
   }
 
-  let filterType: MultipleUnifiedFilterProps['filterType']
-  if (searchParams.has('filterType')) {
-    filterType =
-      (searchParams.get(
-        'filterType',
-      ) as MultipleUnifiedFilterProps['filterType']) ?? 'and'
-  }
-
   return (
     <div className="flex flex-grow flex-col h-full">
       <div className={cn('flex', 'gap-2', 'mb-4', 'flex-row')}>
@@ -483,7 +469,6 @@ export default function TestList() {
           filter={filter}
           setFilter={setFilter}
           onFilterApply={onFilterApply}
-          filterType={filterType}
         />
 
         <ToggleColumns table={table} containerClassName="ml-2" />

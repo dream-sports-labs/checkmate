@@ -31,7 +31,7 @@ export const SideDrawer = () => {
           style={{height: 32, width: 'auto'}}
         />
       </SheetTrigger>
-      <div className="flex mr-auto ml-4 text-3xl text-gray-900 tracking-wide font-times">
+      <div className="flex mr-auto ml-4 text-3xl text-gray-900 tracking-wide">
         {APP_NAME}
       </div>
       <SheetContent side="left" className="w-[100px] sm:w-[300px] pl-8 pt-12">

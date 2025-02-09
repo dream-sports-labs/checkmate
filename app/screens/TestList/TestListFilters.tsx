@@ -1,13 +1,14 @@
 import {
   MultipleUnifiedFilter,
+  MultipleUnifiedFilterProps,
   TestListFilter,
 } from '@components/MultipleUnifiedFilter/MultipleUnifiedFilter'
-import {Tooltip} from '@components/Tooltip/Tooltip'
-import {useSearchParams} from '@remix-run/react'
-import {Button} from '@ui/button'
-import {Separator} from '@ui/separator'
-import {FilterIconShuffle} from '../RunTestList/FilterIcon'
-import {cn} from '@ui/utils'
+import { Tooltip } from '@components/Tooltip/Tooltip'
+import { useSearchParams } from '@remix-run/react'
+import { Button } from '@ui/button'
+import { Separator } from '@ui/separator'
+import { cn } from '@ui/utils'
+import { FilterIconShuffle } from '../RunTestList/FilterIcon'
 
 interface ITestsFilters {
   filter: TestListFilter[]
@@ -16,7 +17,6 @@ interface ITestsFilters {
     selectedFilters: TestListFilter[],
     filterType?: string,
   ) => void
-  filterType?: 'and' | 'or'
   containerClassName?: string
 }
 
@@ -24,7 +24,6 @@ export const TestsFilters = ({
   filter,
   setFilter,
   onFilterApply,
-  filterType,
   containerClassName,
 }: ITestsFilters) => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -56,6 +55,14 @@ export const TestsFilters = ({
         }
       })
     })
+  }
+
+  let filterType: MultipleUnifiedFilterProps['filterType']
+  if (searchParams.has('filterType')) {
+    filterType =
+      (searchParams.get(
+        'filterType',
+      ) as MultipleUnifiedFilterProps['filterType']) ?? 'and'
   }
 
   return (
