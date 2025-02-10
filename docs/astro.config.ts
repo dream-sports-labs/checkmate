@@ -61,6 +61,7 @@ export default defineConfig({
               items: ["guides/runs/runs", "guides/runs/run-detail"],
             },
             "guides/user-settings",
+            "guides/api",
           ],
         },
       ],
