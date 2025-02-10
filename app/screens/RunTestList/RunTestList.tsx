@@ -459,7 +459,7 @@ export default function RunTestList() {
           )
         )}
       </div>
-      <div className={cn('flex flex-col gap-4 h-[calc(100%-172px)]')}>
+      <div className={cn('flex flex-col gap-4 h-[calc(100%-160px)]')}>
         <div className={'flex gap-2 h-12'}>
           <SearchBar
             handlechange={handleChange}
