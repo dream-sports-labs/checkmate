@@ -1,29 +1,12 @@
-import {jsonParseWithError} from '~/routes/utilities/utils'
 import {
   DisplaySection,
-  SectionData,
   SectionWithHierarchy,
 } from '@components/SectionList/interfaces'
 import {
   ICreateSectionResponse,
   IGetAllSectionsResponse,
 } from '@controllers/sections.controller'
-
-export const findSectionId = (
-  sectionName: string,
-  sortedData: SectionData[],
-  sectionDepth: number,
-  currentSectionHierarchy: string,
-) => {
-  return (
-    sortedData.find(
-      (section) =>
-        section.sectionName === sectionName &&
-        section.sectionDepth === sectionDepth &&
-        section.sectionHierarchy === currentSectionHierarchy,
-    )?.sectionId ?? -1
-  )
-}
+import {jsonParseWithError} from '~/routes/utilities/utils'
 
 const parentChildMap = new Map()
 
