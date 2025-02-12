@@ -4,6 +4,7 @@ import tailwind from "@astrojs/tailwind";
 import { defineConfig } from "astro/config";
 
 const SITE = "https://checkmate.dreamsportslabs.com";
+const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_TOKEN;
 
 export default defineConfig({
   site: SITE,
