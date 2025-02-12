@@ -57,6 +57,12 @@ app.get('/healthcheck', (_, res) => {
   res.sendStatus(200)
 })
 
+app.get('/metrics', (_, res) => {
+  console.log('Health check succeeded', Date.now())
+  res.statusCode = 200
+  res.sendStatus(200)
+})
+
 const port = parseInt(process.env.PORT || '', 10) || 3000
 
 httpServer.listen(port, async () => {
