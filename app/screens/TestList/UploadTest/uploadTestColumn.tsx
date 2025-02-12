@@ -10,7 +10,7 @@ export const UploadTestTableColumn: ColumnDef<any>[] = [
       <HeaderComponent heading={TestListingColumns.testId} position={'left'} />
     ),
     cell: ({row}) => {
-      return <div className="flex flex-grow text-left">{row.original?.ID}</div>
+      return <div className="flex flex-grow text-left">{row.original?.Id}</div>
     },
   },
   {
