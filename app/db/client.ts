@@ -8,6 +8,7 @@ const uri = process.env['DB_URL']
 
 export const client = mysql.createPool({
   supportBigNumbers: true,
+  database: 'checkmate',
   uri: uri,
   connectionLimit: 20,
   maxIdle: 1,
