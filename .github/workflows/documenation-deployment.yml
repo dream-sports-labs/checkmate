@@ -26,8 +26,6 @@ jobs:
         uses: withastro/action@v3
         with:
           path: docs
-        env:
-          GOOGLE_ANALYTICS_TOKEN: ${{ secrets.GOOGLE_ANALYTICS_TOKEN }}
 
   deploy:
     needs: build

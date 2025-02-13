@@ -8,12 +8,8 @@ const {
 } = Astro.props;
 
 const BASE_TITLE = "Checkmate";
-const DESCRIPTION = "Test Case Managemenet Application";
-
-const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_TOKEN;
-if (!googleAnalyticsId) {
-  console.log("❌ GA Token is missing!");
-}
+const DESCRIPTION =
+  "Test Case Managemenet Application";
 
 let title = data.title;
 
@@ -41,18 +37,5 @@ if (!id) {
   name="keywords"
   content="javascript, typescript, checkmate, tesct case, test case management,"
 />
-<!-- Google tag (gtag.js) -->
-<script
-  async
-  src=`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`
-></script>
-<script is:inline>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() {
-    dataLayer.push(arguments);
-  }
-  gtag("js", new Date());
 
-  gtag("config", "G-WQ2EJ3BEEV");
-</script>
 <slot />
