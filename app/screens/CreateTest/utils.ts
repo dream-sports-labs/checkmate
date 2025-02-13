@@ -1,3 +1,4 @@
+import {IDropdownMenuCheckboxes} from '@components/TestsFilter/DropdownMenuCheckboxes'
 import {Squad} from '../RunTestList/interfaces'
 
 export const isMandatory = (attribute: string): boolean => {
@@ -15,7 +16,7 @@ export const sectionListPlaceholder = ({
   sectionData,
   newProperty,
 }: {
-  sectionId: number
+  sectionId: number | null
   sectionData: {
     data: {sectionId: number; sectionName: string}[]
   }
@@ -58,4 +59,23 @@ export const squadListPlaceholder = ({
   }
 
   return 'None'
+}
+
+export const dropDownItemChecked = ({
+  placeholder,
+  item,
+  selectedItemId,
+}: {
+  placeholder: string
+  item: IDropdownMenuCheckboxes
+  selectedItemId?: number
+}): boolean => {
+  if (selectedItemId) {
+    if (selectedItemId === item.id) return true
+    return false
+  }
+
+  if (placeholder && placeholder.split(', ').includes(item.name)) return true
+
+  return false
 }

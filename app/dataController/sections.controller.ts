@@ -7,7 +7,7 @@ export interface IGetSectionIdByHierarcy {
 }
 
 export interface IGetAllSections {
-  projectId: number
+  projectId?: number
   runId?: number
 }
 
@@ -60,6 +60,7 @@ export interface IEditSection {
   sectionDescription?: string | null
   projectId?: number
   userId: number
+  parentId?: number | null
 }
 
 const SectionsController = {

@@ -7,6 +7,7 @@ import {
   IShortTextInputComponent,
   ITextInputComponent,
 } from './interface'
+import {cn} from '@ui/utils'
 
 export const TextInputComponent = ({
   labelName,
@@ -60,15 +61,18 @@ export const OptionsInputComponent = ({
   createNewPropertyClicked,
   createNewToolTipString,
   addingNewValue,
+  labelClassName,
+  selectedItemId,
 }: IOptionsInputComponent) => (
   <div className="flex flex-col space-y-2 focus-visible:ring-0 truncate">
     <InputLabels
       labelName={labelName}
       isMandatory={isMandatory}
-      className="focus-visible:ring-0"
+      className={cn('focus-visible:ring-0', labelClassName)}
     />
     <div>
       <OptionsDropdown
+        selectedItemId={selectedItemId}
         filterName={labelName}
         list={list}
         handleCheckboxChange={handleCheckboxChange}

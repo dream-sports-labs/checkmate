@@ -9,6 +9,11 @@ import {Input} from '@ui/input'
 import {Label} from '@ui/label'
 import {toast} from '@ui/use-toast'
 import {useEffect, useState} from 'react'
+import {OptionsInputComponent} from '~/screens/CreateTest/EditTestComponents'
+import {AddTestLabels} from '~/screens/CreateTest/interface'
+import {sectionListPlaceholder} from '~/screens/CreateTest/utils'
+import {getSectionHierarchy, removeSectionAndDescendants} from './utils'
+import {EditSectionsType} from '@api/editSection'
 
 export const EditSectionDialogue = (param: {
   state: boolean
@@ -29,6 +34,9 @@ export const EditSectionDialogue = (param: {
   const [sectionDescription, setSectionDescription] = useState<string>(
     getSelectedSection()?.sectionDescription ?? '',
   )
+  const [parentId, setParentId] = useState<number | null>(
+    getSelectedSection()?.parentId ?? null,
+  )
 
   const addSectionFetcher = useFetcher<any>()
 
@@ -36,23 +44,24 @@ export const EditSectionDialogue = (param: {
     const selectedSection = getSelectedSection()
     setSectionName(selectedSection?.sectionName ?? '')
     setSectionDescription(selectedSection?.sectionDescription ?? '')
+    setParentId(selectedSection?.parentId ?? null)
   }, [param.sectionId, param.sectionData])
 
   const editSectionButtonClicked = () => {
     param.setState(false)
-    addSectionFetcher.submit(
-      {
-        projectId: projectId,
-        sectionId: param.sectionId,
-        sectionName: sectionName,
-        sectionDescription: sectionDescription,
-      },
-      {
-        method: 'PUT',
-        action: `/${API.EditSection}`,
-        encType: 'application/json',
-      },
-    )
+    const data: EditSectionsType = {
+      projectId: projectId,
+      sectionId: param.sectionId,
+      sectionName,
+      sectionDescription,
+      parentId,
+    }
+
+    addSectionFetcher.submit(data, {
+      method: 'PUT',
+      action: `/${API.EditSection}`,
+      encType: 'application/json',
+    })
   }
 
   useEffect(() => {
@@ -105,13 +114,42 @@ export const EditSectionDialogue = (param: {
               }}
             />
           </div>
+          <OptionsInputComponent
+            selectedItemId={parentId ? parentId : undefined}
+            labelClassName="font-normal mt-2"
+            labelName={'Change Parent Section'}
+            placeholder={sectionListPlaceholder({
+              sectionId: parentId,
+              sectionData: {data: param.sectionData},
+            })}
+            key={AddTestLabels.Section}
+            list={
+              param.sectionData
+                ? removeSectionAndDescendants({
+                    sectionId: param.sectionId,
+                    sectionsData: param.sectionData,
+                  }).map((section) => {
+                    return {
+                      id: section.sectionId,
+                      property: section.sectionName,
+                      name: getSectionHierarchy({
+                        sectionId: section.sectionId,
+                        sectionsData: param.sectionData,
+                      }),
+                    }
+                  })
+                : []
+            }
+            handleCheckboxChange={(param) => {
+              setParentId(param.id)
+            }}
+            createNewToolTipString={`Select to create new section, use ' > ' for nested section`}
+          />
         </div>
       }
       footerComponent={
         <DialogClose className="mt-4">
-          <Button asChild onClick={editSectionButtonClicked}>
-            Update Section
-          </Button>
+          <Button onClick={editSectionButtonClicked}>Update Section</Button>
         </DialogClose>
       }
       setState={param.setState}

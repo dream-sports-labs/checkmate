@@ -12,6 +12,7 @@ import {
 } from '~/ui/dropdown-menu'
 import {cn} from '~/ui/utils'
 import {IOptionsDropdown} from './interface'
+import {dropDownItemChecked} from './utils'
 
 export const OptionsDropdown = ({
   filterName,
@@ -20,6 +21,7 @@ export const OptionsDropdown = ({
   placeholder,
   createNewPropertyClicked,
   createNewToolTipString,
+  selectedItemId,
 }: IOptionsDropdown) => {
   const [searchFilter, setSearchFilter] = useState<string>('')
   const [filteredOptions, setFilteredOptions] =
@@ -112,7 +114,11 @@ export const OptionsDropdown = ({
                 itemRefs.current[index] = el
               }}
               key={item.id}
-              checked={placeholder.split(', ').includes(item.name)}
+              checked={dropDownItemChecked({
+                placeholder,
+                item,
+                selectedItemId,
+              })}
               onClick={(e) => {
                 handleCheckboxChange({
                   filterName,

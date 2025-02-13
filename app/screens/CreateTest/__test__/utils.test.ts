@@ -1,9 +1,11 @@
 import {Squad} from '~/screens/RunTestList/interfaces'
 import {
+  dropDownItemChecked,
   isMandatory,
   sectionListPlaceholder,
   squadListPlaceholder,
 } from '../utils'
+import {IDropdownMenuCheckboxes} from '@components/TestsFilter/DropdownMenuCheckboxes'
 
 describe('isMandatory', () => {
   it('should return true for mandatory attributes', () => {
@@ -128,6 +130,59 @@ describe('squadListPlaceholder', () => {
   it('should return "None" when squadData is empty', () => {
     expect(squadListPlaceholder({squadId: 1, squadData: {data: []}})).toBe(
       'None',
+    )
+  })
+})
+
+describe('dropDownItemChecked', () => {
+  it('returns true when selectedItemId matches item.id', () => {
+    const item: IDropdownMenuCheckboxes = {name: 'Option 1', id: 1}
+    expect(
+      dropDownItemChecked({placeholder: '', item, selectedItemId: 1}),
+    ).toBe(true)
+  })
+
+  it('returns false when selectedItemId does not match item.id', () => {
+    const item: IDropdownMenuCheckboxes = {name: 'Option 1', id: 1}
+    expect(
+      dropDownItemChecked({placeholder: '', item, selectedItemId: 2}),
+    ).toBe(false)
+  })
+
+  it('returns true when placeholder contains item.name', () => {
+    const item: IDropdownMenuCheckboxes = {name: 'Option 1', id: 1}
+    expect(dropDownItemChecked({placeholder: 'Option 1, Option 2', item})).toBe(
+      true,
+    )
+  })
+
+  it('returns false when placeholder does not contain item.name', () => {
+    const item: IDropdownMenuCheckboxes = {name: 'Option 3', id: 1}
+    expect(dropDownItemChecked({placeholder: 'Option 1, Option 2', item})).toBe(
+      false,
+    )
+  })
+
+  it('returns false when both selectedItemId and placeholder do not match', () => {
+    const item: IDropdownMenuCheckboxes = {name: 'Option 3', id: 3}
+    expect(
+      dropDownItemChecked({
+        placeholder: 'Option 1, Option 2',
+        item,
+        selectedItemId: 2,
+      }),
+    ).toBe(false)
+  })
+
+  it('returns false when placeholder is empty and selectedItemId is undefined', () => {
+    const item: IDropdownMenuCheckboxes = {name: 'Option 1', id: 1}
+    expect(dropDownItemChecked({placeholder: '', item})).toBe(false)
+  })
+
+  it('returns false when placeholder is undefined and selectedItemId is undefined', () => {
+    const item: IDropdownMenuCheckboxes = {name: 'Option 1', id: 1}
+    expect(dropDownItemChecked({placeholder: undefined as any, item})).toBe(
+      false,
     )
   })
 })

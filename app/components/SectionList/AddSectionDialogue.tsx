@@ -72,7 +72,7 @@ export const AddSectionDialogue = (param: {
       headerComponent={
         <>
           <DialogHeader className="font-bold">
-            <DialogTitle>Add Section</DialogTitle>{' '}
+            <DialogTitle>Add Section</DialogTitle>
           </DialogHeader>
           <DialogDescription>
             {param.sectionHierarchy ? (
@@ -114,9 +114,7 @@ export const AddSectionDialogue = (param: {
       }
       footerComponent={
         <DialogClose className="mt-4">
-          <Button asChild onClick={addSectionButtonClicked}>
-            Add Section
-          </Button>
+          <Button onClick={addSectionButtonClicked}>Add Section</Button>
         </DialogClose>
       }
       setState={param.setState}
