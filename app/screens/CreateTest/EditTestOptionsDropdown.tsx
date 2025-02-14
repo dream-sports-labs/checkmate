@@ -22,6 +22,7 @@ export const OptionsDropdown = ({
   createNewPropertyClicked,
   createNewToolTipString,
   selectedItemId,
+  listClassName,
 }: IOptionsDropdown) => {
   const [searchFilter, setSearchFilter] = useState<string>('')
   const [filteredOptions, setFilteredOptions] =
@@ -107,7 +108,11 @@ export const OptionsDropdown = ({
             }
           />
         )}
-        <div className="max-h-[50vh] overflow-y-auto select-text">
+        <div
+          className={cn(
+            'max-h-[50vh] overflow-y-auto select-text',
+            listClassName,
+          )}>
           {filteredOptions.map((item, index) => (
             <DropdownMenuCheckboxItem
               ref={(el) => {
@@ -115,6 +120,7 @@ export const OptionsDropdown = ({
               }}
               key={item.id}
               checked={dropDownItemChecked({
+                filterName,
                 placeholder,
                 item,
                 selectedItemId,

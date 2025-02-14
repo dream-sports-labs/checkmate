@@ -63,6 +63,7 @@ export const OptionsInputComponent = ({
   addingNewValue,
   labelClassName,
   selectedItemId,
+  listClassName,
 }: IOptionsInputComponent) => (
   <div className="flex flex-col space-y-2 focus-visible:ring-0 truncate">
     <InputLabels
@@ -79,6 +80,7 @@ export const OptionsInputComponent = ({
         placeholder={placeholder}
         createNewPropertyClicked={createNewPropertyClicked}
         createNewToolTipString={createNewToolTipString}
+        listClassName={listClassName}
       />
       {addingNewValue && (
         <p className="text-xs max-w-80 text-green-500 mt-1 ml-2 text-wrap">

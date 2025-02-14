@@ -65,17 +65,26 @@ export const dropDownItemChecked = ({
   placeholder,
   item,
   selectedItemId,
+  filterName,
 }: {
   placeholder: string
   item: IDropdownMenuCheckboxes
   selectedItemId?: number
+  filterName: string
 }): boolean => {
-  if (selectedItemId) {
+  if (selectedItemId && filterName.includes('ection')) {
     if (selectedItemId === item.id) return true
     return false
   }
 
-  if (placeholder && placeholder.split(', ').includes(item.name)) return true
+  if (
+    placeholder &&
+    placeholder
+      .split(',')
+      ?.map((item) => item?.trim())
+      .includes(item.name)
+  )
+    return true
 
   return false
 }

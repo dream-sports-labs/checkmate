@@ -117,6 +117,7 @@ export const EditSectionDialogue = (param: {
           <OptionsInputComponent
             selectedItemId={parentId ? parentId : undefined}
             labelClassName="font-normal mt-2"
+            listClassName="max-h-[30vh]"
             labelName={'Change Parent Section'}
             placeholder={sectionListPlaceholder({
               sectionId: parentId,
@@ -126,6 +127,11 @@ export const EditSectionDialogue = (param: {
             list={
               param.sectionData
                 ? [
+                    {
+                      id: -1,
+                      property: 'None',
+                      name: 'None',
+                    },
                     ...(removeSectionAndDescendants({
                       sectionId: param.sectionId,
                       sectionsData: param.sectionData,
@@ -141,11 +147,6 @@ export const EditSectionDialogue = (param: {
                         }
                       })
                       ?.sort((a, b) => a.name.localeCompare(b.name)) ?? []),
-                    {
-                      id: -1,
-                      property: 'None',
-                      name: 'None',
-                    },
                   ]
                 : []
             }
