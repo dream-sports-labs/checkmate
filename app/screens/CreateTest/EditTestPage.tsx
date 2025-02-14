@@ -344,16 +344,22 @@ export default function EditTestPage({
             key={AddTestLabels.Section}
             list={
               sectionFetcher.data?.data
-                ? sectionFetcher.data?.data.map((section) => {
-                    return {
-                      id: section.sectionId,
-                      property: section.sectionName,
-                      name: getSectionHierarchy({
-                        sectionId: section.sectionId,
-                        sectionsData: sectionFetcher.data?.data,
+                ? sectionFetcher.data?.data
+                    ?.map((section) => {
+                      return {
+                        id: section.sectionId,
+                        property: section.sectionName,
+                        name: getSectionHierarchy({
+                          sectionId: section.sectionId,
+                          sectionsData: sectionFetcher.data?.data,
+                        }),
+                      }
+                    })
+                    ?.sort((a, b) =>
+                      a.name.localeCompare(b.name, undefined, {
+                        sensitivity: 'base',
                       }),
-                    }
-                  })
+                    )
                 : []
             }
             handleCheckboxChange={(param) => {

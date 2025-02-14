@@ -54,7 +54,7 @@ export const EditSectionDialogue = (param: {
       sectionId: param.sectionId,
       sectionName,
       sectionDescription,
-      parentId,
+      parentId: parentId === -1 ? null : parentId,
     }
 
     addSectionFetcher.submit(data, {
@@ -125,19 +125,28 @@ export const EditSectionDialogue = (param: {
             key={AddTestLabels.Section}
             list={
               param.sectionData
-                ? removeSectionAndDescendants({
-                    sectionId: param.sectionId,
-                    sectionsData: param.sectionData,
-                  }).map((section) => {
-                    return {
-                      id: section.sectionId,
-                      property: section.sectionName,
-                      name: getSectionHierarchy({
-                        sectionId: section.sectionId,
-                        sectionsData: param.sectionData,
-                      }),
-                    }
-                  })
+                ? [
+                    ...(removeSectionAndDescendants({
+                      sectionId: param.sectionId,
+                      sectionsData: param.sectionData,
+                    })
+                      ?.map((section) => {
+                        return {
+                          id: section.sectionId,
+                          property: section.sectionName,
+                          name: getSectionHierarchy({
+                            sectionId: section.sectionId,
+                            sectionsData: param.sectionData,
+                          }),
+                        }
+                      })
+                      ?.sort((a, b) => a.name.localeCompare(b.name)) ?? []),
+                    {
+                      id: -1,
+                      property: 'None',
+                      name: 'None',
+                    },
+                  ]
                 : []
             }
             handleCheckboxChange={(param) => {
