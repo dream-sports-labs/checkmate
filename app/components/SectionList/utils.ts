@@ -156,3 +156,28 @@ export const getSectionsWithParents = ({
 
   return Array.from(resultSections.values())
 }
+
+export const removeSectionAndDescendants = ({
+  sectionId,
+  sectionsData,
+}: {
+  sectionId: number
+  sectionsData: ICreateSectionResponse[] | undefined
+}): ICreateSectionResponse[] | undefined => {
+  const removeIds = new Set<number>()
+
+  if (!sectionsData) return sectionsData
+
+  const collectIds = (id: number): void => {
+    removeIds.add(id)
+    sectionsData.forEach((section) => {
+      if (section.parentId === id) {
+        collectIds(section.sectionId)
+      }
+    })
+  }
+
+  collectIds(sectionId)
+
+  return sectionsData.filter((section) => !removeIds.has(section.sectionId))
+}

@@ -7,6 +7,7 @@ import {
   getSectionHierarchy,
   buildSectionHierarchy,
   getSectionsWithParents,
+  removeSectionAndDescendants,
 } from '../utils'
 import {DisplaySection, SectionWithHierarchy} from '../interfaces'
 
@@ -38,7 +39,7 @@ describe('getSectionHierarchy', () => {
   it('should handle missing parent references gracefully', () => {
     const sectionsData = [
       {sectionId: 1, sectionName: 'Root', projectId: 1, parentId: null},
-      {sectionId: 2, sectionName: 'Child', projectId: 1, parentId: 10}, // ParentId does not exist
+      {sectionId: 2, sectionName: 'Child', projectId: 1, parentId: 10},
     ]
     expect(getSectionHierarchy({sectionId: 2, sectionsData})).toBe('Child')
   })
@@ -461,7 +462,7 @@ describe('buildSectionHierarchy', () => {
         sectionId: i,
         sectionName: `Section ${i}`,
         sectionDescription: null,
-        parentId: i > 1 ? i - 1 : null, // Make a long chain
+        parentId: i > 1 ? i - 1 : null,
         projectId: 1,
         createdBy: 1,
         updatedBy: 1,
@@ -595,7 +596,7 @@ describe('getSectionsWithParents', () => {
     ]
 
     const result = getSectionsWithParents({runSections, allSections})
-    expect(result).toEqual([]) // No section 999 in allSections
+    expect(result).toEqual([])
   })
 
   test('should handle cases where parentId is null', () => {
@@ -618,5 +619,109 @@ describe('getSectionsWithParents', () => {
         projectId: 1,
       },
     ])
+  })
+})
+
+describe('removeSectionAndDescendants', () => {
+  const sectionsData: ICreateSectionResponse[] = [
+    {sectionId: 1, sectionName: 'Tag Management', projectId: 1, parentId: null},
+    {
+      sectionId: 2,
+      sectionName: 'User Management',
+      projectId: 1,
+      parentId: null,
+    },
+    {sectionId: 3, sectionName: 'Posting', projectId: 1, parentId: 2},
+    {sectionId: 4, sectionName: 'Answer Submission', projectId: 1, parentId: 3},
+    {sectionId: 5, sectionName: 'Voting System', projectId: 1, parentId: null},
+    {sectionId: 6, sectionName: 'Voting System', projectId: 1, parentId: 5},
+    {
+      sectionId: 7,
+      sectionName: 'Account Management',
+      projectId: 1,
+      parentId: null,
+    },
+    {sectionId: 8, sectionName: 'User Profile', projectId: 1, parentId: 7},
+    {sectionId: 9, sectionName: 'Question Creation', projectId: 1, parentId: 3},
+    {
+      sectionId: 10,
+      sectionName: 'Comment System',
+      projectId: 1,
+      parentId: null,
+    },
+    {sectionId: 11, sectionName: 'Comment System', projectId: 1, parentId: 10},
+    {sectionId: 12, sectionName: 'Tag Management', projectId: 1, parentId: 1},
+    {
+      sectionId: 13,
+      sectionName: 'Search Functionality',
+      projectId: 1,
+      parentId: null,
+    },
+    {
+      sectionId: 14,
+      sectionName: 'Search Functionality',
+      projectId: 1,
+      parentId: 13,
+    },
+  ]
+
+  it('should remove a section with no children', () => {
+    const result = removeSectionAndDescendants({sectionId: 8, sectionsData})
+    if (!result) throw new Error('Expected result to be an array')
+    const resultIds = result.map((s) => s.sectionId)
+
+    expect(resultIds).not.toContain(8)
+    expect(result).toHaveLength(sectionsData.length - 1)
+  })
+
+  it('should remove a section with direct children', () => {
+    const result = removeSectionAndDescendants({sectionId: 1, sectionsData})
+    if (!result) throw new Error('Expected result to be an array')
+    const resultIds = result.map((s) => s.sectionId)
+
+    expect(resultIds).not.toContain(1)
+    expect(resultIds).not.toContain(12)
+    expect(result).toHaveLength(sectionsData.length - 2)
+  })
+
+  it('should remove a section with nested children', () => {
+    const result = removeSectionAndDescendants({sectionId: 2, sectionsData})
+    if (!result) throw new Error('Expected result to be an array')
+    const resultIds = result.map((s) => s.sectionId)
+
+    expect(resultIds).not.toContain(2)
+    expect(resultIds).not.toContain(3)
+    expect(resultIds).not.toContain(4)
+    expect(resultIds).not.toContain(9)
+    expect(result).toHaveLength(sectionsData.length - 4)
+  })
+
+  it('should remove all descendants for a deeply nested section', () => {
+    const result = removeSectionAndDescendants({sectionId: 3, sectionsData})
+    if (!result) throw new Error('Expected result to be an array')
+    const resultIds = result.map((s) => s.sectionId)
+
+    expect(resultIds).not.toContain(3)
+    expect(resultIds).not.toContain(4)
+    expect(resultIds).not.toContain(9)
+    expect(result).toHaveLength(sectionsData.length - 3)
+  })
+
+  it('should return the original array if the sectionId is not found', () => {
+    const result = removeSectionAndDescendants({sectionId: 999, sectionsData})
+    expect(result).toEqual(sectionsData)
+  })
+
+  it('should return an empty array if sectionsData is empty', () => {
+    const result = removeSectionAndDescendants({sectionId: 1, sectionsData: []})
+    expect(result).toEqual([])
+  })
+
+  it('should return undefined if sectionsData is undefined', () => {
+    const result = removeSectionAndDescendants({
+      sectionId: 1,
+      sectionsData: undefined,
+    })
+    expect(result).toBeUndefined()
   })
 })

@@ -14,11 +14,17 @@ import {runs, testRunMap} from '@schema/runs'
 const SectionsDao = {
   getAllSections: async ({projectId, runId}: IGetAllSections) => {
     try {
+      const whereClauses = []
+
+      if (projectId) {
+        whereClauses.push(eq(sections.projectId, projectId))
+      }
+
       if (!runId) {
         const data = await dbClient
           .select()
           .from(sections)
-          .where(eq(sections.projectId, projectId))
+          .where(and(...whereClauses))
 
         return data
       } else {
@@ -143,6 +149,42 @@ const SectionsDao = {
   },
   editSection: async (param: IEditSection) => {
     try {
+      if (param.parentId === null) {
+        if (!param.projectId) {
+          throw new Error('Project id is required when parentId is null')
+        }
+
+        const resp = await dbClient
+          .select()
+          .from(sections)
+          .where(
+            and(
+              eq(sections.sectionName, param.sectionName),
+              eq(sections.projectId, param.projectId),
+            ),
+          )
+
+        if (resp?.length > 0) {
+          if (resp.find((section) => section.parentId === null)) {
+            throw new Error('Entry already exists')
+          }
+        }
+      }
+
+      if (param.parentId !== undefined) {
+        const data = await dbClient
+          .update(sections)
+          .set({
+            sectionName: param.sectionName,
+            sectionDescription: param.sectionDescription,
+            updatedBy: param.userId,
+            parentId: param.parentId,
+          })
+          .where(eq(sections.sectionId, param.sectionId))
+
+        return data
+      }
+
       const data = await dbClient
         .update(sections)
         .set({

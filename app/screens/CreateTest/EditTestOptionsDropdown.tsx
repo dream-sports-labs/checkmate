@@ -12,6 +12,7 @@ import {
 } from '~/ui/dropdown-menu'
 import {cn} from '~/ui/utils'
 import {IOptionsDropdown} from './interface'
+import {dropDownItemChecked} from './utils'
 
 export const OptionsDropdown = ({
   filterName,
@@ -20,6 +21,8 @@ export const OptionsDropdown = ({
   placeholder,
   createNewPropertyClicked,
   createNewToolTipString,
+  selectedItemId,
+  listClassName,
 }: IOptionsDropdown) => {
   const [searchFilter, setSearchFilter] = useState<string>('')
   const [filteredOptions, setFilteredOptions] =
@@ -105,14 +108,23 @@ export const OptionsDropdown = ({
             }
           />
         )}
-        <div className="max-h-[50vh] overflow-y-auto select-text">
+        <div
+          className={cn(
+            'max-h-[50vh] overflow-y-auto select-text',
+            listClassName,
+          )}>
           {filteredOptions.map((item, index) => (
             <DropdownMenuCheckboxItem
               ref={(el) => {
                 itemRefs.current[index] = el
               }}
               key={item.id}
-              checked={placeholder.split(', ').includes(item.name)}
+              checked={dropDownItemChecked({
+                filterName,
+                placeholder,
+                item,
+                selectedItemId,
+              })}
               onClick={(e) => {
                 handleCheckboxChange({
                   filterName,

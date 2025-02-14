@@ -34,6 +34,9 @@ export interface IOptionsInputComponent {
   createNewPropertyClicked?: (name: string) => void
   createNewToolTipString?: string
   addingNewValue?: string
+  labelClassName?: string
+  listClassName?: string
+  selectedItemId?: number
 }
 
 export interface IShortTextInputComponent {
@@ -66,6 +69,8 @@ export interface IOptionsDropdown {
   placeholder: string
   createNewPropertyClicked?: (name: string) => void
   createNewToolTipString?: string
+  selectedItemId?: number
+  listClassName?: string
 }
 
 export interface TestFormData {

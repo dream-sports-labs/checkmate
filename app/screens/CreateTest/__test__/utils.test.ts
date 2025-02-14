@@ -1,9 +1,11 @@
 import {Squad} from '~/screens/RunTestList/interfaces'
 import {
+  dropDownItemChecked,
   isMandatory,
   sectionListPlaceholder,
   squadListPlaceholder,
 } from '../utils'
+import {IDropdownMenuCheckboxes} from '@components/TestsFilter/DropdownMenuCheckboxes'
 
 describe('isMandatory', () => {
   it('should return true for mandatory attributes', () => {
@@ -129,5 +131,91 @@ describe('squadListPlaceholder', () => {
     expect(squadListPlaceholder({squadId: 1, squadData: {data: []}})).toBe(
       'None',
     )
+  })
+})
+
+describe('dropDownItemChecked', () => {
+  const sectionFilter = 'Section' // contains "ection", so selectedItemId logic is used
+  const otherFilter = 'Other' // does not trigger selectedItemId logic
+
+  it('returns true when selectedItemId matches item.id and filterName contains "ection"', () => {
+    const item: IDropdownMenuCheckboxes = {name: 'Option 1', id: 1}
+    expect(
+      dropDownItemChecked({
+        placeholder: '',
+        item,
+        selectedItemId: 1,
+        filterName: sectionFilter,
+      }),
+    ).toBe(true)
+  })
+
+  it('returns false when selectedItemId does not match item.id and filterName contains "ection"', () => {
+    const item: IDropdownMenuCheckboxes = {name: 'Option 1', id: 1}
+    expect(
+      dropDownItemChecked({
+        placeholder: '',
+        item,
+        selectedItemId: 2,
+        filterName: sectionFilter,
+      }),
+    ).toBe(false)
+  })
+
+  it('ignores selectedItemId when filterName does not contain "ection" and returns true if placeholder contains item.name', () => {
+    const item: IDropdownMenuCheckboxes = {name: 'Option 1', id: 1}
+    expect(
+      dropDownItemChecked({
+        placeholder: 'Option 1, Option 2',
+        item,
+        selectedItemId: 2, // even if mismatched, it should ignore this because filterName doesn't contain "ection"
+        filterName: otherFilter,
+      }),
+    ).toBe(true)
+  })
+
+  it('returns false when filterName does not contain "ection" and placeholder does not contain item.name', () => {
+    const item: IDropdownMenuCheckboxes = {name: 'Option 3', id: 1}
+    expect(
+      dropDownItemChecked({
+        placeholder: 'Option 1, Option 2',
+        item,
+        filterName: otherFilter,
+      }),
+    ).toBe(false)
+  })
+
+  it('returns false when both selectedItemId (with filterName containing "ection") and placeholder do not match', () => {
+    const item: IDropdownMenuCheckboxes = {name: 'Option 3', id: 3}
+    expect(
+      dropDownItemChecked({
+        placeholder: 'Option 1, Option 2',
+        item,
+        selectedItemId: 2,
+        filterName: sectionFilter,
+      }),
+    ).toBe(false)
+  })
+
+  it('returns false when placeholder is empty and selectedItemId is undefined (filterName without "ection")', () => {
+    const item: IDropdownMenuCheckboxes = {name: 'Option 1', id: 1}
+    expect(
+      dropDownItemChecked({
+        placeholder: '',
+        item,
+        filterName: otherFilter,
+      }),
+    ).toBe(false)
+  })
+
+  it('returns false when placeholder is undefined and selectedItemId is undefined', () => {
+    const item: IDropdownMenuCheckboxes = {name: 'Option 1', id: 1}
+    expect(
+      dropDownItemChecked({
+        placeholder: undefined as any,
+        item,
+        filterName: otherFilter,
+      }),
+    ).toBe(false)
   })
 })
