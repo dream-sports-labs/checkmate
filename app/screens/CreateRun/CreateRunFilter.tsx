@@ -42,7 +42,7 @@ export interface TestCoveredBy {
   testCoveredById: number
 }
 
-export const RunFilter = () => {
+export const CreateRunFilter = () => {
   const pathParams = useParams()
   const projectId = Number(pathParams?.projectId)
   const orgId = ORG_ID
