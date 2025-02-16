@@ -153,7 +153,7 @@ const RenderSections = memo(
                     />
                   </div>
                   {!runId && (
-                    <div className="flex flex-row items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 absolute top-1/2 left-full transform -translate-y-1/2 ml-2">
+                    <div className="flex flex-row items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 absolute top-1/2 left-full transform -translate-y-1/2 ml-2 pb-0.5">
                       <Tooltip
                         anchor={
                           <CirclePlus
