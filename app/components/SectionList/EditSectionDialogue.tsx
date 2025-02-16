@@ -84,6 +84,8 @@ export const EditSectionDialogue = (param: {
 
   return (
     <StateDialog
+      setState={param.setState}
+      state={param.state}
       variant="edit"
       headerComponent={
         <DialogHeader className="font-bold">
@@ -162,8 +164,6 @@ export const EditSectionDialogue = (param: {
           <Button onClick={editSectionButtonClicked}>Update Section</Button>
         </DialogClose>
       }
-      setState={param.setState}
-      state={param.state}
     />
   )
 }
