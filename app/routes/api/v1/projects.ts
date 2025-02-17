@@ -2,7 +2,6 @@ import {LoaderFunctionArgs} from '@remix-run/node'
 import {ErrorCause} from '~/constants'
 import ProjectsController from '~/dataController/projects.controller'
 import {getUserAndCheckAccess} from '~/routes/utilities/checkForUserAndAccess'
-import {logger, LogType} from '~/utils/logger'
 import {
   errorResponseHandler,
   responseHandler,
