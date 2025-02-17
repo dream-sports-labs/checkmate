@@ -9,7 +9,6 @@ import {
   DropdownMenuTrigger,
 } from '~/ui/dropdown-menu'
 import {TestListFilter} from './MultipleUnifiedFilter'
-import './filter.css'
 
 interface IFilterView {
   filter: TestListFilter

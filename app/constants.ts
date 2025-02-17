@@ -25,3 +25,6 @@ export const ADDING_SECTION_AT_ROOT = 'Adding Section At Root'
 export const RUN_IS_LOCKED = 'Run is not active'
 
 export const DUP_ENTRY = 'Entry Already Exists'
+
+export const CHILD_SECTION =
+  "Invalid parentId, section cannot be subsection of itself or of it's child"

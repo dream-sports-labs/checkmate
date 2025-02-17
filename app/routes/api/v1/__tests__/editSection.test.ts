@@ -1,4 +1,5 @@
 import SectionsController from '@controllers/sections.controller'
+import {CHILD_SECTION} from '~/constants'
 import {action} from '~/routes/api/v1/editSection'
 import {API} from '~/routes/utilities/api'
 import {getUserAndCheckAccess} from '~/routes/utilities/checkForUserAndAccess'
@@ -197,8 +198,7 @@ describe('Edit Section - Action Function', () => {
     // the valid parent sections will NOT include section 3.
     expect(SectionsController.getAllSections).toHaveBeenCalledWith(requestData)
     expect(responseHandler).toHaveBeenCalledWith({
-      error:
-        'Invalid parentId, section cannot be parent of itself or subsection of child',
+      error: CHILD_SECTION,
       status: 400,
     })
   })

@@ -9,6 +9,7 @@ import {
 import {API} from '../../utilities/api'
 import {getRequestParams} from '../../utilities/utils'
 import {removeSectionAndDescendants} from '@components/SectionList/utils'
+import {CHILD_SECTION} from '~/constants'
 
 const EditSectionSchema = z.object({
   sectionId: z.number().gt(0),
@@ -50,8 +51,7 @@ export const action = async ({request}: ActionFunctionArgs) => {
         !validParentSections.find((s) => s.sectionId === data.parentId)
       ) {
         return responseHandler({
-          error:
-            'Invalid parentId, section cannot be parent of itself or subsection of child',
+          error: CHILD_SECTION,
           status: 400,
         })
       }
