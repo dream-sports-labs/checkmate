@@ -1,5 +1,5 @@
 import {AddSectionsType} from '@api/addSection'
-import {StateDialog} from '@components/Dialog/StateDialogue'
+import {StateDialog} from '@components/Dialog/StateDialog'
 import {Loader} from '@components/Loader/Loader'
 import {useFetcher, useParams} from '@remix-run/react'
 import {API} from '@route/utils/api'
@@ -16,7 +16,7 @@ import {toast} from '@ui/use-toast'
 import {useEffect, useState} from 'react'
 import {ADDING_SECTION_AT_ROOT} from '~/constants'
 
-export const AddSectionDialogue = (param: {
+export const AddSectionDialog = (param: {
   sectionHierarchy: null | string
   state: boolean
   setState: React.Dispatch<React.SetStateAction<boolean>>

@@ -18,9 +18,9 @@ import {
   LockIcon,
 } from 'lucide-react'
 import {ReactElement, useEffect, useMemo, useRef, useState} from 'react'
-import {LockRunDialogue} from './LockRunDialog'
-import {RemoveTestsDialogue} from './RemoveTestsDialog'
-import {ResetRunsDialogue} from './ResetRunDialogue'
+import {LockRunDialog} from './LockRunDialog'
+import {RemoveTestsDialog} from './RemoveTestsDialog'
+import {ResetRunsDialog} from './ResetRunDialog'
 import React from 'react'
 import {toast} from '@ui/use-toast'
 import {downloadReport} from './utils'
@@ -74,7 +74,7 @@ interface IRunActions {
 export const RunActions = React.memo(({table, runData}: IRunActions) => {
   const [resetRunDialog, setResetRunDialog] = useState<boolean>(false)
   const [lockRunDialog, setLockRunDialog] = useState<boolean>(false)
-  const [removeTestDialogue, setRemoveTestDialogue] = useState<boolean>(false)
+  const [removeTestDialog, setRemoveTestDialog] = useState<boolean>(false)
   const params = useParams()
   const projectId = +(params['projectId'] ?? 0)
   const navigate = useCustomNavigate()
@@ -101,7 +101,7 @@ export const RunActions = React.memo(({table, runData}: IRunActions) => {
     setActionDD(false)
     if (action === ACTIONS.LOCK) setLockRunDialog(true)
     else if (action === ACTIONS.REMOVE_TEST) {
-      setRemoveTestDialogue(true)
+      setRemoveTestDialog(true)
     } else if (action === ACTIONS.EDIT)
       navigate(`/project/${projectId}/editRun/${runData?.runId ?? 0}`)
     else if (action === ACTIONS.RESET_RUN) {
@@ -145,21 +145,21 @@ export const RunActions = React.memo(({table, runData}: IRunActions) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">{actionItemView}</DropdownMenuContent>
       </DropdownMenu>
-      <ResetRunsDialogue
+      <ResetRunsDialog
         state={resetRunDialog}
         setState={setResetRunDialog}
         runId={runData?.runId ?? 0}
         setResponse={setApiResponse}
       />
-      <LockRunDialogue
+      <LockRunDialog
         state={lockRunDialog}
         setState={setLockRunDialog}
         runId={runData?.runId ?? 0}
         setResponse={setApiResponse}
       />
-      <RemoveTestsDialogue
-        state={removeTestDialogue}
-        setState={setRemoveTestDialogue}
+      <RemoveTestsDialog
+        state={removeTestDialog}
+        setState={setRemoveTestDialog}
         runData={runData}
         table={table}
         setResponse={setApiResponse}

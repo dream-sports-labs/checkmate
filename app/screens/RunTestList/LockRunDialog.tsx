@@ -1,4 +1,4 @@
-import {StateDialog} from '@components/Dialog/StateDialogue'
+import {StateDialog} from '@components/Dialog/StateDialog'
 import {Loader} from '@components/Loader/Loader'
 import {useFetcher, useParams} from '@remix-run/react'
 import {API} from '@route/utils/api'
@@ -12,7 +12,7 @@ import {
 import {useEffect} from 'react'
 import {LOCK_RUN} from '~/constants'
 
-export const LockRunDialogue = (param: {
+export const LockRunDialog = (param: {
   runId: number
   state: boolean
   setState: React.Dispatch<React.SetStateAction<boolean>>

@@ -1,4 +1,4 @@
-import {StateDialog} from '@components/Dialog/StateDialogue'
+import {StateDialog} from '@components/Dialog/StateDialog'
 import {Loader} from '@components/Loader/Loader'
 import {ICreateSectionResponse} from '@controllers/sections.controller'
 import {useFetcher, useParams} from '@remix-run/react'
@@ -15,7 +15,7 @@ import {sectionListPlaceholder} from '~/screens/CreateTest/utils'
 import {getSectionHierarchy, removeSectionAndDescendants} from './utils'
 import {EditSectionsType} from '@api/editSection'
 
-export const EditSectionDialogue = (param: {
+export const EditSectionDialog = (param: {
   state: boolean
   setState: React.Dispatch<React.SetStateAction<boolean>>
   sectionId: number

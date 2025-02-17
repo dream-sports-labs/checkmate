@@ -1,27 +1,25 @@
-import {CustomDialog} from '@components/Dialog/Dialog'
+import {StateDialog} from '@components/Dialog/StateDialog'
 import {InputsSpacing} from '@components/Forms/InputsSpacing'
 import {DialogDescription, DialogTitle} from '@radix-ui/react-dialog'
 import {Button} from '@ui/button'
 import {DialogClose} from '@ui/dialog'
 import {Input} from '@ui/input'
-import {SetStateAction, useState} from 'react'
+import {useState} from 'react'
 import {InputLabels} from './InputLabels'
-import {StateDialog} from '@components/Dialog/StateDialogue'
-import {s} from 'node_modules/vite/dist/node/types.d-aGj9QkWt'
 
-interface AddSquadsLabelsDialogueProps {
+interface AddSquadsLabelsDialogProps {
   heading: string
   handleSaveChanges: (value: string, description?: string) => void
   state: boolean
   setState: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const AddSquadsLabelsDialogue = ({
+export const AddSquadsLabelsDialog = ({
   heading,
   handleSaveChanges,
   state,
   setState,
-}: AddSquadsLabelsDialogueProps) => {
+}: AddSquadsLabelsDialogProps) => {
   const [value, setValue] = useState<string>('')
   const [description, setDescription] = useState<string>('')
 

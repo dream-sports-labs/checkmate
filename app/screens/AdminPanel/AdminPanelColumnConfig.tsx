@@ -1,7 +1,7 @@
 import {GetAllUsersResponse} from '@api/getAllUser'
 import {ColumnDef} from '@tanstack/react-table'
 import {HeaderComponent} from '../TestList/TestListRowColumns'
-import {UpdateUserRoleDialog} from './UserRoleDialogue'
+import {UpdateUserRoleDialog} from './UserRoleDialog'
 
 export const AdminPanelColumnConfig: ColumnDef<GetAllUsersResponse>[] = [
   {

@@ -1,4 +1,4 @@
-import {StateDialog} from '@components/Dialog/StateDialogue'
+import {StateDialog} from '@components/Dialog/StateDialog'
 import {Loader} from '@components/Loader/Loader'
 import {useFetcher, useParams} from '@remix-run/react'
 import {API} from '@route/utils/api'
@@ -12,7 +12,7 @@ import {
 import {useEffect} from 'react'
 import {RESET_RUN} from '~/constants'
 
-export const ResetRunsDialogue = (param: {
+export const ResetRunsDialog = (param: {
   state: boolean
   runId: number
   setState: React.Dispatch<React.SetStateAction<boolean>>

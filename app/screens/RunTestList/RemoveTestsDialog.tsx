@@ -1,6 +1,6 @@
 import {RunDetails} from '@api/runData'
 import {Tests} from '@api/runTestsList'
-import {StateDialog} from '@components/Dialog/StateDialogue'
+import {StateDialog} from '@components/Dialog/StateDialog'
 import {Loader} from '@components/Loader/Loader'
 import {useFetcher, useParams} from '@remix-run/react'
 import {API} from '@route/utils/api'
@@ -15,7 +15,7 @@ import {
 import {useEffect} from 'react'
 import {REMOVE_TEST} from '~/constants'
 
-export const RemoveTestsDialogue = (param: {
+export const RemoveTestsDialog = (param: {
   runData: null | RunDetails
   state: boolean
   setState: React.Dispatch<React.SetStateAction<boolean>>

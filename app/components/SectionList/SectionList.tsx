@@ -13,16 +13,16 @@ import {useFetcher, useParams, useSearchParams} from '@remix-run/react'
 import {CirclePlus, ListRestart} from 'lucide-react'
 import React, {useEffect, useState} from 'react'
 import {API} from '~/routes/utilities/api'
-import {AddSectionDialogue} from './AddSectionDialogue'
-import {EditSectionDialogue} from './EditSectionDialogue'
+import {AddSectionDialog} from './AddSectionDialog'
+import {EditSectionDialog} from './EditSectionDialog'
 import RenderSections from './RenderSections'
 import {SectionInfoBox} from './SectionInfoBox'
 
 export const SectionList = () => {
   const [searchParams, setSearchParams] = useSearchParams([])
   const [sectionsData, setSectionsData] = useState<DisplaySection[]>([])
-  const [addSectionDialogue, setAddSectionDialogue] = useState<boolean>(false)
-  const [editSectionDialogue, setEditSectionDialogue] = useState<boolean>(false)
+  const [addSectionDialog, setAddSectionDialog] = useState<boolean>(false)
+  const [editSectionDialog, setEditSectionDialog] = useState<boolean>(false)
 
   const [sectionId, setSectionId] = useState<number | null>(null)
   const sectionFetcher = useFetcher<{
@@ -142,12 +142,12 @@ export const SectionList = () => {
 
   const addSubsectionClicked = (sectionId: number | null) => {
     setSectionId(sectionId)
-    setAddSectionDialogue(true)
+    setAddSectionDialog(true)
   }
 
   const editSubsectionClicked = (sectionId: number) => {
     setSectionId(sectionId)
-    setEditSectionDialogue(true)
+    setEditSectionDialog(true)
   }
 
   const reloadSections = () => {
@@ -195,20 +195,20 @@ export const SectionList = () => {
           </button>
         )}
       </div>
-      <AddSectionDialogue
+      <AddSectionDialog
         sectionHierarchy={getSectionHierarchy({
           sectionId: sectionId ? sectionId : 0,
           sectionsData: sectionFetcher?.data?.data,
         })}
-        state={addSectionDialogue}
-        setState={setAddSectionDialogue}
+        state={addSectionDialog}
+        setState={setAddSectionDialog}
         reloadSections={reloadSections}
         parentId={sectionId}
       />
       {sectionId && sectionFetcher?.data?.data && (
-        <EditSectionDialogue
-          state={editSectionDialogue}
-          setState={setEditSectionDialogue}
+        <EditSectionDialog
+          state={editSectionDialog}
+          setState={setEditSectionDialog}
           sectionId={sectionId}
           sectionData={sectionFetcher?.data?.data}
           reloadSections={reloadSections}

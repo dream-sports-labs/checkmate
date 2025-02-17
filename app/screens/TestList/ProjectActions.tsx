@@ -16,7 +16,7 @@ import {Loader} from '~/components/Loader/Loader'
 import {API} from '~/routes/utilities/api'
 import {safeJsonParse} from '~/routes/utilities/utils'
 import {cn} from '~/ui/utils'
-import {AddSquadsLabelsDialogue} from './AddSquadsLabelsDialogue'
+import {AddSquadsLabelsDialog} from './AddSquadsLabelsDialog'
 
 enum Actions {
   AddTest = 'Test',
@@ -54,9 +54,9 @@ export const ProjectActions = () => {
   const [searchParams, _] = useSearchParams()
   const createRun = useFetcher<any>()
   const [actionDD, setActionDD] = useState<boolean>(false)
-  const [addSquadDialogue, setAddSquadDialogue] = useState<boolean>(false)
-  const [addLabelDialogue, setAddLabelDialogue] = useState<boolean>(false)
-  const [addRunDialogue, setAddRunDialogue] = useState<boolean>(false)
+  const [addSquadDialog, setAddSquadDialog] = useState<boolean>(false)
+  const [addLabelDialog, setAddLabelDialog] = useState<boolean>(false)
+  const [addRunDialog, setAddRunDialog] = useState<boolean>(false)
 
   useEffect(() => {
     if (saveChanges.data?.error === null) {
@@ -107,9 +107,9 @@ export const ProjectActions = () => {
   ) => {
     setActionDD(false)
 
-    if (action === Actions.AddLabel) setAddLabelDialogue(true)
-    else if (action === Actions.AddSquad) setAddSquadDialogue(true)
-    else if (action === Actions.CreateRun) setAddRunDialogue(true)
+    if (action === Actions.AddLabel) setAddLabelDialog(true)
+    else if (action === Actions.AddSquad) setAddSquadDialog(true)
+    else if (action === Actions.CreateRun) setAddRunDialog(true)
     else if (action === Actions.AddTest)
       navigate(`/project/${projectId}/tests/createTest`, {}, e)
   }
@@ -187,23 +187,23 @@ export const ProjectActions = () => {
           ))}
         </DropdownMenuContent>
       </DropdownMenu>
-      <AddSquadsLabelsDialogue
+      <AddSquadsLabelsDialog
         heading={Actions.AddLabel}
         handleSaveChanges={handleSaveChangesLabels}
-        state={addLabelDialogue}
-        setState={setAddLabelDialogue}
+        state={addLabelDialog}
+        setState={setAddLabelDialog}
       />
-      <AddSquadsLabelsDialogue
+      <AddSquadsLabelsDialog
         heading={Actions.AddSquad}
         handleSaveChanges={handleSaveChangesSquads}
-        state={addSquadDialogue}
-        setState={setAddSquadDialogue}
+        state={addSquadDialog}
+        setState={setAddSquadDialog}
       />
-      <AddSquadsLabelsDialogue
+      <AddSquadsLabelsDialog
         heading={Actions.CreateRun}
         handleSaveChanges={handleSaveChangesRuns}
-        state={addRunDialogue}
-        setState={setAddRunDialogue}
+        state={addRunDialog}
+        setState={setAddRunDialog}
       />
       {createRun.state !== 'idle' && <Loader />}
     </div>
