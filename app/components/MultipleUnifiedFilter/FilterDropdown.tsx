@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '~/ui/dropdown-menu'
 import {TestListFilter} from './MultipleUnifiedFilter'
+import './filter.css'
 
 interface IFilterView {
   filter: TestListFilter
@@ -19,10 +20,7 @@ interface IFilterView {
   }) => void
 }
 
-export const DropDownFilterView = ({
-  filter,
-  handleCheckboxChange,
-}: IFilterView) => {
+export const FilterDropdown = ({filter, handleCheckboxChange}: IFilterView) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const numberOfSelected = filter.filterOptions.reduce((count, item) => {
     return item.checked ? count + 1 : count

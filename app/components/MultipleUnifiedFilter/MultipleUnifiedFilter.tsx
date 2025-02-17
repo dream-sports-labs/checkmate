@@ -1,6 +1,6 @@
 import {CustomDialog} from '@components/Dialog/Dialog'
 import {PopoverClose} from '@radix-ui/react-popover'
-import {DialogClose} from '@ui/dialog'
+import {DialogClose, DialogTitle} from '@ui/dialog'
 import {RotateCcw} from 'lucide-react'
 import {useEffect, useState} from 'react'
 import {
@@ -15,7 +15,7 @@ import {Label} from '~/ui/label'
 import {Popover, PopoverContent, PopoverTrigger} from '~/ui/popover'
 import {RadioGroup, RadioGroupItem} from '~/ui/radio-group'
 import {cn} from '~/ui/utils'
-import {DropDownFilterView} from './Filters'
+import {FilterDropdown} from './FilterDropdown'
 
 interface FilterOption {
   id?: number
@@ -106,14 +106,11 @@ export const MultipleUnifiedFilter = ({
   const ContentCompenent = () => {
     return (
       <>
-        {variant === 'dialog' && (
-          <div className="text-lg font-semibold mb-2">Select Filters</div>
-        )}
         <div className={cn('flex', 'flex-wrap', 'justify-between pr-8')}>
           {selectedFilters.map((filter, index) => {
             return (
               <div key={index} className="flex flex-row">
-                <DropDownFilterView
+                <FilterDropdown
                   key={filter.filterName}
                   filter={filter}
                   handleCheckboxChange={handleCheckboxChange}
@@ -122,7 +119,7 @@ export const MultipleUnifiedFilter = ({
                   <RotateCcw
                     color="#ff3c00"
                     className={'self-center cursor-pointer -ml-1'}
-                    size={16}
+                    size={15}
                     strokeWidth={2}
                     onClick={() => resetFilter(filter.filterName)}
                   />
@@ -164,7 +161,7 @@ export const MultipleUnifiedFilter = ({
       </PopoverTrigger>
       <PopoverContent className="w-80">
         <div className={cn('flex', 'flex-col')}>
-          {ContentCompenent()}
+          <ContentCompenent />
           <PopoverClose className={'flex w-full'}>
             <Button
               className={
@@ -184,7 +181,10 @@ export const MultipleUnifiedFilter = ({
   ) : (
     <CustomDialog
       anchorComponent={<Button className="px-4">Apply Filter</Button>}
-      contentComponent={ContentCompenent()}
+      headerComponent={
+        <DialogTitle className="mb-2">Select Filters</DialogTitle>
+      }
+      contentComponent={<ContentCompenent />}
       footerComponent={
         <div className="flex flex-col w-full">
           <DialogClose>
