@@ -29,7 +29,7 @@ export const SelectTests = ({form}: ISelectTests) => {
             <RadioGroup
               onValueChange={field.onChange}
               defaultValue={'all'}
-              className={cn('flex ', 'flex-col', 'space-y-1')}>
+              className={cn('flex ', 'flex-col', 'gap-2', 'mt-2')}>
               <FormItem
                 className={cn(
                   'flex ',

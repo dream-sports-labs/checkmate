@@ -3,12 +3,12 @@ import {
   MultipleUnifiedFilterProps,
   TestListFilter,
 } from '@components/MultipleUnifiedFilter/MultipleUnifiedFilter'
-import { Tooltip } from '@components/Tooltip/Tooltip'
-import { useSearchParams } from '@remix-run/react'
-import { Button } from '@ui/button'
-import { Separator } from '@ui/separator'
-import { cn } from '@ui/utils'
-import { FilterIconShuffle } from '../RunTestList/FilterIcon'
+import {Tooltip} from '@components/Tooltip/Tooltip'
+import {useSearchParams} from '@remix-run/react'
+import {Button} from '@ui/button'
+import {Separator} from '@ui/separator'
+import {cn} from '@ui/utils'
+import {FilterIconShuffle} from '../RunTestList/FilterIcon'
 
 interface ITestsFilters {
   filter: TestListFilter[]
