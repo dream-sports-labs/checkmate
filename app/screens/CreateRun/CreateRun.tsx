@@ -18,7 +18,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@ui/form'
-import {RadioGroup, RadioGroupItem} from '@ui/radio-group'
 import {Skeleton} from '@ui/skeleton'
 import {Textarea} from '@ui/textarea'
 import {useToast} from '@ui/use-toast'
@@ -26,9 +25,8 @@ import {cn} from '@ui/utils'
 import {useEffect, useState} from 'react'
 import {SubmitHandler, useForm} from 'react-hook-form'
 import {z} from 'zod'
-import {FILTER_TEST_CASES, INCLUDE_ALL_TEST_CASES} from '~/constants'
 import {API} from '~/routes/utilities/api'
-import {CreateRunFilter} from '~/screens/CreateRun/CreateRunFilter'
+import {SelectTests} from './SelectTests'
 
 const formSchema = z.object({
   runName: z
@@ -290,62 +288,7 @@ export const CreateRun = (props: CreateRunProps) => {
               }}
             />
             <InputsSpacing />
-            {props.flow === FLOW.CREATE ? (
-              <FormField
-                control={form.control}
-                name="testSelection"
-                render={({field}) => (
-                  <FormItem>
-                    <FormLabel className={cn('text-lg')}>
-                      Select Tests
-                    </FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={'all'}
-                        className={cn('flex ', 'flex-col', 'space-y-1')}>
-                        <FormItem
-                          className={cn(
-                            'flex ',
-                            'items-center',
-                            'space-x-3',
-                            'space-y-0',
-                          )}>
-                          <FormControl>
-                            <RadioGroupItem value="all" />
-                          </FormControl>
-                          <FormLabel className={cn('font-normal')}>
-                            {INCLUDE_ALL_TEST_CASES}
-                          </FormLabel>
-                        </FormItem>
-                        <FormItem
-                          className={cn('flex', 'space-x-3', 'space-y-0')}>
-                          <FormControl>
-                            <RadioGroupItem value="filter" />
-                          </FormControl>
-                          <div className={cn('flex', 'flex-col')}>
-                            <FormLabel className={cn('font-normal')}>
-                              {FILTER_TEST_CASES}
-                            </FormLabel>
-                            {form.getValues('testSelection') === 'filter' ? (
-                              <div
-                                className={cn(
-                                  'mt-4',
-                                  'flex',
-                                  'flex-col',
-                                  'rounded-l',
-                                )}>
-                                <CreateRunFilter />
-                              </div>
-                            ) : null}
-                          </div>
-                        </FormItem>
-                      </RadioGroup>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            ) : null}
+            {props.flow === FLOW.CREATE ? <SelectTests form={form} /> : null}
             <InputsSpacing />
             {props.flow === FLOW.CREATE ? (
               <div className={cn('flex flex-col')}>
