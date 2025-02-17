@@ -324,7 +324,7 @@ export const TestListColumnConfig: ColumnDef<ITestListTable>[] = [
                       Are you absolutely sure?
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete
+                      This action cannot be undone, it will permanently delete
                       the test.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
@@ -332,7 +332,9 @@ export const TestListColumnConfig: ColumnDef<ITestListTable>[] = [
                     <AlertDialogCancel onClick={() => setMenuOpen(false)}>
                       Cancel
                     </AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDeleteTest}>
+                    <AlertDialogAction
+                      className="bg-destructive/90 hover:bg-destructive"
+                      onClick={handleDeleteTest}>
                       Delete
                     </AlertDialogAction>
                   </AlertDialogFooter>

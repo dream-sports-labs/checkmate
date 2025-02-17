@@ -25,6 +25,8 @@ import {Button} from '~/ui/button'
 import {getFormatedDate} from '~/utils/getDate'
 import {IRunListTable} from './runTable.interface'
 import {API} from '~/routes/utilities/api'
+import {CustomDialog} from '@components/Dialog/Dialog'
+import {DialogClose, DialogTitle} from '@ui/dialog'
 
 const AnimatedPulse = () => {
   return (
@@ -161,34 +163,41 @@ export const RunListColumnConfig: ColumnDef<IRunListTable>[] = [
 
       return (
         <div onClick={(e) => e.stopPropagation()}>
-          <AlertDialog>
-            <AlertDialogTrigger asChild={true}>
-              <Trash2
-                size={40}
-                color={'red'}
-                className={'cursor-pointer p-2'}
-              />
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
+          <CustomDialog
+            variant="delete"
+            anchorComponent={
+              <Trash2 size={24} color={'red'} className={'cursor-pointer'} />
+            }
+            contentComponent={
+              <>
+                <div className="text-lg font-semibold">
                   Are you sure you want to delete{' '}
-                  <span className={'text-red-500'}>{row.original.runName}</span>{' '}
+                  <span className={'text-destructive'}>
+                    {row.original.runName}
+                  </span>{' '}
                   ?
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  this run and its data.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={onSubmit}>
-                  Continue
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+                </div>
+                <div className="flex flex-col mt-4 text-xs text-gray-500">
+                  This action cannot be undone, it will permanently delete this
+                  run and its data.
+                </div>
+              </>
+            }
+            footerComponent={
+              <>
+                <DialogClose>
+                  <Button variant={'outline'}>Cancel</Button>
+                </DialogClose>
+                <DialogClose>
+                  <Button
+                    className="bg-destructive/90 hover:bg-destructive font-semibold"
+                    onClick={onSubmit}>
+                    Delete
+                  </Button>
+                </DialogClose>
+              </>
+            }
+          />
         </div>
       )
     },
