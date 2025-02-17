@@ -1,3 +1,4 @@
+import {CustomDialog} from '@components/Dialog/Dialog'
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -6,27 +7,15 @@ import {
 } from '@radix-ui/react-icons'
 import {useFetcher} from '@remix-run/react'
 import {ColumnDef} from '@tanstack/react-table'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@ui/alert-dialog'
+import {DialogClose} from '@ui/dialog'
 import {toast} from '@ui/use-toast'
 import {LockIcon, OctagonXIcon, Trash2} from 'lucide-react'
 import {useEffect} from 'react'
 import {Tooltip} from '~/components/Tooltip/Tooltip'
+import {API} from '~/routes/utilities/api'
 import {Button} from '~/ui/button'
 import {getFormatedDate} from '~/utils/getDate'
 import {IRunListTable} from './runTable.interface'
-import {API} from '~/routes/utilities/api'
-import {CustomDialog} from '@components/Dialog/Dialog'
-import {DialogClose, DialogTitle} from '@ui/dialog'
 
 const AnimatedPulse = () => {
   return (
