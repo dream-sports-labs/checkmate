@@ -1,23 +1,13 @@
-import {ChevronRightIcon} from '@radix-ui/react-icons'
-import {ColumnDef} from '@tanstack/react-table'
-import {getDateDetail} from '~/utils/getDate'
-import {ITestListTable} from './testTable.interface'
 import {TrashIcon} from '@components/Button/TrashIcon'
+import {CustomDialog} from '@components/Dialog/Dialog'
 import {Tooltip} from '@components/Tooltip/Tooltip'
 import {useCustomNavigate} from '@hooks/useCustomNavigate'
+import {ChevronRightIcon} from '@radix-ui/react-icons'
 import {useFetcher} from '@remix-run/react'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@ui/alert-dialog'
+import {ColumnDef} from '@tanstack/react-table'
+import {Button} from '@ui/button'
 import {Checkbox} from '@ui/checkbox'
+import {DialogClose} from '@ui/dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,8 +17,9 @@ import {
 import {toast} from '@ui/use-toast'
 import {PencilIcon} from 'lucide-react'
 import {MouseEvent, useEffect, useState} from 'react'
+import {API} from '~/routes/utilities/api'
 import {cn} from '~/ui/utils'
-import {TestListingColumns} from './UploadTest/constants'
+import {getDateDetail} from '~/utils/getDate'
 import {TestDetailDrawer} from './TestDetailSlidingPanel'
 import {
   HeaderComponent,
@@ -37,10 +28,8 @@ import {
   SortingHeaderComponent,
   TitleRowComponent,
 } from './TestListRowColumns'
-import {API} from '~/routes/utilities/api'
-import {CustomDialog} from '@components/Dialog/Dialog'
-import {DialogClose} from '@ui/dialog'
-import {Button} from '@ui/button'
+import {ITestListTable} from './testTable.interface'
+import {TestListingColumns} from './UploadTest/constants'
 
 export const TestListColumnConfig: ColumnDef<ITestListTable>[] = [
   {
