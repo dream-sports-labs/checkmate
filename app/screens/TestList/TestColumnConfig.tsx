@@ -38,6 +38,9 @@ import {
   TitleRowComponent,
 } from './TestListRowColumns'
 import {API} from '~/routes/utilities/api'
+import {CustomDialog} from '@components/Dialog/Dialog'
+import {DialogClose} from '@ui/dialog'
+import {Button} from '@ui/button'
 
 export const TestListColumnConfig: ColumnDef<ITestListTable>[] = [
   {
@@ -311,35 +314,39 @@ export const TestListColumnConfig: ColumnDef<ITestListTable>[] = [
                 <PencilIcon className="mr-2 h-4 w-4" />
                 Edit
               </DropdownMenuItem>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
+              <CustomDialog
+                anchorComponent={
                   <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                     <TrashIcon size={20} className="mr-2 h-4 w-4" />
                     Delete
                   </DropdownMenuItem>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      Are you absolutely sure?
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
+                }
+                contentComponent={
+                  <>
+                    <div className="text-lg font-semibold">
+                      Are you sure you want to delete?
+                    </div>
+                    <div className="flex flex-col mt-4 text-xs text-gray-500">
                       This action cannot be undone, it will permanently delete
-                      the test.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel onClick={() => setMenuOpen(false)}>
-                      Cancel
-                    </AlertDialogCancel>
-                    <AlertDialogAction
-                      className="bg-destructive/90 hover:bg-destructive"
-                      onClick={handleDeleteTest}>
-                      Delete
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+                      this test and its data.
+                    </div>
+                  </>
+                }
+                footerComponent={
+                  <>
+                    <DialogClose>
+                      <Button variant={'outline'}>Cancel</Button>
+                    </DialogClose>
+                    <DialogClose>
+                      <Button
+                        className="bg-destructive/90 hover:bg-destructive font-semibold"
+                        onClick={handleDeleteTest}>
+                        Delete
+                      </Button>
+                    </DialogClose>
+                  </>
+                }
+              />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
