@@ -127,7 +127,7 @@ export const buildSectionHierarchy = ({
   return rootSections
 }
 
-export const getSectionsWithParents = ({
+export const getSectionsWithTheirParents = ({
   runSections,
   allSections,
 }: {

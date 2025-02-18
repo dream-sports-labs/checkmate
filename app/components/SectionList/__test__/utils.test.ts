@@ -6,7 +6,7 @@ import {
   addSectionHierarchy,
   getSectionHierarchy,
   buildSectionHierarchy,
-  getSectionsWithParents,
+  getSectionsWithTheirParents,
   removeSectionAndDescendants,
 } from '../utils'
 import {DisplaySection, SectionWithHierarchy} from '../interfaces'
@@ -525,7 +525,7 @@ describe('getSectionsWithParents', () => {
       },
     ]
 
-    const result = getSectionsWithParents({runSections, allSections})
+    const result = getSectionsWithTheirParents({runSections, allSections})
 
     expect(result).toEqual([
       {
@@ -554,7 +554,7 @@ describe('getSectionsWithParents', () => {
       {sectionId: 9, sectionName: 'User Profile', parentId: 8, projectId: 1},
     ]
 
-    const result = getSectionsWithParents({runSections, allSections})
+    const result = getSectionsWithTheirParents({runSections, allSections})
 
     expect(result).toEqual([
       {
@@ -581,7 +581,7 @@ describe('getSectionsWithParents', () => {
 
   test('should return empty array if runSections is empty', () => {
     const runSections: ICreateSectionResponse[] = []
-    const result = getSectionsWithParents({runSections, allSections})
+    const result = getSectionsWithTheirParents({runSections, allSections})
     expect(result).toEqual([])
   })
 
@@ -595,7 +595,7 @@ describe('getSectionsWithParents', () => {
       },
     ]
 
-    const result = getSectionsWithParents({runSections, allSections})
+    const result = getSectionsWithTheirParents({runSections, allSections})
     expect(result).toEqual([])
   })
 
@@ -609,7 +609,7 @@ describe('getSectionsWithParents', () => {
       },
     ]
 
-    const result = getSectionsWithParents({runSections, allSections})
+    const result = getSectionsWithTheirParents({runSections, allSections})
 
     expect(result).toEqual([
       {

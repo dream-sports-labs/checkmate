@@ -5,7 +5,7 @@ import {
   getInitialOpenSections,
   getInitialSelectedSections,
   getSectionHierarchy,
-  getSectionsWithParents,
+  getSectionsWithTheirParents,
 } from '@components/SectionList/utils'
 import {Tooltip} from '@components/Tooltip/Tooltip'
 import {IGetAllSectionsResponse} from '@controllers/sections.controller'
@@ -44,7 +44,7 @@ export const SectionList = () => {
 
   useEffect(() => {
     if (runId && runSectionFetcher.data?.data && sectionFetcher.data?.data) {
-      const x = getSectionsWithParents({
+      const x = getSectionsWithTheirParents({
         allSections: sectionFetcher.data?.data,
         runSections: runSectionFetcher.data?.data,
       })
