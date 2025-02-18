@@ -304,6 +304,7 @@ export const TestListColumnConfig: ColumnDef<ITestListTable>[] = [
                 Edit
               </DropdownMenuItem>
               <CustomDialog
+                variant="delete"
                 anchorComponent={
                   <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                     <TrashIcon size={20} className="mr-2 h-4 w-4" />
