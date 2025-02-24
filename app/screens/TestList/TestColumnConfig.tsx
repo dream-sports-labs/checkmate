@@ -20,7 +20,6 @@ import {MouseEvent, useEffect, useState} from 'react'
 import {API} from '~/routes/utilities/api'
 import {cn} from '~/ui/utils'
 import {getDateDetail} from '~/utils/getDate'
-import {TestDetailDrawer} from './TestDetailSlidingPanel'
 import {
   HeaderComponent,
   PlatformComponent,
