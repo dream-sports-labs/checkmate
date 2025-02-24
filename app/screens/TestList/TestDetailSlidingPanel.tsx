@@ -124,7 +124,7 @@ export const TestDetailDrawer = ({
               <InputsSpacing />
 
               <InputLabels labelName={'Section'} />
-              <div style={infoTextStyle}>{data?.sectionHierarchy}</div>
+              <div style={infoTextStyle}>{data?.section}</div>
             </div>
           </div>
           <InputsSpacing />
