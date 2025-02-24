@@ -60,6 +60,7 @@ export const TestDetailDrawer = ({
   const [testStatusHistory, setTestStatusHistory] = useState<{
     data: StatusEntry[]
   }>()
+  const navigate = useCustomNavigate()
 
   const testDetailClicked = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -95,7 +96,6 @@ export const TestDetailDrawer = ({
     }
   }, [testStatusHistoryFetcher.data])
 
-  const navigate = useCustomNavigate()
   return (
     <CustomDrawer isOpen={isOpen} onClose={onClose}>
       {data ? (

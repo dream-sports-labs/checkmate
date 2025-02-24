@@ -3,7 +3,7 @@ import {CustomDialog} from '@components/Dialog/Dialog'
 import {Tooltip} from '@components/Tooltip/Tooltip'
 import {useCustomNavigate} from '@hooks/useCustomNavigate'
 import {ChevronRightIcon} from '@radix-ui/react-icons'
-import {useFetcher} from '@remix-run/react'
+import {useFetcher, useParams} from '@remix-run/react'
 import {ColumnDef} from '@tanstack/react-table'
 import {Button} from '@ui/button'
 import {Checkbox} from '@ui/checkbox'
@@ -79,33 +79,25 @@ export const TestListColumnConfig: ColumnDef<ITestListTable>[] = [
     accessorKey: TestListingColumns.title,
     header: () => <SortingHeaderComponent heading={TestListingColumns.title} />,
     cell: ({row, table}) => {
-      const [isDrawerOpen, setDrawerOpen] = useState(false)
       const visibleColumnsCount = table.getVisibleLeafColumns().length
       const columnWidth = `${100 / visibleColumnsCount}%`
-
-      const toggleDrawer = () => {
-        setDrawerOpen((prev) => !prev)
-      }
+      const navigate = useCustomNavigate()
+      const {projectId} = useParams()
 
       return (
-        <div>
-          <TitleRowComponent
-            clickable={true}
-            content={row.original.title}
-            onClick={toggleDrawer}
-            columnWidth={columnWidth}
-            initialWidth="640px"
-          />
-          <TestDetailDrawer
-            isOpen={isDrawerOpen}
-            onClose={toggleDrawer}
-            props={{
-              projectId: row.original.projectId,
-              testId: row.original.testId,
-            }}
-            pageType="testDetail"
-          />
-        </div>
+        <TitleRowComponent
+          clickable={true}
+          content={row.original.title}
+          onClick={(event) => {
+            navigate(
+              `/project/${projectId}/tests/${row.original.testId}`,
+              {},
+              event,
+            )
+          }}
+          columnWidth={columnWidth}
+          initialWidth="640px"
+        />
       )
     },
     enableHiding: false,
