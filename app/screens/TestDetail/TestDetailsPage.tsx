@@ -102,7 +102,7 @@ export default function TestDetailsPage({
         )}
         <div className="w-full items-center">
           <InputLabels labelName={'Section'} />
-          <div style={infoTextStyle}>{data?.sectionHierarchy}</div>
+          <div style={infoTextStyle}>{data?.section}</div>
         </div>
         <div className="flex flex-row gap-12">
           {data?.createdBy && (

@@ -78,7 +78,7 @@ const SectionsDao = {
         .from(sections)
         .where(and(...whereClauses))
 
-      if (data?.length > 1)
+      if (data?.length > 1 || param.parentId === null)
         return data.filter((section) => section.parentId === param.parentId)
 
       return data

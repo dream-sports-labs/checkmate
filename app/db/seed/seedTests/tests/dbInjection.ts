@@ -13,7 +13,15 @@ let labelMapArrayInserted = 0
 const createNewLabel = true
 const insertLabelMap = true
 
-const labelsSet = new Set(testData.map((item) => item.label))
+const labelsSet = new Set(
+  testData
+    .map((item) => {
+      if (item && item?.label) {
+        return item.label
+      } else return undefined
+    })
+    ?.filter((item) => item !== undefined),
+)
 
 let allLabels =
   (await LabelsController.getAllLabels({projectId: PROJECT_ID})) ?? []
@@ -36,12 +44,16 @@ if (createNewLabel && labelsSet.size > 0) {
     })
     .filter((item) => item !== undefined)
 
-  console.log(
-    '🧨 Inserting new labels',
-    newLabels.map((item) => item.labelName),
-  )
-  await dbClient.insert(labels).values(newLabels)
-  console.log('✅ Inserted new labels')
+  if (newLabels && newLabels.length > 0) {
+    console.log(
+      '🧨 Inserting new labels',
+      newLabels.map((item) => item.labelName),
+    )
+    await dbClient.insert(labels).values(newLabels)
+    console.log('✅ Inserted new labels')
+  } else {
+    console.log('✅ No new labels to insert')
+  }
 }
 
 allLabels = (await LabelsController.getAllLabels({projectId: PROJECT_ID})) ?? []
@@ -58,13 +70,13 @@ for (let test of testData) {
       .insert(tests)
       .values(test)
       .then(async (res) => {
-        // console.log('Inserted test', res[0].insertId, test.testRailId)
+        // console.log('Inserted test', res[0].insertId)
         // console.log(
         //   'Inserting labelTestMap',
         //   'labelId: 1',
         //   `testId: ${res[0].insertId}`,
         // )
-        if (insertLabelMap) {
+        if (insertLabelMap && test?.label) {
           const labelId = labelMap[test.label]
 
           if (labelId)
@@ -85,13 +97,13 @@ for (let test of testData) {
               })
               .catch((e) => {
                 console.log('⛔️ Error in inserting labelTestMap', e)
-                process.exit(1)
+                // process.exit(1)
               })
         }
       })
       .catch((e) => {
-        console.log('⛔️ Error in inserting test', e)
-        process.exit(1)
+        console.log(`⛔️ Error in inserting test, ${test.title}`, e)
+        // process.exit(1)
       })
   } catch (e) {
     console.log('⛔️ Error in inserting test', e)

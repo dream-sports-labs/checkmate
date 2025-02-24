@@ -58,7 +58,7 @@ Papa.parse(csvFileContent, {
       test['title'] = obj['Title']?.trim()
       test['expectedResult'] = obj['Expected Result']?.trim()
       test['type'] = obj['Type']?.trim()
-      test['preconditions'] = obj['Preconditions']?.trim()
+      test['preConditions'] = obj['Preconditions']?.trim()
       test['createdBy'] = CREATED_BY
       test['projectId'] = PROJECT_ID
 
@@ -78,7 +78,13 @@ Papa.parse(csvFileContent, {
       if (obj['Description']) test['description'] = obj['Description']?.trim()
 
       const sectionId = allSections?.find(
-        (section) => section.sectionHierarchy === obj['Section']?.trim(),
+        (section) =>
+          section.sectionHierarchy ===
+          obj['Section']
+            ?.split('>')
+            ?.map((x: string) => x?.trim())
+            ?.join(' > ')
+            ?.trim(),
       )?.sectionId
 
       if (sectionId) test['sectionId'] = sectionId
