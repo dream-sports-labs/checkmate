@@ -12,6 +12,8 @@ import {LinkContent, OptionContent, TextContent} from './Contents'
 import {TestStatusHistroyDialog} from './TestStatusHistroyDialog'
 import {shortDate2} from '~/utils/getDate'
 import {Tooltip} from '@components/Tooltip/Tooltip'
+import {IGetAllSectionsResponse} from '@controllers/sections.controller'
+import {getSectionHierarchy} from '@components/SectionList/utils'
 
 export default function TestDetailsPage({
   pageType,
@@ -25,6 +27,17 @@ export default function TestDetailsPage({
 
   const testStatusFetcher = useFetcher<any>()
   const testStatusHistoryFetcher = useFetcher<any>()
+  const sectionFetcher = useFetcher<{
+    data: IGetAllSectionsResponse[]
+  }>()
+  const [sectionsData, setSectionsData] = useState<
+    {
+      sectionId: number
+      sectionName: string
+      parentId: number | null
+      projectId: number
+    }[]
+  >([])
 
   const data = resp?.data
   const [testStatus, setTestStatus] = useState<TestStatusData>()
@@ -44,6 +57,7 @@ export default function TestDetailsPage({
         ? `/${API.GetTestStatusHistory}?testId=${testId}`
         : `/${API.GetTestStatusHistoryInRun}?runId=${runId}&testId=${testId}`,
     )
+    sectionFetcher.load(`/${API.GetSections}?projectId=${projectId}`)
   }, [projectId, testId, runId])
 
   useEffect(() => {
@@ -51,6 +65,12 @@ export default function TestDetailsPage({
       setTestStatus(testStatusFetcher.data)
     }
   }, [testStatusFetcher.data])
+
+  useEffect(() => {
+    if (sectionFetcher.data) {
+      setSectionsData(sectionFetcher.data.data)
+    }
+  }, [sectionFetcher.data])
 
   useEffect(() => {
     if (testStatusHistoryFetcher && testStatusHistoryFetcher.data) {
@@ -102,7 +122,12 @@ export default function TestDetailsPage({
         )}
         <div className="w-full items-center">
           <InputLabels labelName={'Section'} />
-          <div style={infoTextStyle}>{data?.sectionHierarchy}</div>
+          <div style={infoTextStyle}>
+            {getSectionHierarchy({
+              sectionId: data?.sectionId,
+              sectionsData,
+            })}
+          </div>
         </div>
         <div className="flex flex-row gap-12">
           {data?.createdBy && (

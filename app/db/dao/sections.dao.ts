@@ -1,15 +1,15 @@
-import {logger, LogType} from '~/utils/logger'
-import {dbClient} from '../client'
-import {and, eq, inArray} from 'drizzle-orm/sql'
-import {errorHandling} from './utils'
-import {sections, tests} from '../schema/tests'
 import {
   IAddSection,
   IEditSection,
   IGetAllSections,
   IGetSectionIdByHierarcy,
 } from '@controllers/sections.controller'
-import {runs, testRunMap} from '@schema/runs'
+import {testRunMap} from '@schema/runs'
+import {and, eq, inArray} from 'drizzle-orm/sql'
+import {logger, LogType} from '~/utils/logger'
+import {dbClient} from '../client'
+import {sections, tests} from '../schema/tests'
+import {errorHandling} from './utils'
 
 const SectionsDao = {
   getAllSections: async ({projectId, runId}: IGetAllSections) => {
@@ -78,7 +78,7 @@ const SectionsDao = {
         .from(sections)
         .where(and(...whereClauses))
 
-      if (data?.length > 1)
+      if (data?.length > 1 || param.parentId === null)
         return data.filter((section) => section.parentId === param.parentId)
 
       return data

@@ -163,7 +163,7 @@ export const RunListColumnConfig: ColumnDef<IRunListTable>[] = [
                   Are you sure you want to delete{' '}
                   <span className={'text-destructive'}>
                     {row.original.runName}
-                  </span>{' '}
+                  </span>
                   ?
                 </div>
                 <div className="flex flex-col mt-4 text-xs text-gray-500">

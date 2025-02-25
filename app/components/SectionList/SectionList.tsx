@@ -174,11 +174,11 @@ export const SectionList = () => {
           ) : null}
         </h2>
         <RenderSections
+          sections={sectionsData}
           addSubsectionClicked={addSubsectionClicked}
           applySectionFilter={applySectionFilter}
           level={0}
           openSections={openSections}
-          sections={sectionsData}
           selectedSections={selectedSections}
           toggleSection={toggleSection}
           sectionData={sectionFetcher?.data?.data}
