@@ -26,6 +26,7 @@ export interface IArchiveProjects {
   projectId: number
   status: 'Active' | 'Archived' | 'Deleted'
   userId: number
+  updatedName?: string
 }
 
 const ProjectsController = {

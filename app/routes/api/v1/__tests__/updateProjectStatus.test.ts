@@ -25,6 +25,7 @@ describe('Update Project Status - Action Function', () => {
     const requestData = {
       projectId: 123,
       status: 'Archived',
+      updatedName: 'Website_2025-02-28T12:01:12.807Z',
     }
     const request = new Request('http://localhost', {
       method: 'POST',
