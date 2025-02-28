@@ -149,6 +149,7 @@ describe('ProjectsController', () => {
         projectId: 123,
         status: 'Archived' as IArchiveProjects['status'],
         userId: 456,
+        updatedName: 'Website_2025-02-28T12:01:12.807Z',
       }
       const mockResponse = {affectedRows: 1}
 
@@ -167,6 +168,7 @@ describe('ProjectsController', () => {
         projectId: 123,
         status: 'Archived' as IArchiveProjects['status'],
         userId: 456,
+        updatedName: 'Website_2025-02-28T12:01:12.807Z',
       }
 
       const mockError = new Error('Database error')
