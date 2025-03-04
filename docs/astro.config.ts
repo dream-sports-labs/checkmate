@@ -24,8 +24,7 @@ export default defineConfig({
       },
       social: {
         github: "https://github.com/dream-sports-labs/checkmate",
-        discord:
-          "https://discord.com/channels/1317172052179943504/1329754684730380340",
+        discord: "https://discord.gg/W67bA8j8",
       },
       sidebar: [
         {
@@ -34,18 +33,6 @@ export default defineConfig({
             "project/introduction",
             "project/application-structure",
             "project/setup",
-            {
-              label: "TechStack Used",
-              slug: "project/techstack",
-              badge: {
-                text: "WIP",
-                variant: "caution",
-              },
-            },
-            {
-              label: "RBAC",
-              slug: "project/rbac",
-            },
           ],
         },
         {
@@ -62,6 +49,25 @@ export default defineConfig({
             },
             "guides/user-settings",
             "guides/api",
+            {
+              label: "RBAC",
+              slug: "project/rbac",
+            },
+          ],
+        },
+        {
+          label: "Developer Docs",
+          items: [
+            {
+              label: "TechStack Used",
+              slug: "tech/techstack",
+              badge: {
+                text: "WIP",
+                variant: "caution",
+              },
+            },
+            "tech/db-schema",
+            "tech/hld",
           ],
         },
       ],

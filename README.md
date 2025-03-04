@@ -17,7 +17,7 @@ This Test Case Management Tool is designed to address the challenges faced by te
 - [Detailed Documentation](https://checkmate.dreamsportslabs.com/)
 - [Installation Guide](https://checkmate.dreamsportslabs.com/project/setup/)
 - [Product Guide](https://checkmate.dreamsportslabs.com/guides/projects/)
-- [Connect with us on discord](https://discord.com/channels/1317172052179943504/1329754684730380340)
+- [Connect with us on discord](https://discord.gg/W67bA8j8)
 
 ## 📦 Installation
 
@@ -116,4 +116,4 @@ This project is published under the [MIT License](/LICENSE).
 
 ## ✉️ Contact
 
-If you need feedback or support, reach out via the [Issue Tracker](https://github.com/dream-sports-labs/checkmate/issues) or [Discord](https://discord.com/channels/1317172052179943504/1329754684730380340).
+If you need feedback or support, reach out via the [Issue Tracker](https://github.com/dream-sports-labs/checkmate/issues) or [Discord](https://discord.gg/W67bA8j8).
