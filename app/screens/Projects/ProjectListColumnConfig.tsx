@@ -317,12 +317,10 @@ export const PROJECT_LIST_COLUMN_CONFIG: ColumnDef<IProjectItem>[] = [
 
       const handleConfirmDelete = async (event: React.MouseEvent) => {
         const projectId = row.original.projectId
-        const timestampString = new Date().toISOString()
-        const updatedName = `${row.original.projectName}_${timestampString}`
         const status = 'Archived'
 
         updateProjectStatus.submit(
-          {projectId, status, updatedName},
+          {projectId, status},
           {
             method: 'put',
             action: `/${API.EditProjectStatus}`,
