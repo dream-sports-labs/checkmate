@@ -143,52 +143,12 @@ describe('ProjectsController', () => {
     })
   })
 
-  // describe('updateProjectStatus', () => {
-  //   it('should call ProjectsDao.updateProjectStatus with the correct parameters', async () => {
-  //     const mockParams: IArchiveProjects = {
-  //       projectId: 123,
-  //       status: 'Archived' as IArchiveProjects['status'],
-  //       userId: 456,
-  //     }
-  //     const mockResponse = {affectedRows: 1}
-
-  //     ;(ProjectsDao.updateProjectStatus as jest.Mock).mockResolvedValue(
-  //       mockResponse,
-  //     )
-
-  //     const result = await ProjectsController.updateProjectStatus(mockParams)
-
-  //     expect(ProjectsDao.updateProjectStatus).toHaveBeenCalledWith(mockParams)
-  //     expect(result).toEqual(mockResponse)
-  //   })
-
-  //   it('should handle errors from ProjectsDao.updateProjectStatus', async () => {
-  //     const mockParams: IArchiveProjects = {
-  //       projectId: 123,
-  //       status: 'Archived' as IArchiveProjects['status'],
-  //       userId: 456,
-  //     }
-
-  //     const mockError = new Error('Database error')
-
-  //     ;(ProjectsDao.updateProjectStatus as jest.Mock).mockRejectedValue(
-  //       mockError,
-  //     )
-
-  //     await expect(
-  //       ProjectsController.updateProjectStatus(mockParams),
-  //     ).rejects.toThrow('Database error')
-
-  //     expect(ProjectsDao.updateProjectStatus).toHaveBeenCalledWith(mockParams)
-  //   })
-  // })
   describe('updateProjectStatus', () => {
     it('should update project status and append timestamp to projectName when status is Archived', async () => {
       const mockParams: IArchiveProjects = {
         projectId: 123,
         status: 'Archived' as IArchiveProjects['status'],
         userId: 456,
-        updatedName: 'Website_2025-02-28T12:01:12.807Z',
       }
       const mockProjectInfo = [{projectName: 'MyProject'}] // Mock response from getProjectInfo
       const mockResponse = {affectedRows: 1} // Mock response from updateProjectStatus
@@ -285,7 +245,6 @@ describe('ProjectsController', () => {
         projectId: 123,
         status: 'Archived' as IArchiveProjects['status'],
         userId: 456,
-        updatedName: 'Website_2025-02-28T12:01:12.807Z',
       }
       const mockProjectInfo = [{projectName: 'MyProject'}]
       const mockError = new Error('Database error')
