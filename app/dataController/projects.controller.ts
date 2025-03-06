@@ -38,7 +38,7 @@ const ProjectsController = {
     const {projectId, status} = params
     if (status === 'Archived') {
       const projectInfo = await ProjectsDao.getProjectInfo(projectId)
-      const project = projectInfo[0]
+      const project = projectInfo?.[0]
       const projectName = project?.projectName
       if (!project || !projectName) {
         return Promise.reject({
