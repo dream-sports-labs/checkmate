@@ -67,7 +67,14 @@ export default defineConfig({
               },
             },
             "tech/db-schema",
-            "tech/hld",
+            {
+              label: "HLD",
+              slug: "tech/hld",
+              badge: {
+                text: "WIP",
+                variant: "caution",
+              },
+            },
           ],
         },
       ],
