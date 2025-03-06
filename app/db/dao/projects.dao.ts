@@ -136,19 +136,23 @@ const ProjectsDao = {
     projectId,
     status,
     userId,
-    updatedName,
+    projectName,
   }: IArchiveProjects) => {
     try {
-      if (status === 'Archived' && !updatedName) {
-        throw new Error('Updated name is required for archiving the project')
+      const updatedField: {
+        status: 'Active' | 'Archived' | 'Deleted'
+        updatedBy: number
+        projectName?: string
+      } = {
+        status,
+        updatedBy: userId,
+      }
+      if (projectName) {
+        updatedField['projectName'] = projectName
       }
       const archiveProject = await dbClient
         .update(projects)
-        .set({
-          status,
-          updatedBy: userId,
-          ...(updatedName && {projectName: updatedName}),
-        })
+        .set(updatedField)
         .where(eq(projects.projectId, projectId))
       return archiveProject
     } catch (error: any) {
