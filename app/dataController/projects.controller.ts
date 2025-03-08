@@ -42,8 +42,16 @@ const ProjectsController = {
       const projectName = project?.projectName
       if (!project || !projectName) {
         return Promise.reject({
-          projectId: projectId,
-          reason: 'Project not found',
+          data: null,
+          message: 'Project not found',
+          status: 404,
+        })
+      }
+      if (project.status !== 'Active') {
+        return Promise.reject({
+          data: null,
+          message: 'Project is not active',
+          status: 400,
         })
       }
       const timestamp = new Date().toISOString()
