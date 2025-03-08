@@ -150,7 +150,7 @@ describe('ProjectsController', () => {
         status: 'Archived' as IArchiveProjects['status'],
         userId: 456,
       }
-      const mockProjectInfo = [{projectName: 'MyProject'}] // Mock response from getProjectInfo
+      const mockProjectInfo = [{projectName: 'MyProject', status: 'Active'}] // Mock response from getProjectInfo
       const mockResponse = {affectedRows: 1} // Mock response from updateProjectStatus
 
       // Mock getProjectInfo and updateProjectStatus
@@ -195,8 +195,9 @@ describe('ProjectsController', () => {
       await expect(
         ProjectsController.updateProjectStatus(mockParams),
       ).rejects.toEqual({
-        projectId: 123,
-        reason: 'Project not found',
+        data: null,
+        message: 'Project not found',
+        status: 404,
       })
 
       expect(ProjectsDao.getProjectInfo).toHaveBeenCalledWith(123)
@@ -246,7 +247,7 @@ describe('ProjectsController', () => {
         status: 'Archived' as IArchiveProjects['status'],
         userId: 456,
       }
-      const mockProjectInfo = [{projectName: 'MyProject'}]
+      const mockProjectInfo = [{projectName: 'MyProject', status: 'Active'}]
       const mockError = new Error('Database error')
 
       ;(ProjectsDao.getProjectInfo as jest.Mock).mockResolvedValue(
