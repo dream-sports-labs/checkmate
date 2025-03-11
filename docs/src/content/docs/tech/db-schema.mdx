@@ -1,0 +1,438 @@
+---
+title: Database Schema
+---
+
+This document describes the database schema for our Test Case Management System. The schema is designed to manage organisations, projects, test cases, test runs, labels, and associated metadata.
+
+You can import the `_schema.sql` file in [dbdiagram.io](https://dbdiagram.io/home) for visualising relationships.
+
+---
+
+### Tables Overview
+
+The database consists of 16 tables that can be categorized as follows:
+
+1. **Core Entities**: `users`, `organisations`, `projects`, `tests`, `runs`
+2. **Test Organization**: `sections`, `squads`, `labels`
+3. **Test Metadata**: `type`, `priority`, `platform`, `automationStatus`, `testCoveredBy`
+4. **Relationship Tables**: `labelTestMap`, `testRunMap`, `testRunsStatusHistory`
+
+### Core Entities
+
+#### Users
+
+Users who interact with the test management system.
+
+<div class="text-xs">
+
+| Column       | Type         | Constraints              | Description                                      |
+| ------------ | ------------ | ------------------------ | ------------------------------------------------ |
+| `userId`     | int          | PK, AUTO_INCREMENT       | Unique user identifier                           |
+| `userName`   | varchar(100) | NOT NULL                 | User's display name                              |
+| `email`      | varchar(100) | NOT NULL, UNIQUE         | User's email address                             |
+| `ssoId`      | varchar(200) | UNIQUE                   | Single sign-on identifier                        |
+| `profileUrl` | text         |                          | URL to user's profile image                      |
+| `role`       | enum         | NOT NULL, DEFAULT `user` | User role: `admin`, `user`, or `reader`          |
+| `token`      | varchar(500) | UNIQUE                   | Authentication token                             |
+| `updatedBy`  | int          | FK to users.userId       | User who last updated this record                |
+| `status`     | enum         | DEFAULT `active`         | Account status: `active`, `archive`, or `delete` |
+
+</div>
+
+#### Organisations
+
+Organizations that group projects and users.
+
+<div class="text-xs">
+
+| Column      | Type        | Constraints               | Description                       |
+| ----------- | ----------- | ------------------------- | --------------------------------- |
+| `orgId`     | int         | PK, AUTO_INCREMENT        | Unique organization identifier    |
+| `orgName`   | varchar(20) | NOT NULL, UNIQUE          | Organization name                 |
+| `createdBy` | int         | FK to users.userId        | User who created the organization |
+| `createdOn` | timestamp   | DEFAULT CURRENT_TIMESTAMP | Creation timestamp                |
+
+</div>
+
+#### Projects
+
+Projects that contain tests and test runs.
+
+<div class="text-xs">
+
+| Column               | Type         | Constraints                         | Description                                        |
+| -------------------- | ------------ | ----------------------------------- | -------------------------------------------------- |
+| `projectId`          | int          | PK, AUTO_INCREMENT                  | Unique project identifier                          |
+| `projectName`        | varchar(50)  | NOT NULL                            | Project name                                       |
+| `projectDescription` | varchar(255) |                                     | Project description                                |
+| `createdBy`          | int          | FK to users.userId                  | User who created the project                       |
+| `createdOn`          | timestamp    | DEFAULT CURRENT_TIMESTAMP           | Creation timestamp                                 |
+| `orgId`              | int          | NOT NULL, FK to organisations.orgId | Organization that owns the project                 |
+| `testsCount`         | int          | DEFAULT 0                           | Count of tests in the project                      |
+| `runsCount`          | int          | DEFAULT 0                           | Count of test runs in the project                  |
+| `status`             | enum         | NOT NULL, DEFAULT `Active`          | Project status: `Active`, `Archived`, or `Deleted` |
+| `updatedOn`          | timestamp    | DEFAULT CURRENT_TIMESTAMP ON UPDATE | Last update timestamp                              |
+| `updatedBy`          | int          | FK to users.userId                  | User who last updated the project                  |
+
+</div>
+
+**Indexes:**
+
+- `projectsNameIndex` on `projectName`
+- `projectsProjectIdIndex` on `projectId`
+- `projectOrgUniqueIndex` (UNIQUE) on `projectName` and `orgId`
+
+#### Tests
+
+Test cases with detailed specifications.
+
+<div class="text-xs">
+
+| Column               | Type         | Constraints                                   | Description                                     |
+| -------------------- | ------------ | --------------------------------------------- | ----------------------------------------------- |
+| `testId`             | int          | PK, AUTO_INCREMENT                            | Unique test identifier                          |
+| `sectionId`          | int          | FK to sections.sectionId                      | Section containing the test                     |
+| `projectId`          | int          | NOT NULL, FK to projects.projectId            | Project that owns the test                      |
+| `title`              | varchar(750) | NOT NULL                                      | Test title                                      |
+| `squadId`            | int          | FK to squads.squadId                          | Squad responsible for the test                  |
+| `priorityId`         | int          | FK to priority.priorityId                     | Test priority                                   |
+| `typeId`             | int          | FK to type.typeId                             | Test type                                       |
+| `automationStatusId` | int          | FK to automationStatus.automationStatusId     | Automation status                               |
+| `testCoveredById`    | int          | FK to testCoveredBy.testCoveredById           | Test coverage type                              |
+| `preConditions`      | text         |                                               | Test preconditions                              |
+| `steps`              | text         |                                               | Test steps                                      |
+| `expectedResult`     | text         |                                               | Expected test results                           |
+| `assignedTo`         | int          | FK to users.userId                            | User assigned to the test                       |
+| `createdBy`          | int          | FK to users.userId                            | User who created the test                       |
+| `updatedBy`          | int          | FK to users.userId                            | User who last updated the test                  |
+| `createdOn`          | timestamp    | NOT NULL, DEFAULT CURRENT_TIMESTAMP           | Creation timestamp                              |
+| `testStatusHistory`  | json         |                                               | History of status changes                       |
+| `updatedOn`          | timestamp    | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE | Last update timestamp                           |
+| `editInfo`           | json         | DEFAULT ('[]')                                | Edit history                                    |
+| `platformId`         | int          | FK to platform.platformId                     | Platform for the test                           |
+| `createdByName`      | varchar(100) |                                               | Name of creator (denormalized)                  |
+| `jiraTicket`         | varchar(100) |                                               | Associated JIRA ticket                          |
+| `defects`            | varchar(100) |                                               | Associated defects                              |
+| `attachments`        | varchar(100) |                                               | Associated attachments                          |
+| `status`             | enum         | NOT NULL, DEFAULT `Active`                    | Test status: `Active`, `Archived`, or `Deleted` |
+| `reference`          | text         |                                               | References or links                             |
+| `additionalGroups`   | text         |                                               | Additional grouping information                 |
+| `automationId`       | varchar(100) |                                               | Identifier for automation                       |
+| `description`        | text         |                                               | Test description                                |
+
+</div>
+
+**Indexes:**
+
+- `projectSquadIndex` on `projectId` and `squadId`
+- `statusIndex` on `status`
+- `titleIndex` on `title`
+
+#### Runs
+
+Test execution runs that group test results.
+
+<div class="text-xs">
+
+| Column           | Type         | Constraints                                   | Description                                              |
+| ---------------- | ------------ | --------------------------------------------- | -------------------------------------------------------- |
+| `runId`          | int          | PK, AUTO_INCREMENT                            | Unique run identifier                                    |
+| `projectId`      | int          | NOT NULL, FK to projects.projectId            | Project that owns the run                                |
+| `status`         | enum         |                                               | Run status: `Active`, `Locked`, `Archived`, or `Deleted` |
+| `runDescription` | varchar(255) |                                               | Run description                                          |
+| `refrence`       | varchar(255) |                                               | References (note: typo in schema)                        |
+| `createdBy`      | int          | FK to users.userId                            | User who created the run                                 |
+| `createdOn`      | timestamp    | DEFAULT CURRENT_TIMESTAMP                     | Creation timestamp                                       |
+| `updatedOn`      | timestamp    | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE | Last update timestamp                                    |
+| `updatedBy`      | int          | FK to users.userId                            | User who last updated the run                            |
+| `runName`        | varchar(50)  | NOT NULL                                      | Run name                                                 |
+| `lockedBy`       | int          | FK to users.userId                            | User who locked the run                                  |
+| `lockedOn`       | timestamp    |                                               | Timestamp when run was locked                            |
+
+</div>
+
+**Indexes:**
+
+- `runProjectIndex` on `projectId` and `status`
+
+### Test Organization
+
+#### Sections
+
+Hierarchical sections to organize tests.
+
+<div class="text-xs">
+
+| Column               | Type         | Constraints                                   | Description                       |
+| -------------------- | ------------ | --------------------------------------------- | --------------------------------- |
+| `sectionId`          | int          | PK, AUTO_INCREMENT                            | Unique section identifier         |
+| `sectionName`        | varchar(250) | NOT NULL                                      | Section name                      |
+| `sectionDescription` | text         |                                               | Section description               |
+| `parentId`           | int          | FK to sections.sectionId                      | Parent section (for hierarchy)    |
+| `editHistory`        | json         | DEFAULT ('[]')                                | Edit history                      |
+| `projectId`          | int          | NOT NULL, FK to projects.projectId            | Project that owns the section     |
+| `createdBy`          | int          | FK to users.userId                            | User who created the section      |
+| `createdOn`          | timestamp    | NOT NULL, DEFAULT CURRENT_TIMESTAMP           | Creation timestamp                |
+| `updatedOn`          | timestamp    | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE | Last update timestamp             |
+| `updatedBy`          | int          | FK to users.userId                            | User who last updated the section |
+
+</div>
+
+**Indexes:**
+
+- `sectionNameIndex` on `sectionName`
+- `sectionHierarchyUnique` (UNIQUE) on `parentId`, `sectionName`, and `projectId`
+
+#### Squads
+
+Teams responsible for tests.
+
+<div class="text-xs">
+
+| Column      | Type         | Constraints                                   | Description                     |
+| ----------- | ------------ | --------------------------------------------- | ------------------------------- |
+| `squadId`   | int          | PK, AUTO_INCREMENT                            | Unique squad identifier         |
+| `squadName` | varchar(100) | NOT NULL                                      | Squad name                      |
+| `createdBy` | int          | FK to users.userId                            | User who created the squad      |
+| `createdOn` | timestamp    | NOT NULL, DEFAULT CURRENT_TIMESTAMP           | Creation timestamp              |
+| `projectId` | int          | NOT NULL, FK to projects.projectId            | Project that owns the squad     |
+| `editInfo`  | json         | DEFAULT ('[]')                                | Edit history                    |
+| `updatedOn` | timestamp    | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE | Last update timestamp           |
+| `updatedBy` | int          | FK to users.userId                            | User who last updated the squad |
+
+</div>
+
+**Indexes:**
+
+- `squadsSquadNameIndex` on `squadName`
+- `squadsProjectIdIndex` on `projectId`
+- `squadNameUnique` (UNIQUE) on `squadName` and `projectId`
+
+#### Labels
+
+Tags for categorizing tests.
+
+<div class="text-xs">
+
+| Column        | Type         | Constraints                                   | Description                      |
+| ------------- | ------------ | --------------------------------------------- | -------------------------------- |
+| `labelId`     | int          | PK, AUTO_INCREMENT                            | Unique label identifier          |
+| `labelName`   | varchar(100) | NOT NULL                                      | Label name                       |
+| `labelType`   | enum         |                                               | Label type: `System` or `Custom` |
+| `createdOn`   | timestamp    | DEFAULT CURRENT_TIMESTAMP                     | Creation timestamp               |
+| `createdBy`   | int          | FK to users.userId                            | User who created the label       |
+| `editHistory` | json         | DEFAULT ('[]')                                | Edit history                     |
+| `projectId`   | int          | NOT NULL, FK to projects.projectId            | Project that owns the label      |
+| `updatedOn`   | timestamp    | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE | Last update timestamp            |
+| `updatedBy`   | int          | FK to users.userId                            | User who last updated the label  |
+
+</div>
+
+**Constraints:**
+
+- `labelProjectunique` (UNIQUE) on `labelName` and `projectId`
+
+### Test Metadata
+
+#### Type
+
+Types of tests.
+
+<div class="text-xs">
+
+| Column      | Type        | Constraints                                   | Description                     |
+| ----------- | ----------- | --------------------------------------------- | ------------------------------- |
+| `typeId`    | int         | PK, AUTO_INCREMENT                            | Unique type identifier          |
+| `typeName`  | varchar(30) | NOT NULL                                      | Type name                       |
+| `createdBy` | int         | FK to users.userId                            | User who created the type       |
+| `createdOn` | timestamp   | DEFAULT CURRENT_TIMESTAMP                     | Creation timestamp              |
+| `updatedOn` | timestamp   | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE | Last update timestamp           |
+| `orgId`     | int         | NOT NULL, FK to organisations.orgId           | Organization that owns the type |
+
+</div>
+
+**Indexes:**
+
+- `typeNameIndex` on `typeName`
+
+#### Priority
+
+Priority levels for tests.
+
+<div class="text-xs">
+
+| Column         | Type        | Constraints                                   | Description                         |
+| -------------- | ----------- | --------------------------------------------- | ----------------------------------- |
+| `priorityId`   | int         | PK, AUTO_INCREMENT                            | Unique priority identifier          |
+| `priorityName` | varchar(30) | NOT NULL                                      | Priority name                       |
+| `createdBy`    | int         | FK to users.userId                            | User who created the priority       |
+| `createdOn`    | timestamp   | DEFAULT CURRENT_TIMESTAMP                     | Creation timestamp                  |
+| `updatedOn`    | timestamp   | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE | Last update timestamp               |
+| `updatedBy`    | int         | FK to users.userId                            | User who last updated the priority  |
+| `orgId`        | int         | NOT NULL, FK to organisations.orgId           | Organization that owns the priority |
+
+</div>
+
+**Indexes:**
+
+- `priorityNameIndex` on `priorityName`
+
+#### Platform
+
+Platforms for tests.
+
+<div class="text-xs">
+
+| Column         | Type        | Constraints                                   | Description                         |
+| -------------- | ----------- | --------------------------------------------- | ----------------------------------- |
+| `platformId`   | int         | PK, AUTO_INCREMENT                            | Unique platform identifier          |
+| `platformName` | varchar(30) | NOT NULL                                      | Platform name                       |
+| `createdBy`    | int         | FK to users.userId                            | User who created the platform       |
+| `createdOn`    | timestamp   | DEFAULT CURRENT_TIMESTAMP                     | Creation timestamp                  |
+| `updatedOn`    | timestamp   | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE | Last update timestamp               |
+| `updatedBy`    | int         | FK to users.userId                            | User who last updated the platform  |
+| `orgId`        | int         | NOT NULL, FK to organisations.orgId           | Organization that owns the platform |
+
+</div>
+
+**Indexes:**
+
+- `platformNameIndex` on `platformName`
+
+#### AutomationStatus
+
+Automation statuses for tests.
+
+<div class="text-xs">
+
+| Column                 | Type        | Constraints                                   | Description                                  |
+| ---------------------- | ----------- | --------------------------------------------- | -------------------------------------------- |
+| `automationStatusId`   | int         | PK, AUTO_INCREMENT                            | Unique automation status identifier          |
+| `automationStatusName` | varchar(30) | NOT NULL                                      | Automation status name                       |
+| `createdBy`            | int         | FK to users.userId                            | User who created the automation status       |
+| `createdOn`            | timestamp   | NOT NULL, DEFAULT CURRENT_TIMESTAMP           | Creation timestamp                           |
+| `orgId`                | int         | NOT NULL, FK to organisations.orgId           | Organization that owns the automation status |
+| `updatedOn`            | timestamp   | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE | Last update timestamp                        |
+| `updatedBy`            | int         | FK to users.userId                            | User who last updated the automation status  |
+
+</div>
+
+**Indexes:**
+
+- `automationStatusNameIndex` on `automationStatusName`
+
+#### TestCoveredBy
+
+Coverage types for tests.
+
+<div class="text-xs">
+
+| Column              | Type        | Constraints                                   | Description                              |
+| ------------------- | ----------- | --------------------------------------------- | ---------------------------------------- |
+| `testCoveredById`   | int         | PK, AUTO_INCREMENT                            | Unique coverage type identifier          |
+| `testCoveredByName` | varchar(30) | NOT NULL                                      | Coverage type name                       |
+| `createdBy`         | int         | FK to users.userId                            | User who created the coverage type       |
+| `createdOn`         | timestamp   | DEFAULT CURRENT_TIMESTAMP                     | Creation timestamp                       |
+| `updatedOn`         | timestamp   | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE | Last update timestamp                    |
+| `updatedBy`         | int         | FK to users.userId                            | User who last updated the coverage type  |
+| `orgId`             | int         | NOT NULL, FK to organisations.orgId           | Organization that owns the coverage type |
+
+</div>
+
+**Indexes:**
+
+- `testCoveredByNameIndex` on `testCoveredByName`
+
+### Relationship Tables
+
+#### LabelTestMap
+
+Maps labels to tests.
+
+<div class="text-xs">
+
+| Column      | Type      | Constraints                                   | Description                       |
+| ----------- | --------- | --------------------------------------------- | --------------------------------- |
+| `labelId`   | int       | NOT NULL, FK to labels.labelId                | Label identifier                  |
+| `testId`    | int       | NOT NULL, FK to tests.testId                  | Test identifier                   |
+| `createdOn` | timestamp | DEFAULT CURRENT_TIMESTAMP                     | Creation timestamp                |
+| `createdBy` | int       | FK to users.userId                            | User who created the mapping      |
+| `projectId` | int       | NOT NULL, FK to projects.projectId            | Project that owns the mapping     |
+| `updatedOn` | timestamp | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE | Last update timestamp             |
+| `updatedBy` | int       | FK to users.userId                            | User who last updated the mapping |
+
+</div>
+
+**Constraints:**
+
+- `labelToTest` (UNIQUE) on `labelId` and `testId`
+
+**Indexes:**
+
+- `labelTestMapLabelIdIndex` on `labelId`
+
+#### TestRunMap
+
+Maps tests to runs and tracks test status.
+
+<div class="text-xs">
+
+| Column          | Type         | Constraints                                   | Description                             |
+| --------------- | ------------ | --------------------------------------------- | --------------------------------------- |
+| `testRunMapId`  | int          | PK, AUTO_INCREMENT                            | Unique mapping identifier               |
+| `runId`         | int          | FK to runs.runId                              | Run identifier                          |
+| `testId`        | int          | FK to tests.testId                            | Test identifier                         |
+| `projectId`     | int          | NOT NULL, FK to projects.projectId            | Project that owns the mapping           |
+| `isIncluded`    | boolean      | DEFAULT true                                  | Whether the test is included in the run |
+| `status`        | varchar(25)  | NOT NULL, DEFAULT `Untested`                  | Test status within the run              |
+| `statusUpdates` | json         |                                               | History of status updates               |
+| `updatedBy`     | int          | FK to users.userId                            | User who last updated the mapping       |
+| `createdOn`     | timestamp    | DEFAULT CURRENT_TIMESTAMP                     | Creation timestamp                      |
+| `updatedOn`     | timestamp    | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE | Last update timestamp                   |
+| `comment`       | varchar(200) |                                               | Comment on the test result              |
+
+</div>
+
+**Indexes:**
+
+- `testRunMapRunIdIndex` on `runId`
+- `testRunMapStatusIndex` on `status`
+
+#### TestRunsStatusHistory
+
+Historical record of test status changes within runs.
+
+<div class="text-xs">
+
+| Column                    | Type        | Constraints                                   | Description                      |
+| ------------------------- | ----------- | --------------------------------------------- | -------------------------------- |
+| `testRunsStatusHistoryId` | int         | PK, AUTO_INCREMENT                            | Unique history record identifier |
+| `runId`                   | int         | FK to runs.runId                              | Run identifier                   |
+| `testId`                  | int         | FK to tests.testId                            | Test identifier                  |
+| `status`                  | varchar(25) | NOT NULL                                      | Test status                      |
+| `updatedBy`               | int         | FK to users.userId                            | User who updated the status      |
+| `updatedOn`               | timestamp   | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE | Last update timestamp            |
+| `createdOn`               | timestamp   | NOT NULL, DEFAULT CURRENT_TIMESTAMP           | Creation timestamp               |
+| `comment`                 | text        |                                               | Comment on the status change     |
+| `totalTestCase`           | int         | DEFAULT 0                                     | Total number of test cases       |
+| `passedTestCase`          | int         | DEFAULT 0                                     | Number of passed test cases      |
+| `failedTestCase`          | int         | DEFAULT 0                                     | Number of failed test cases      |
+| `untestedTestCase`        | int         | DEFAULT 0                                     | Number of untested test cases    |
+
+</div>
+
+**Indexes:**
+
+- `testRunsStatusHistoryRunIdIndex` on `runId` and `testId`
+
+### Entity Relationship Diagram
+
+The database follows a relational model with these key relationships:
+
+- Organizations contain Projects
+- Projects contain Tests, Runs, Sections, Squads, and Labels
+- Organizations define metadata like Types, Priorities, Platforms, Automation Statuses, and Test Coverage Types
+- Tests are organized into Sections and can be assigned to Squads
+- Tests can have multiple Labels through LabelTestMap
+- Runs track test execution through TestRunMap and TestRunsStatusHistory
+- Users create and update records throughout the system

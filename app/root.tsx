@@ -3,6 +3,7 @@ import {LinksFunction, LoaderFunctionArgs, redirect} from '@remix-run/node'
 import {
   Links,
   Meta,
+  MetaFunction,
   Outlet,
   Scripts,
   ScrollRestoration,
@@ -45,6 +46,15 @@ export async function loader({request}: LoaderFunctionArgs) {
   return result.user
 }
 
+export const meta: MetaFunction = () => {
+  return [
+    {title: 'Checkmate'},
+    {name: 'description', content: 'Test Case Management System'},
+    {name: 'version', content: `${version}`},
+    {name: 'viewport', content: 'width=device-width, initial-scale=1'},
+  ]
+}
+
 export function Layout({children}: {children: React.ReactNode}) {
   const user = useRouteLoaderData<User>('root')
   const location = useLocation()
@@ -55,8 +65,6 @@ export function Layout({children}: {children: React.ReactNode}) {
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="version" content={version ?? 'NA'} />
         <Meta />
         <Links />
         <title>{APP_NAME}</title>
