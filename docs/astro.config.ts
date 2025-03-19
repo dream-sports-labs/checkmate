@@ -36,7 +36,7 @@ export default defineConfig({
           ],
         },
         {
-          label: "Guides",
+          label: "User Guide",
           items: [
             "guides/projects",
             {

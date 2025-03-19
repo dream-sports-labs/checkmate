@@ -49,7 +49,7 @@ export async function loader({request}: LoaderFunctionArgs) {
 export const meta: MetaFunction = () => {
   return [
     {title: 'Checkmate'},
-    {name: 'description', content: 'Test Case Management System'},
+    {name: 'description', content: 'Test Case Management Tool'},
     {name: 'version', content: `${version}`},
     {name: 'viewport', content: 'width=device-width, initial-scale=1'},
   ]
