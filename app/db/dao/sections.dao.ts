@@ -165,7 +165,10 @@ const SectionsDao = {
           )
 
         if (resp?.length > 0) {
-          if (resp.find((section) => section.parentId === null)) {
+          if (
+            resp.find((section) => section.parentId === null) &&
+            resp.find((section) => section.sectionName === param.sectionName)
+          ) {
             throw new Error('Entry already exists')
           }
         }
