@@ -3,7 +3,7 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "build": "NODE_OPTIONS=\"--import tsx/esm\" remix vite:build",
     "db:generate": "drizzle-kit generate",
