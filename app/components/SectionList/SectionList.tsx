@@ -20,7 +20,9 @@ import {SectionInfoBox} from './SectionInfoBox'
 
 export const SectionList = () => {
   const [searchParams, setSearchParams] = useSearchParams([])
-  const [sectionsData, setSectionsData] = useState<DisplaySection[]>([])
+  const [sectionsData, setSectionsData] = useState<DisplaySection[] | null>(
+    null,
+  )
   const [addSectionDialog, setAddSectionDialog] = useState<boolean>(false)
   const [editSectionDialog, setEditSectionDialog] = useState<boolean>(false)
 

@@ -10,7 +10,7 @@ import SectionSkeleton from './SectionSkeleton'
 import {getSectionHierarchy} from './utils'
 
 interface IRenderSection {
-  sections: DisplaySection[]
+  sections: DisplaySection[] | null
   level: number
   openSections: number[]
   toggleSection: (id: number) => void
@@ -38,9 +38,10 @@ const RenderSections = memo(
     editSubsectionClicked,
     sectionData,
   }: IRenderSection) => {
-    sections = sections.sort((a, b) =>
-      a.sectionName.localeCompare(b.sectionName),
-    )
+    sections = sections
+      ? sections.sort((a, b) => a.sectionName.localeCompare(b.sectionName))
+      : null
+
     const runId = useParams().runId ? Number(useParams().runId) : 0
 
     const renderSubSections = useCallback(
@@ -79,7 +80,7 @@ const RenderSections = memo(
 
     return (
       <ul className="relative font-poppins" key={`${level}`}>
-        {sections?.length ? (
+        {sections !== null ? (
           sections.map((section, index) => (
             <li key={section.sectionId} className="relative py-1">
               <div className="flex flex-row items-center cursor-pointer">
