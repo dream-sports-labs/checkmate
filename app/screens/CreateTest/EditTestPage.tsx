@@ -111,28 +111,33 @@ export default function EditTestPage({
 
       const priorityId = formData.priorityId
         ? formData.priorityId
-        : priorityFetcher.data?.data?.find((priority) => {
-        return priority.priorityName === testDetailsFetcher.data?.data.priority
-      })?.priorityId ?? 0
+        : priorityFetcher.data?.data?.find(
+            (priority) =>
+              priority.priorityName === testDetailsFetcher.data?.data.priority,
+          )?.priorityId ?? 0
 
       const automationStatusId = formData.automationStatusId
         ? formData.automationStatusId
-        : automationStatusFetcher.data?.data?.find((automationStatus) => {
-          return  automationStatus.automationStatusName === testDetailsFetcher.data?.data.automationStatus
-      })?.automationStatusId || null
-
+        : automationStatusFetcher.data?.data?.find(
+            (automationStatus) =>
+              automationStatus.automationStatusName ===
+              testDetailsFetcher.data?.data.automationStatus,
+          )?.automationStatusId || null
 
       const platformId = formData.platformId
         ? formData.platformId
-        : platformFetcher.data?.data?.find((platform) => {
-        return platform.platformName === testDetailsFetcher.data?.data.platform
-      })?.platformId ?? 0
+        : platformFetcher.data?.data?.find(
+            (platform) =>
+              platform.platformName === testDetailsFetcher.data?.data.platform,
+          )?.platformId ?? 0
 
       const testCoveredById = formData.testCoveredById
         ? formData.testCoveredById
-        : testCoveredByFetcher.data?.data?.find((testCoveredBy) => {
-        return testCoveredBy.testCoveredByName === testDetailsFetcher.data?.data.testCoveredBy
-      })?.testCoveredById ?? null
+        : testCoveredByFetcher.data?.data?.find(
+            (testCoveredBy) =>
+              testCoveredBy.testCoveredByName ===
+              testDetailsFetcher.data?.data.testCoveredBy,
+          )?.testCoveredById ?? null
 
       const labelNameArray =
         testDetailsFetcher.data?.data.labelNames?.split(',')
