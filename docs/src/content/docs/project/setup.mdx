@@ -75,7 +75,7 @@ Application running in docker is in **production** mode
    - If a database container does not already exist, this script will create one and seed data from `seedData.sql` file.
 2. Apply schema changes to the database:
    ```sh frame="none"
-      yarn dev:db:setup
+   yarn dev:db:setup
    ```
    - Create a database container in Docker (if one doesn’t exist).
    - Generate the updated schema in the drizzle folder.

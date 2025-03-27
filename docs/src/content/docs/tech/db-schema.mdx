@@ -248,6 +248,7 @@ Types of tests.
 | `createdOn` | timestamp   | DEFAULT CURRENT_TIMESTAMP                     | Creation timestamp              |
 | `updatedOn` | timestamp   | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE | Last update timestamp           |
 | `orgId`     | int         | NOT NULL, FK to organisations.orgId           | Organization that owns the type |
+| `projectId` | int         | FK to projects.projectId                      | Project that owns the label     |
 
 </div>
 
@@ -292,6 +293,7 @@ Platforms for tests.
 | `updatedOn`    | timestamp   | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE | Last update timestamp               |
 | `updatedBy`    | int         | FK to users.userId                            | User who last updated the platform  |
 | `orgId`        | int         | NOT NULL, FK to organisations.orgId           | Organization that owns the platform |
+| `projectId`    | int         | FK to projects.projectId                      | Project that owns the label         |
 
 </div>
 
@@ -314,6 +316,7 @@ Automation statuses for tests.
 | `orgId`                | int         | NOT NULL, FK to organisations.orgId           | Organization that owns the automation status |
 | `updatedOn`            | timestamp   | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE | Last update timestamp                        |
 | `updatedBy`            | int         | FK to users.userId                            | User who last updated the automation status  |
+| `projectId`            | int         | FK to projects.projectId                      | Project that owns the label                  |
 
 </div>
 
@@ -336,6 +339,7 @@ Coverage types for tests.
 | `updatedOn`         | timestamp   | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE | Last update timestamp                    |
 | `updatedBy`         | int         | FK to users.userId                            | User who last updated the coverage type  |
 | `orgId`             | int         | NOT NULL, FK to organisations.orgId           | Organization that owns the coverage type |
+| `projectId`         | int         | FK to projects.projectId                      | Project that owns the label              |
 
 </div>
 
