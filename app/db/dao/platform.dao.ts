@@ -9,12 +9,12 @@ import {dbClient} from '../client'
 import {errorHandling} from './utils'
 
 const PlatformDao = {
-  getAllPlatform: async ({orgId}: IGetAllPlatform) => {
+  getAllPlatform: async ({projectId}: IGetAllPlatform) => {
     try {
       return await dbClient
         .select()
         .from(platform)
-        .where(eq(platform.orgId, orgId))
+        .where(eq(platform.projectId, projectId))
     } catch (error: any) {
       // FOR DEV PURPOSES
       logger({
@@ -26,8 +26,15 @@ const PlatformDao = {
     }
   },
   createPlatform: async (param: ICreatePlatform) => {
+
     try {
-      return await dbClient.insert(platform).values(param)
+      const insertData = param.platformNames.map((platformName) => ({
+        platformName: platformName?.trim(),
+        projectId: param.projectId,
+        createdBy: param.createdBy,
+      }))
+      const data = await dbClient.insert(platform).values(insertData)
+      return data
     } catch (error: any) {
       // FOR DEV PURPOSES
       logger({

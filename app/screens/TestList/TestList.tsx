@@ -101,7 +101,7 @@ export default function TestList() {
   useEffect(() => {
     priorityFetcher.load(`/${API.GetPriority}?orgId=${orgId}`)
     automationStatusFetcher.load(`/${API.GetAutomationStatus}?orgId=${orgId}`)
-    platformFetcher.load(`/${API.GetPlatforms}?orgId=${orgId}`)
+    platformFetcher.load(`/${API.GetPlatforms}?projectId=${projectId}`)
   }, [orgId])
 
   useEffect(() => {

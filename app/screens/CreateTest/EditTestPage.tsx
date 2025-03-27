@@ -58,13 +58,13 @@ export default function EditTestPage({
     squadsFetcher.load(`/${API.GetSquads}?projectId=${projectId}`)
     labelsFetcher.load(`/${API.GetLabels}?projectId=${projectId}`)
     sectionFetcher.load(`/${API.GetSections}?projectId=${projectId}`)
+    platformFetcher.load(`/${API.GetPlatforms}?projectId=${projectId}`)
   }, [projectId])
 
   useEffect(() => {
     priorityFetcher.load(`/${API.GetPriority}?orgId=${orgId}`)
     automationStatusFetcher.load(`/${API.GetAutomationStatus}?orgId=${orgId}`)
     typeFetcher.load(`/${API.GetType}?orgId=${orgId}`)
-    platformFetcher.load(`/${API.GetPlatforms}?orgId=${orgId}`)
     testCoveredByFetcher.load(`/${API.GetTestCoveredBy}?orgId=${orgId}`)
   }, [orgId])
 
@@ -111,33 +111,28 @@ export default function EditTestPage({
 
       const priorityId = formData.priorityId
         ? formData.priorityId
-        : priorityFetcher.data?.data?.find(
-            (priority) =>
-              priority.priorityName === testDetailsFetcher.data?.data.priority,
-          )?.priorityId ?? 0
+        : priorityFetcher.data?.data?.find((priority) => {
+        return priority.priorityName === testDetailsFetcher.data?.data.priority
+      })?.priorityId ?? 0
 
       const automationStatusId = formData.automationStatusId
         ? formData.automationStatusId
-        : automationStatusFetcher.data?.data?.find(
-            (automationStatus) =>
-              automationStatus.automationStatusName ===
-              testDetailsFetcher.data?.data.automationStatus,
-          )?.automationStatusId || null
+        : automationStatusFetcher.data?.data?.find((automationStatus) => {
+          return  automationStatus.automationStatusName === testDetailsFetcher.data?.data.automationStatus
+      })?.automationStatusId || null
+
 
       const platformId = formData.platformId
         ? formData.platformId
-        : platformFetcher.data?.data?.find(
-            (platform) =>
-              platform.platformName === testDetailsFetcher.data?.data.platform,
-          )?.platformId ?? 0
+        : platformFetcher.data?.data?.find((platform) => {
+        return platform.platformName === testDetailsFetcher.data?.data.platform
+      })?.platformId ?? 0
 
       const testCoveredById = formData.testCoveredById
         ? formData.testCoveredById
-        : testCoveredByFetcher.data?.data?.find(
-            (testCoveredBy) =>
-              testCoveredBy.testCoveredByName ===
-              testDetailsFetcher.data?.data.testCoveredBy,
-          )?.testCoveredById ?? null
+        : testCoveredByFetcher.data?.data?.find((testCoveredBy) => {
+        return testCoveredBy.testCoveredByName === testDetailsFetcher.data?.data.testCoveredBy
+      })?.testCoveredById ?? null
 
       const labelNameArray =
         testDetailsFetcher.data?.data.labelNames?.split(',')

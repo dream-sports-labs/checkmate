@@ -12,7 +12,7 @@ describe('PlatformController', () => {
     const mockPlatforms = [{ id: 1, name: 'Platform1' }, { id: 2, name: 'Platform2' }];
     (PlatformDao.getAllPlatform as jest.Mock).mockResolvedValue(mockPlatforms);
 
-    const param = { orgId: 1 };
+    const param = { projectId: 1 };
     const result = await PlatformController.getAllPlatform(param);
 
     expect(result).toEqual(mockPlatforms);

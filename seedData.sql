@@ -199,7 +199,7 @@ CREATE TABLE `platform` (
   `createdOn` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedOn` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updatedBy` int DEFAULT NULL,
-  `orgId` int NOT NULL,
+  `projectId` int NOT NULL,
   PRIMARY KEY (`platformId`),
   KEY `platform_createdBy_users_userId_fk` (`createdBy`),
   KEY `platform_updatedBy_users_userId_fk` (`updatedBy`),

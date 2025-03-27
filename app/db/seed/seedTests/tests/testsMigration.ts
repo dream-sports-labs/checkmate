@@ -32,7 +32,7 @@ Papa.parse(csvFileContent, {
     })
     const allPriority = await PriorityController.getAllPriority({orgId: ORG_ID})
     const allPlatform = await PlatformController.getAllPlatform({
-      orgId: ORG_ID,
+      projectId: PROJECT_ID,
     })
     const allAutomationStatus =
       await AutomationStatusController.getAllAutomationStatus({orgId: ORG_ID})

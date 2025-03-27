@@ -54,7 +54,7 @@ export const CreateRunFilter = () => {
   const platformFetcher = useFetcher<{data: Platforms[]}>()
 
   useEffect(() => {
-    platformFetcher.load(`/${API.GetPlatforms}?orgId=${orgId}`)
+    platformFetcher.load(`/${API.GetPlatforms}?projectId=${projectId}`)
   }, [orgId])
 
   useEffect(() => {
