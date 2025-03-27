@@ -2,36 +2,43 @@
   {
     "typeName": "Functional",
     "createdBy": 1,
-    "orgId": 1
+    "orgId": 1,
+    "projectId": 1
   },
   {
     "typeName": "P1 Test Case",
     "createdBy": 1,
-    "orgId": 1
+    "orgId": 1,
+    "projectId": 1
   },
   {
     "typeName": "P0 Test Case",
     "createdBy": 1,
-    "orgId": 1
+    "orgId": 1,
+    "projectId": 1
   },
   {
     "typeName": "MobileApp",
     "createdBy": 1,
-    "orgId": 1
+    "orgId": 1,
+    "projectId": 1
   },
   {
     "typeName": "Automated",
     "createdBy": 1,
-    "orgId": 1
+    "orgId": 1,
+    "projectId": 1
   },
   {
     "typeName": "Intelligent Client",
     "createdBy": 1,
-    "orgId": 1
+    "orgId": 1,
+    "projectId": 1
   },
   {
     "typeName": "P2 Test Cases",
     "createdBy": 1,
-    "orgId": 1
+    "orgId": 1,
+    "projectId": 1
   }
 ]

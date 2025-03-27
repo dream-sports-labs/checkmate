@@ -2,16 +2,19 @@
   {
     "automationStatusName": "Not Automatable",
     "createdBy": 1,
-    "orgId": 1
+    "orgId": 1,
+    "projectId": 1
   },
   {
     "automationStatusName": "Automated",
     "createdBy": 1,
-    "orgId": 1
+    "orgId": 1,
+    "projectId": 1
   },
   {
     "automationStatusName": "Automatable",
     "createdBy": 1,
-    "orgId": 1
+    "orgId": 1,
+    "projectId": 1
   }
 ]
