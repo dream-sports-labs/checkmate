@@ -79,18 +79,32 @@ export default function EditTestPage({
     }
   }, [projectId, testId])
 
-  const [formData, setFormData] = useState<TestFormData>({
-    title: '',
-    sectionId: 0,
-    priorityId: 3,
-    automationStatusId: 3,
-    labelIds: [],
-    platformId: 1,
-    testCoveredById: 1,
-  })
+  const [formData, setFormData] = useState<TestFormData>(
+    source === 'addTest'
+      ? {
+          title: '',
+          sectionId: 0,
+          priorityId: 3,
+          automationStatusId: 3,
+          labelIds: [],
+          platformId: 1,
+          testCoveredById: 1,
+        }
+      : {
+          title: '',
+          sectionId: 0,
+          priorityId: 0,
+          automationStatusId: 0,
+          labelIds: [],
+          platformId: 0,
+          testCoveredById: 0,
+        },
+  )
 
   useEffect(() => {
     if (testDetailsFetcher.data) {
+      console.log('testDetailsFetcher.data', testDetailsFetcher.data)
+
       const sectionId = formData.sectionId
         ? formData.sectionId
         : sectionFetcher.data?.data?.find((section) => {
@@ -142,13 +156,14 @@ export default function EditTestPage({
       const labelNameArray =
         testDetailsFetcher.data?.data.labelNames?.split(',')
 
-      const labelIdArray = formData.labelIds
-        ? formData.labelIds
-        : labelsFetcher.data?.data
-        ? labelsFetcher.data.data
-            .filter((label) => labelNameArray?.includes(label.labelName))
-            .map((label) => label.labelId)
-        : []
+      const labelIdArray =
+        formData.labelIds && formData.labelIds.length > 0
+          ? formData.labelIds
+          : labelsFetcher.data?.data
+          ? labelsFetcher.data.data
+              .filter((label) => labelNameArray?.includes(label.labelName))
+              .map((label) => label.labelId)
+          : []
 
       const typeId = formData.typeId
         ? formData.typeId

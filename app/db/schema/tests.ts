@@ -118,6 +118,9 @@ export const type = mysqlTable(
     orgId: int('orgId')
       .references(() => organisations.orgId, {onDelete: 'cascade'})
       .notNull(),
+    projectId: int('projectId').references(() => projects.projectId, {
+      onDelete: 'set null',
+    }),
   },
   (type) => {
     return {
@@ -147,6 +150,9 @@ export const automationStatus = mysqlTable(
       .default(sql`CURRENT_TIMESTAMP`)
       .onUpdateNow(),
     updatedBy: int('updatedBy').references(() => users.userId, {
+      onDelete: 'set null',
+    }),
+    projectId: int('projectId').references(() => projects.projectId, {
       onDelete: 'set null',
     }),
   },
@@ -180,6 +186,9 @@ export const testCoveredBy = mysqlTable(
     orgId: int('orgId')
       .references(() => organisations.orgId, {onDelete: 'cascade'})
       .notNull(),
+    projectId: int('projectId').references(() => projects.projectId, {
+      onDelete: 'set null',
+    }),
   },
   (testCoveredBy) => {
     return {
@@ -211,6 +220,9 @@ export const platform = mysqlTable(
     projectId: int('projectId')
       .references(() => projects.projectId, {onDelete: 'cascade'})
       .notNull(),
+    projectId: int('projectId').references(() => projects.projectId, {
+      onDelete: 'set null',
+    }),
   },
   (platform) => {
     return {
