@@ -221,8 +221,8 @@ export const platform = mysqlTable(
       .references(() => organisations.orgId, {onDelete: 'cascade'})
       .notNull(),
     projectId: int('projectId').references(() => projects.projectId, {
-        onDelete: 'set null'
-    })
+      onDelete: 'set null',
+    }),
   },
   (platform) => {
     return {
