@@ -1,12 +1,13 @@
 import PlatformDao from '@dao/platform.dao'
 
 export interface IGetAllPlatform {
-  projectId: number
+  orgId: number
 }
 export interface ICreatePlatform {
   platformNames: string[]
   createdBy: number
-  projectId: number
+  projectId?: null | number
+  orgId: number
 }
 
 const PlatformController = {

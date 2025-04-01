@@ -16,16 +16,16 @@ export async function loader({params, request}: LoaderFunctionArgs) {
     })
     const url = new URL(request.url)
     const searchParams = Object.fromEntries(url.searchParams.entries())
-    const projectId = Number(searchParams['projectId'])
+    const orgId = Number(searchParams['orgId'])
 
-    if (!checkForValidId(projectId)) {
+    if (!checkForValidId(orgId)) {
       return responseHandler({
         error: 'Invalid param orgId',
         status: 400,
       })
     }
 
-    const platformData = await PlatformController.getAllPlatform({projectId})
+    const platformData = await PlatformController.getAllPlatform({orgId})
     return responseHandler({data: platformData, status: 200})
   } catch (error: any) {
     return errorResponseHandler(error)

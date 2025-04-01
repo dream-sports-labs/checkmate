@@ -58,13 +58,13 @@ export default function EditTestPage({
     squadsFetcher.load(`/${API.GetSquads}?projectId=${projectId}`)
     labelsFetcher.load(`/${API.GetLabels}?projectId=${projectId}`)
     sectionFetcher.load(`/${API.GetSections}?projectId=${projectId}`)
-    platformFetcher.load(`/${API.GetPlatforms}?projectId=${projectId}`)
   }, [projectId])
 
   useEffect(() => {
     priorityFetcher.load(`/${API.GetPriority}?orgId=${orgId}`)
     automationStatusFetcher.load(`/${API.GetAutomationStatus}?orgId=${orgId}`)
     typeFetcher.load(`/${API.GetType}?orgId=${orgId}`)
+    platformFetcher.load(`/${API.GetPlatforms}?orgId=${orgId}`)
     testCoveredByFetcher.load(`/${API.GetTestCoveredBy}?orgId=${orgId}`)
   }, [orgId])
 

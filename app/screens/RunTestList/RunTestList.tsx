@@ -86,7 +86,7 @@ export default function RunTestList() {
     testRunsMetaDataFetcher.load(
       `/${API.GetRunStateDetail}?runId=${params.runId}`,
     )
-    platformFetcher.load(`/${API.GetPlatforms}?projectId=${projectId}`)
+    platformFetcher.load(`/${API.GetPlatforms}?orgId=${orgId}`)
 
     if (testRunsData.length === 0 && Number(searchParams?.get('page')) !== 1) {
       resetPageNumber()

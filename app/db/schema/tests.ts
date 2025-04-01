@@ -217,12 +217,12 @@ export const platform = mysqlTable(
     updatedBy: int('updatedBy').references(() => users.userId, {
       onDelete: 'set null',
     }),
-    projectId: int('projectId')
-      .references(() => projects.projectId, {onDelete: 'cascade'})
+    orgId: int('orgId')
+      .references(() => organisations.orgId, {onDelete: 'cascade'})
       .notNull(),
     projectId: int('projectId').references(() => projects.projectId, {
-      onDelete: 'set null',
-    }),
+        onDelete: 'set null'
+    })
   },
   (platform) => {
     return {

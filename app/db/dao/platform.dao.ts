@@ -7,14 +7,15 @@ import {eq} from 'drizzle-orm/sql'
 import {logger, LogType} from '~/utils/logger'
 import {dbClient} from '../client'
 import {errorHandling} from './utils'
+import {ORG_ID} from '@route/utils/constants'
 
 const PlatformDao = {
-  getAllPlatform: async ({projectId}: IGetAllPlatform) => {
+  getAllPlatform: async ({orgId}: IGetAllPlatform) => {
     try {
       return await dbClient
         .select()
         .from(platform)
-        .where(eq(platform.projectId, projectId))
+        .where(eq(platform.orgId, orgId))
     } catch (error: any) {
       // FOR DEV PURPOSES
       logger({
@@ -30,6 +31,7 @@ const PlatformDao = {
     try {
       const insertData = param.platformNames.map((platformName) => ({
         platformName: platformName?.trim(),
+        orgId: param.orgId ?? ORG_ID,
         projectId: param.projectId,
         createdBy: param.createdBy,
       }))

@@ -8,6 +8,7 @@ import {
 import {API} from '../../utilities/api'
 import {getRequestParams} from '../../utilities/utils'
 import PlatformController from '@controllers/platform.controller'
+import {ORG_ID} from '@route/utils/constants'
 
 const AddPlatformsSchema = z.object({
   platforms: z
@@ -33,13 +34,14 @@ export const action = async ({request}: ActionFunctionArgs) => {
       request,
       resource: API.AddPlatforms,
     })
-
+    const orgID = ORG_ID
     const data = await getRequestParams<AddPlatformsType>(request, AddPlatformsSchema)
 
     const resp = await PlatformController.createPlatform({
       projectId: data.projectId,
       platformNames: data.platforms,
       createdBy: user?.userId ?? 0,
+      orgId: orgID
     })
 
     if (resp) {

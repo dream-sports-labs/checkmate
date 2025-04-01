@@ -1,31 +1,37 @@
 [
   {
     "platformName": "All Platforms",
+    "orgId": 1,
     "createdBy": 1,
     "projectId": 1
   },
   {
     "platformName": "Only Android",
+    "orgId": 1,
     "createdBy": 1,
     "projectId": 1
   },
   {
     "platformName": "Only iOS",
+    "orgId": 1,
     "createdBy": 1,
     "projectId": 1
   },
   {
     "platformName": "Only Playstore",
+    "orgId": 1,
     "createdBy": 1,
     "projectId": 1
   },
   {
     "platformName": "Android Web And iOS Only",
+    "orgId": 1,
     "createdBy": 1,
     "projectId": 1
   },
   {
     "platformName": "Android Web and Playstore",
+    "orgId": 1,
     "createdBy": 1,
     "projectId": 1
   }
