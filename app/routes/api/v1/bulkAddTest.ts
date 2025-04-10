@@ -18,7 +18,7 @@ export const TestRequestSchema = z.object({
   steps: z.string().optional().nullable(),
   preConditions: z.string().optional(),
   expectedResult: z.string().optional(),
-  section: z.string(),
+  section: z.string().min(3, 'Number of characters are less than 3'),
   sectionDescription: z.string().optional(),
   testCoveredBy: z.string().optional(),
   testId: z.string().or(z.number()).optional(),

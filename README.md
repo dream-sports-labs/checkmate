@@ -73,7 +73,7 @@ This Test Case Management Tool is designed to address the challenges faced by te
 
 ### 📖 API Documentation
 
-[Postman](https://www.postman.com/checkmate-2397/checkmate/collection/504lfpr/checkmate-api-endpoints-collection) collection of APIs is currently available, comprehensive documentation is in progress.
+[Postman](https://documenter.getpostman.com/view/23217307/2sAYXFgwRt) collection of APIs is currently available, comprehensive documentation is in progress.
 
 ### ⚙️ TechStack Used:
 
