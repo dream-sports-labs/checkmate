@@ -4,8 +4,9 @@ export interface IGetAllPlatform {
   orgId: number
 }
 export interface ICreatePlatform {
-  platformName: string
+  platformNames: string[]
   createdBy: number
+  projectId?: null | number
   orgId: number
 }
 

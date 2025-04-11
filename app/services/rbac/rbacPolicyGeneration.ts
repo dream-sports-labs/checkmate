@@ -40,10 +40,12 @@ export function generateRbacPolicy(): IRbacPolicy[] {
         action = ApiTypes.GET
         break
 
+
       case API.AddLabels:
       case API.AddSquads:
       case API.AddTestBulk:
       case API.AddRun:
+      case API.AddPlatforms:
       case API.AddTest:
       case API.AddSection:
         role = AccessType.USER

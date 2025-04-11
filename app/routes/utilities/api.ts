@@ -16,6 +16,7 @@ export enum API {
   AddProjects = 'api/v1/project/create',
   AddRun = 'api/v1/run/create',
   AddSquads = 'api/v1/project/add-squads',
+  AddPlatforms = 'api/v1/project/add-platforms',
   AddTest = 'api/v1/test/create',
   AddTestBulk = 'api/v1/test/bulk-add',
   AddToken = 'api/v1/token/generate',
@@ -68,6 +69,7 @@ export const API_RESOLUTION_PATHS = {
   [API.AddProjects]: 'routes/api/v1/createProjects.ts',
   [API.AddRun]: 'routes/api/v1/createRun.ts',
   [API.AddSquads]: 'routes/api/v1/addSquads.ts',
+  [API.AddPlatforms]: 'routes/api/v1/addPlatforms.ts',
   [API.AddTest]: 'routes/api/v1/createTest.ts',
   [API.AddTestBulk]: 'routes/api/v1/bulkAddTest.ts',
   [API.AddToken]: 'routes/api/v1/generateToken.ts',
@@ -171,4 +173,5 @@ export const ApiToTypeMap: {
   [API.UpdateUserRole]: ApiTypes.PUT,
   [API.AddSection]: ApiTypes.POST,
   [API.EditSection]: ApiTypes.PUT,
+  [API.AddPlatforms]: ApiTypes.POST
 }

@@ -83,7 +83,7 @@ export const AddResultDialog = ({
             width: 'min-96',
             backgroundColor: getStatusColor(currStatus as TestStatusType),
             fontWeight: 500,
-            color: currStatus === TestStatusType.Blocked ? 'white' : 'black',
+            color: getStatusTextColor(currStatus as TestStatusType),
           }}>
           {currStatus}
           <ChevronDown size={22} strokeWidth={2} className="ml-2" />
