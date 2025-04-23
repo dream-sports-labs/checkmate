@@ -315,4 +315,71 @@ describe('Remove Test From Run - Action Function', () => {
 
     expect(errorResponseHandler).toHaveBeenCalledWith(mockError)
   })
+
+  it('should return an error when the run is not found', async () => {
+    const requestData = {
+      runId: 123,
+      projectId: 456,
+      testIds: [1, 2, 3],
+    }
+    const request = new Request('http://localhost', {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify(requestData),
+    })
+    const mockUser = {userId: 789}
+    const mockRunInfo: any[] = [] // Empty array means no run was found
+
+    ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(mockUser)
+    ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
+    ;(checkForRunId as jest.Mock).mockReturnValue(true)
+    ;(RunsController.getRunInfo as jest.Mock).mockResolvedValue(mockRunInfo)
+    ;(responseHandler as jest.Mock).mockImplementation((response) => response)
+
+    const response = await action({request} as any)
+
+    expect(RunsController.getRunInfo).toHaveBeenCalledWith({runId: 123})
+    expect(responseHandler).toHaveBeenCalledWith({
+      error: 'Run not found',
+      status: 400,
+    })
+  })
+
+  it('should handle undefined user correctly', async () => {
+    const requestData = {
+      runId: 123,
+      projectId: 456,
+      testIds: [1, 2, 3],
+    }
+    const request = new Request('http://localhost', {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify(requestData),
+    })
+    const mockUser = undefined
+    const mockRunInfo = [{status: 'Active'}]
+    const mockDeleteResponse = [{affectedRows: 3}]
+
+    ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(mockUser)
+    ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
+    ;(checkForRunId as jest.Mock).mockReturnValue(true)
+    ;(RunsController.getRunInfo as jest.Mock).mockResolvedValue(mockRunInfo)
+    ;(TestRunsController.deleteTestFromRun as jest.Mock).mockResolvedValue(
+      mockDeleteResponse,
+    )
+    ;(responseHandler as jest.Mock).mockImplementation((response) => response)
+
+    const response = await action({request} as any)
+
+    expect(TestRunsController.deleteTestFromRun).toHaveBeenCalledWith({
+      testIds: [1, 2, 3],
+      runId: 123,
+      projectId: 456,
+      updatedBy: 0, // Should use 0 as a fallback for undefined user
+    })
+    expect(responseHandler).toHaveBeenCalledWith({
+      data: {success: true, message: 'Tests removed successfully'},
+      status: 200,
+    })
+  })
 })
