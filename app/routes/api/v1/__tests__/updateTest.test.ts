@@ -179,4 +179,190 @@ describe('Update Test - Action Function', () => {
       error: 'Unexpected error',
     })
   })
+
+  it('should handle error in updateTest', async () => {
+    const requestData = {
+      testId: 123,
+      title: 'Updated Test',
+      projectId: 456,
+      sectionId: 789,
+      priorityId: 1,
+      automationStatusId: 2,
+      labelIds: [1, 2, 3],
+    }
+    const request = new Request('http://localhost', {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify(requestData),
+    })
+    const mockUser = {userId: 123}
+    const mockError = new Error('Failed to update test')
+
+    ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(mockUser)
+    ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
+    ;(TestsController.updateTest as jest.Mock).mockRejectedValue(mockError)
+    ;(errorResponseHandler as jest.Mock).mockImplementation((error) => error)
+
+    const response = await action({request} as any)
+
+    expect(errorResponseHandler).toHaveBeenCalledWith(mockError)
+  })
+
+  it('should handle error in updateLabelTestMap', async () => {
+    const requestData = {
+      testId: 123,
+      title: 'Updated Test',
+      projectId: 456,
+      sectionId: 789,
+      priorityId: 1,
+      automationStatusId: 2,
+      labelIds: [1, 2, 3],
+    }
+    const request = new Request('http://localhost', {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify(requestData),
+    })
+    const mockUser = {userId: 123}
+    const mockUpdateResponse = {testData: 1}
+    const mockError = new Error('Failed to update label test map')
+
+    ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(mockUser)
+    ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
+    ;(TestsController.updateTest as jest.Mock).mockResolvedValue(
+      mockUpdateResponse,
+    )
+    ;(TestsController.updateLabelTestMap as jest.Mock).mockRejectedValue(
+      mockError,
+    )
+    ;(errorResponseHandler as jest.Mock).mockImplementation((error) => error)
+
+    const response = await action({request} as any)
+
+    expect(errorResponseHandler).toHaveBeenCalledWith(mockError)
+  })
+
+  it('should validate missing section', async () => {
+    const invalidRequestData = {
+      testId: 123,
+      title: 'Updated Test',
+      projectId: 456,
+      priorityId: 1,
+      automationStatusId: 2,
+      labelIds: [1, 2, 3],
+    }
+    const request = new Request('http://localhost', {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify(invalidRequestData),
+    })
+
+    ;(getRequestParams as jest.Mock).mockRejectedValue(
+      new Error('Select or Create a section'),
+    )
+    ;(errorResponseHandler as jest.Mock).mockImplementation((error) => error)
+
+    const response = await action({request} as any)
+
+    expect(getRequestParams).toHaveBeenCalledWith(request, expect.any(Object))
+    expect(errorResponseHandler).toHaveBeenCalledWith(
+      new Error('Select or Create a section'),
+    )
+  })
+
+  it('should validate both sectionId and new_section', async () => {
+    const invalidRequestData = {
+      testId: 123,
+      title: 'Updated Test',
+      projectId: 456,
+      sectionId: 789,
+      new_section: 'New Section',
+      priorityId: 1,
+      automationStatusId: 2,
+      labelIds: [1, 2, 3],
+    }
+    const request = new Request('http://localhost', {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify(invalidRequestData),
+    })
+
+    ;(getRequestParams as jest.Mock).mockRejectedValue(
+      new Error('Both sectionId and new_section cannot be provided'),
+    )
+    ;(errorResponseHandler as jest.Mock).mockImplementation((error) => error)
+
+    const response = await action({request} as any)
+
+    expect(getRequestParams).toHaveBeenCalledWith(request, expect.any(Object))
+    expect(errorResponseHandler).toHaveBeenCalledWith(
+      new Error('Both sectionId and new_section cannot be provided'),
+    )
+  })
+
+  it('should validate both squadId and new_squad', async () => {
+    const invalidRequestData = {
+      testId: 123,
+      title: 'Updated Test',
+      projectId: 456,
+      sectionId: 789,
+      squadId: 1,
+      new_squad: 'New Squad',
+      priorityId: 1,
+      automationStatusId: 2,
+      labelIds: [1, 2, 3],
+    }
+    const request = new Request('http://localhost', {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify(invalidRequestData),
+    })
+
+    ;(getRequestParams as jest.Mock).mockRejectedValue(
+      new Error('Both squadId and New Squad cannot be provided'),
+    )
+    ;(errorResponseHandler as jest.Mock).mockImplementation((error) => error)
+
+    const response = await action({request} as any)
+
+    expect(getRequestParams).toHaveBeenCalledWith(request, expect.any(Object))
+    expect(errorResponseHandler).toHaveBeenCalledWith(
+      new Error('Both squadId and New Squad cannot be provided'),
+    )
+  })
+
+  it('should handle error in responseHandler', async () => {
+    const requestData = {
+      testId: 123,
+      title: 'Updated Test',
+      projectId: 456,
+      sectionId: 789,
+      priorityId: 1,
+      automationStatusId: 2,
+      labelIds: [1, 2, 3],
+    }
+    const request = new Request('http://localhost', {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify(requestData),
+    })
+    const mockUser = {userId: 123}
+    const mockUpdateResponse = {testData: 1}
+    const mockError = new Error('Failed to handle response')
+
+    ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(mockUser)
+    ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
+    ;(TestsController.updateTest as jest.Mock).mockResolvedValue(
+      mockUpdateResponse,
+    )
+    ;(TestsController.updateLabelTestMap as jest.Mock).mockResolvedValue({})
+    ;(responseHandler as jest.Mock).mockImplementation(() => {
+      throw mockError
+    })
+    ;(errorResponseHandler as jest.Mock).mockImplementation((error) => error)
+
+    const response = await action({request} as any)
+
+    expect(errorResponseHandler).toHaveBeenCalledWith(mockError)
+  })
 })
