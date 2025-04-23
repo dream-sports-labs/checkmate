@@ -22,26 +22,26 @@ jest.mock('@schema/tests', () => {
     generated: undefined,
     primary: false,
     keyAsName: name,
-    _: {name}
+    _: {name},
   })
 
   return {
     tests: {
       testId: mockColumn('testId'),
-      title: mockColumn('title')
+      title: mockColumn('title'),
     },
     priority: {
-      priorityId: mockColumn('priorityId')
+      priorityId: mockColumn('priorityId'),
     },
     platform: {
-      platformName: mockColumn('platformName')
+      platformName: mockColumn('platformName'),
     },
     sections: {
-      sectionName: mockColumn('sectionName')
+      sectionName: mockColumn('sectionName'),
     },
     automationStatus: {
-      automationStatusName: mockColumn('automationStatusName')
-    }
+      automationStatusName: mockColumn('automationStatusName'),
+    },
   }
 })
 
@@ -54,7 +54,7 @@ jest.mock('../../../services/ErrorTypes', () => ({
       Object.assign(error, options)
     }
     return error
-  })
+  }),
 }))
 
 jest.mock('uuid', () => ({
