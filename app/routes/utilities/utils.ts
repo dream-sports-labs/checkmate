@@ -43,7 +43,7 @@ export const jsonParseWithError = (
   try {
     return jsonString ? JSON.parse(jsonString) : undefined
   } catch (error) {
-    throw new Error(paramName ? `Invalid JSON in ${paramName}` : 'Invalid JSON', {
+    throw new Error(paramName ? `Invalid JSON ${paramName}` : 'Invalid JSON', {
       cause: ErrorCause.INVALID_PARAMS,
     })
   }

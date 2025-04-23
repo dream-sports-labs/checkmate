@@ -25,7 +25,7 @@ export const errorHandling = (error: any) => {
   throw new SqlError(error.message || 'Unknown error')
 }
 
-export function getForeignKeyConstraint(errorString: string) {
+function getForeignKeyConstraint(errorString: string) {
   const foreignKeyPattern = /FOREIGN KEY \(`[^`]+\`\)/
   const KEY_PATTERN = /`[^`]+`/
   const match = errorString.match(foreignKeyPattern)
