@@ -53,8 +53,15 @@ describe('jsonParseWithError', () => {
 
   it('should include paramName in the error message if provided', () => {
     expect(() => jsonParseWithError('invalid json', 'paramName')).toThrow(
-      'Invalid JSON paramName',
+      'Invalid JSON in paramName',
     )
+  })
+
+  it('should throw error with parameter name when invalid JSON', () => {
+    const invalidJson = '{invalid'
+    const paramName = 'paramName'
+
+    expect(() => jsonParseWithError(invalidJson, paramName)).toThrow('Invalid JSON in paramName')
   })
 })
 

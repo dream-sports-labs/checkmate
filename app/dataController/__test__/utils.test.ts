@@ -89,81 +89,93 @@ describe('handleNewSectionAndSquad', () => {
     jest.clearAllMocks()
   })
 
-  test('should create a new section when new_section is provided', async () => {
-    const mockSectionResponse = {id: 1, name: 'New Section'}
-    ;(
-      SectionsController.createSectionFromHierarchy as jest.Mock
-    ).mockResolvedValue(mockSectionResponse)
-
-    const result = await handleNewSectionAndSquad({
+  it('should create new section when new_section is provided', async () => {
+    const params = {
       new_section: 'New Section',
-      new_squad: null,
+      new_squad: undefined,
       projectId: 1,
-      createdBy: 1,
-    })
-
+      createdBy: 100
+    };
+    const mockSectionResponse = { id: 1, name: 'New Section' };
+    
+    (SectionsController.createSectionFromHierarchy as jest.Mock).mockResolvedValue(mockSectionResponse);
+    
+    const result = await handleNewSectionAndSquad(params);
+    
     expect(SectionsController.createSectionFromHierarchy).toHaveBeenCalledWith({
-      sectionHierarchyString: 'New Section',
-      projectId: 1,
-      createdBy: 1,
-    })
-    expect(result).toEqual({newSection: mockSectionResponse})
-  })
+      sectionHierarchyString: params.new_section,
+      projectId: params.projectId,
+      createdBy: params.createdBy
+    });
+    expect(SquadsController.checkAndCreateSquad).not.toHaveBeenCalled();
+    expect(result).toEqual({ newSection: mockSectionResponse });
+  });
 
-  test('should create a new squad when new_squad is provided', async () => {
-    const mockSquadResponse = {id: 2, name: 'New Squad'}
-    ;(SquadsController.checkAndCreateSquad as jest.Mock).mockResolvedValue(
-      mockSquadResponse,
-    )
-
-    const result = await handleNewSectionAndSquad({
-      new_section: null,
+  it('should create new squad when new_squad is provided', async () => {
+    const params = {
+      new_section: undefined,
       new_squad: 'New Squad',
       projectId: 1,
-      createdBy: 1,
-    })
-
+      createdBy: 100
+    };
+    const mockSquadResponse = { id: 1, name: 'New Squad' };
+    
+    (SquadsController.checkAndCreateSquad as jest.Mock).mockResolvedValue(mockSquadResponse);
+    
+    const result = await handleNewSectionAndSquad(params);
+    
     expect(SquadsController.checkAndCreateSquad).toHaveBeenCalledWith({
-      squadName: 'New Squad',
-      projectId: 1,
-      createdBy: 1,
-    })
-    expect(result).toEqual({newSquad: mockSquadResponse})
-  })
+      squadName: params.new_squad,
+      projectId: params.projectId,
+      createdBy: params.createdBy
+    });
+    expect(SectionsController.createSectionFromHierarchy).not.toHaveBeenCalled();
+    expect(result).toEqual({ newSquad: mockSquadResponse });
+  });
 
-  test('should handle both new section and new squad', async () => {
-    const mockSectionResponse = {id: 1, name: 'New Section'}
-    const mockSquadResponse = {id: 2, name: 'New Squad'}
-    ;(
-      SectionsController.createSectionFromHierarchy as jest.Mock
-    ).mockResolvedValue(mockSectionResponse)
-    ;(SquadsController.checkAndCreateSquad as jest.Mock).mockResolvedValue(
-      mockSquadResponse,
-    )
-
-    const result = await handleNewSectionAndSquad({
+  it('should create both section and squad when both are provided', async () => {
+    const params = {
       new_section: 'New Section',
       new_squad: 'New Squad',
       projectId: 1,
-      createdBy: 1,
-    })
-
-    expect(SectionsController.createSectionFromHierarchy).toHaveBeenCalled()
-    expect(SquadsController.checkAndCreateSquad).toHaveBeenCalled()
-    expect(result).toEqual({
+      createdBy: 100
+    };
+    const mockSectionResponse = { id: 1, name: 'New Section' };
+    const mockSquadResponse = { id: 2, name: 'New Squad' };
+    
+    (SectionsController.createSectionFromHierarchy as jest.Mock).mockResolvedValue(mockSectionResponse);
+    (SquadsController.checkAndCreateSquad as jest.Mock).mockResolvedValue(mockSquadResponse);
+    
+    const result = await handleNewSectionAndSquad(params);
+    
+    expect(SectionsController.createSectionFromHierarchy).toHaveBeenCalledWith({
+      sectionHierarchyString: params.new_section,
+      projectId: params.projectId,
+      createdBy: params.createdBy
+    });
+    expect(SquadsController.checkAndCreateSquad).toHaveBeenCalledWith({
+      squadName: params.new_squad,
+      projectId: params.projectId,
+      createdBy: params.createdBy
+    });
+    expect(result).toEqual({ 
       newSection: mockSectionResponse,
-      newSquad: mockSquadResponse,
-    })
-  })
+      newSquad: mockSquadResponse
+    });
+  });
 
-  test('should return an empty object when no new section or squad is provided', async () => {
-    const result = await handleNewSectionAndSquad({
-      new_section: null,
-      new_squad: null,
+  it('should return empty object when no new section or squad is provided', async () => {
+    const params = {
+      new_section: undefined,
+      new_squad: undefined,
       projectId: 1,
-      createdBy: 1,
-    })
-
-    expect(result).toEqual({})
-  })
+      createdBy: 100
+    };
+    
+    const result = await handleNewSectionAndSquad(params);
+    
+    expect(SectionsController.createSectionFromHierarchy).not.toHaveBeenCalled();
+    expect(SquadsController.checkAndCreateSquad).not.toHaveBeenCalled();
+    expect(result).toEqual({});
+  });
 })

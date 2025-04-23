@@ -63,16 +63,16 @@ const SearchParams = {
 
     return {
       projectId,
-      squadIds,
-      labelIds,
+      squadIds: squadIds?.length ? squadIds : [],
+      labelIds: labelIds?.length ? labelIds : [],
       page,
       pageSize,
       textSearch,
       filterType: filterType as 'and' | 'or',
-      sectionIds: sectionIds?.length ? sectionIds : undefined,
+      sectionIds: sectionIds?.length ? sectionIds : [],
       sortBy,
       sortOrder: sortOrder as ITestRunData['sortOrder'],
-      platformIds,
+      platformIds: platformIds?.length ? platformIds : undefined,
     }
   },
 
@@ -211,13 +211,14 @@ const SearchParams = {
   },
   getAllUsers: ({params, request}: ISearchParams) => {
     const url = new URL(request.url)
-    const page = Number(url.searchParams.get('page')) || 1
-    const pageSize = Number(url.searchParams.get('pageSize')) || MED_PAGE_SIZE
+    const page = Number(url.searchParams.get('page'))
+    const pageSize = Number(url.searchParams.get('pageSize'))
     const textSearch = url.searchParams.get('textSearch') || ''
     const userRoles = url.searchParams.get('userRoles')
       ? jsonParseWithError(url.searchParams.get('userRoles'), 'userRoles')
       : undefined
-    if (!page || !pageSize)
+
+    if (isNaN(page) || isNaN(pageSize) || page < 1 || pageSize < 1)
       throw new Error('Invalid page or pageSize, provide valid entry', {
         cause: ErrorCause.INVALID_PARAMS,
       })
@@ -229,8 +230,8 @@ const SearchParams = {
     })
 
     return {
-      page,
-      pageSize,
+      page: page || 1,
+      pageSize: pageSize || MED_PAGE_SIZE,
       textSearch,
       userRoles,
     }

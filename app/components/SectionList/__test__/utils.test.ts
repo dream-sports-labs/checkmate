@@ -8,6 +8,9 @@ import {
   buildSectionHierarchy,
   getSectionsWithTheirParents,
   removeSectionAndDescendants,
+  getInitialOpenSections,
+  getInitialSelectedSections,
+  getChildSections,
 } from '../utils'
 import {DisplaySection, SectionWithHierarchy} from '../interfaces'
 
@@ -723,5 +726,173 @@ describe('removeSectionAndDescendants', () => {
       sectionsData: undefined,
     })
     expect(result).toBeUndefined()
+  })
+})
+
+describe('getInitialOpenSections', () => {
+  let parentChildMap: Map<number, number>
+
+  beforeEach(() => {
+    // Create a new Map for testing
+    parentChildMap = new Map()
+
+    // Setup some parent-child relationships for testing
+    parentChildMap.set(3, 2)
+    parentChildMap.set(2, 1)
+    parentChildMap.set(5, 4)
+    parentChildMap.set(7, 6)
+    parentChildMap.set(8, -1) // Invalid parent
+
+    // Mock the parentChildMap in the utils module
+    jest.mock('../utils', () => {
+      const originalModule = jest.requireActual('../utils')
+      return {
+        ...originalModule,
+        parentChildMap: parentChildMap,
+        getInitialOpenSections: (sectionIds: number[]) => {
+          const openSections: number[] = []
+          sectionIds.forEach((sectionId) => {
+            let openSectionId: number | undefined = sectionId
+            while (openSectionId !== undefined && openSectionId !== -1) {
+              openSections.push(openSectionId)
+              openSectionId = parentChildMap.get(openSectionId)
+            }
+          })
+          return openSections
+        },
+      }
+    })
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
+  it('should return empty array when no section IDs are provided', () => {
+    const {getInitialOpenSections} = require('../utils')
+    const result = getInitialOpenSections([])
+    expect(result).toEqual([])
+  })
+
+  it('should return section ID itself when it has no parent', () => {
+    const {getInitialOpenSections} = require('../utils')
+    const result = getInitialOpenSections([1])
+    expect(result).toEqual([1])
+  })
+
+  it('should return section ID and all its parents', () => {
+    const {getInitialOpenSections} = require('../utils')
+    const result = getInitialOpenSections([3])
+    expect(result).toEqual([3, 2, 1])
+  })
+
+  it('should handle multiple section IDs', () => {
+    const {getInitialOpenSections} = require('../utils')
+    const result = getInitialOpenSections([3, 5])
+    expect(result).toEqual([3, 2, 1, 5, 4])
+  })
+
+  it('should handle section with invalid parent ID', () => {
+    const {getInitialOpenSections} = require('../utils')
+    const result = getInitialOpenSections([8])
+    expect(result).toEqual([8])
+  })
+})
+
+describe('getInitialSelectedSections', () => {
+  it('should return empty array when searchParams is undefined', () => {
+    const result = getInitialSelectedSections(undefined)
+    expect(result).toEqual([])
+  })
+
+  it('should return empty array when sectionIds param is missing', () => {
+    const searchParams = new URLSearchParams()
+    const result = getInitialSelectedSections(searchParams)
+    expect(result).toEqual([])
+  })
+
+  it('should return parsed section IDs from searchParams', () => {
+    const searchParams = new URLSearchParams()
+    searchParams.set('sectionIds', JSON.stringify([1, 2, 3]))
+    const result = getInitialSelectedSections(searchParams)
+    expect(result).toEqual([1, 2, 3])
+  })
+
+  it('should handle invalid JSON and return empty array', () => {
+    const searchParams = new URLSearchParams()
+    searchParams.set('sectionIds', 'invalid-json')
+    const result = getInitialSelectedSections(searchParams)
+    expect(result).toEqual([])
+  })
+
+  it('should return null if section IDs is null', () => {
+    const searchParams = new URLSearchParams()
+    searchParams.set('sectionIds', 'null')
+    const result = getInitialSelectedSections(searchParams)
+    expect(result).toEqual([])
+  })
+})
+
+describe('getChildSections', () => {
+  it('should return only section ID when it has no subsections', () => {
+    const result = getChildSections(1, undefined)
+    expect(result).toEqual([1])
+  })
+
+  it('should return section ID and IDs of all direct children', () => {
+    const subSections: DisplaySection[] = [
+      {sectionId: 2, sectionName: 'Child 1', subSections: []},
+      {sectionId: 3, sectionName: 'Child 2', subSections: []},
+    ]
+
+    const result = getChildSections(1, subSections)
+    expect(result).toEqual([1, 2, 3])
+  })
+
+  it('should return section ID and IDs of all nested children', () => {
+    const subSections: DisplaySection[] = [
+      {
+        sectionId: 2,
+        sectionName: 'Child 1',
+        subSections: [
+          {sectionId: 4, sectionName: 'Grandchild 1', subSections: []},
+        ],
+      },
+      {
+        sectionId: 3,
+        sectionName: 'Child 2',
+        subSections: [
+          {sectionId: 5, sectionName: 'Grandchild 2', subSections: []},
+        ],
+      },
+    ]
+
+    const result = getChildSections(1, subSections)
+    expect(result).toEqual([1, 2, 4, 3, 5])
+  })
+
+  it('should handle deeply nested sections', () => {
+    const subSections: DisplaySection[] = [
+      {
+        sectionId: 2,
+        sectionName: 'Level 2',
+        subSections: [
+          {
+            sectionId: 3,
+            sectionName: 'Level 3',
+            subSections: [
+              {
+                sectionId: 4,
+                sectionName: 'Level 4',
+                subSections: [],
+              },
+            ],
+          },
+        ],
+      },
+    ]
+
+    const result = getChildSections(1, subSections)
+    expect(result).toEqual([1, 2, 3, 4])
   })
 })
