@@ -8,10 +8,13 @@ import {
   getSectionsWithTheirParents,
 } from '@components/SectionList/utils'
 import {Tooltip} from '@components/Tooltip/Tooltip'
-import {IGetAllSectionsResponse} from '@controllers/sections.controller'
+import {
+  ICreateSectionResponse,
+  IGetAllSectionsResponse,
+} from '@controllers/sections.controller'
 import {useFetcher, useParams, useSearchParams} from '@remix-run/react'
 import {CirclePlus, ListRestart} from 'lucide-react'
-import React, {useEffect, useState} from 'react'
+import React, {use, useEffect, useState} from 'react'
 import {API} from '~/routes/utilities/api'
 import {AddSectionDialog} from './AddSectionDialog'
 import {EditSectionDialog} from './EditSectionDialog'
@@ -25,6 +28,9 @@ export const SectionList = () => {
   )
   const [addSectionDialog, setAddSectionDialog] = useState<boolean>(false)
   const [editSectionDialog, setEditSectionDialog] = useState<boolean>(false)
+  const [sectionAPIData, setSectionAPIData] = useState<
+    ICreateSectionResponse[]
+  >([])
 
   const [sectionId, setSectionId] = useState<number | null>(null)
   const sectionFetcher = useFetcher<{
@@ -50,22 +56,32 @@ export const SectionList = () => {
         allSections: sectionFetcher.data?.data,
         runSections: runSectionFetcher.data?.data,
       })
-
       setSectionsData(buildSectionHierarchy({sectionsData: x}))
+      setSectionAPIData(sectionFetcher.data?.data)
     } else if (!runId && sectionFetcher.data?.data) {
       setSectionsData(
         buildSectionHierarchy({sectionsData: sectionFetcher.data?.data}),
       )
+      setSectionAPIData(sectionFetcher.data?.data)
     }
   }, [sectionFetcher.data, runSectionFetcher.data])
 
   const initialSelectedSections = getInitialSelectedSections(searchParams)
-  const initialOpenSections = getInitialOpenSections(initialSelectedSections)
   const [selectedSections, setSelectedSections] = useState(
     initialSelectedSections,
   )
 
-  const [openSections, setOpenSections] = useState(initialOpenSections)
+  const [openSections, setOpenSections] = useState<number[]>([])
+
+  useEffect(() => {
+    if (sectionAPIData && initialSelectedSections.length > 0) {
+      const openSections = getInitialOpenSections({
+        initialSelectedSections,
+        sectionAPIData,
+      })
+      setOpenSections(openSections)
+    }
+  }, [sectionAPIData])
 
   const toggleSection = (id: number) => {
     if (openSections.includes(id)) {

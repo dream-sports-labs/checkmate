@@ -49,9 +49,9 @@ describe('GetSearchParams', () => {
         filterType: 'and',
         sortBy: undefined,
         sortOrder: undefined,
-        squadIds: [],
-        labelIds: [],
-        sectionIds: [],
+        squadIds: undefined,
+        labelIds: undefined,
+        sectionIds: undefined,
       })
     })
   })

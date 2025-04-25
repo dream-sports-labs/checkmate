@@ -63,13 +63,13 @@ const SearchParams = {
 
     return {
       projectId,
-      squadIds: squadIds?.length ? squadIds : [],
-      labelIds: labelIds?.length ? labelIds : [],
+      squadIds,
+      labelIds,
       page,
       pageSize,
       textSearch,
       filterType: filterType as 'and' | 'or',
-      sectionIds: sectionIds?.length ? sectionIds : [],
+      sectionIds,
       sortBy,
       sortOrder: sortOrder as ITestRunData['sortOrder'],
       platformIds: platformIds?.length ? platformIds : undefined,
