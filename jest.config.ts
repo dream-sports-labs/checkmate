@@ -27,8 +27,8 @@ export default {
     '/scripts/',
     '/sql/',
     '/build/',
-    '/components/',
     '/drizzle/',
     'app/routes/utilities/api.ts',
+    '\\.tsx$',
   ],
 }

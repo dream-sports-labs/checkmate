@@ -15,27 +15,23 @@ import {
 import {DisplaySection, SectionWithHierarchy} from '../interfaces'
 
 describe('getSectionHierarchy', () => {
-  it('should return empty string when sectionsData is undefined', () => {
-    const result = getSectionHierarchy({
-      sectionId: 1,
-      sectionsData: undefined,
-    })
-    expect(result).toBe('')
+  it('should handle undefined or empty sectionsData', () => {
+    expect(getSectionHierarchy({sectionId: 1, sectionsData: undefined})).toBe(
+      '',
+    )
+    expect(getSectionHierarchy({sectionId: 1, sectionsData: []})).toBe('')
   })
 
-  it('should return empty string when section is not found', () => {
-    const result = getSectionHierarchy({
-      sectionId: 999,
-      sectionsData: [
-        {
-          sectionId: 1,
-          sectionName: 'Section 1',
-          parentId: null,
-          projectId: 1,
-        },
-      ],
-    })
-    expect(result).toBe('')
+  it('should handle non-existent section', () => {
+    const sectionsData = [
+      {
+        sectionId: 1,
+        sectionName: 'Section 1',
+        parentId: null,
+        projectId: 1,
+      },
+    ]
+    expect(getSectionHierarchy({sectionId: 999, sectionsData})).toBe('')
   })
 
   it('should handle circular references', () => {
@@ -86,26 +82,25 @@ describe('getSectionHierarchy', () => {
     expect(result).toBe('Section 3 > Section 2 > Section 1')
   })
 
-  it('should handle sections with null values', () => {
-    const result = getSectionHierarchy({
-      sectionId: 1,
-      sectionsData: [
-        {
-          sectionId: 1,
-          sectionName: 'Section 1',
-          parentId: null,
-          projectId: 1,
-        },
-      ],
-    })
-    expect(result).toBe('Section 1')
-  })
-
-  it('should return the section name when there is no parent', () => {
+  it('should handle root sections (no parent)', () => {
     const sectionsData = [
-      {sectionId: 1, sectionName: 'Root', parentId: null, projectId: 1},
+      {
+        sectionId: 1,
+        sectionName: 'Root Section',
+        parentId: null,
+        projectId: 1,
+      },
+      {
+        sectionId: 5,
+        projectId: 1,
+        sectionName: 'Orphan',
+        parentId: null,
+      },
     ]
-    expect(getSectionHierarchy({sectionId: 1, sectionsData})).toBe('Root')
+    expect(getSectionHierarchy({sectionId: 1, sectionsData})).toBe(
+      'Root Section',
+    )
+    expect(getSectionHierarchy({sectionId: 5, sectionsData})).toBe('Orphan')
   })
 
   it('should return the full hierarchy path', () => {
@@ -125,13 +120,6 @@ describe('getSectionHierarchy', () => {
       {sectionId: 2, sectionName: 'Child', projectId: 1, parentId: 10},
     ]
     expect(getSectionHierarchy({sectionId: 2, sectionsData})).toBe('Child')
-  })
-
-  it('should return only the section name when it has no known parent', () => {
-    const sectionsData = [
-      {sectionId: 5, projectId: 1, sectionName: 'Orphan', parentId: null},
-    ]
-    expect(getSectionHierarchy({sectionId: 5, sectionsData})).toBe('Orphan')
   })
 
   it('should handle sections with duplicate names', () => {
@@ -186,46 +174,6 @@ describe('getSectionHierarchy', () => {
       ],
     })
     expect(result).toBe('Parent 1 > Child')
-  })
-
-  it('should handle undefined sectionsData', () => {
-    expect(
-      getSectionHierarchy({
-        sectionId: 1,
-        sectionsData: undefined,
-      }),
-    ).toBe('')
-  })
-
-  it('should handle non-existent section', () => {
-    const sectionsData = [
-      {
-        sectionId: 1,
-        sectionName: 'Section 1',
-        parentId: null,
-        projectId: 1,
-        sectionDescription: '',
-        createdBy: 1,
-        updatedBy: 1,
-        createdOn: new Date(),
-        updatedOn: new Date(),
-      },
-    ]
-
-    expect(
-      getSectionHierarchy({
-        sectionId: 999,
-        sectionsData,
-      }),
-    ).toBe('')
-  })
-
-  it('should handle empty sectionsData array', () => {
-    const result = getSectionHierarchy({
-      sectionId: 1,
-      sectionsData: [],
-    })
-    expect(result).toBe('')
   })
 
   it('should handle sections with undefined sectionName', () => {
@@ -918,7 +866,7 @@ describe('buildSectionHierarchy', () => {
     expect(buildSectionHierarchy({sectionsData})).toEqual(expectedOutput)
   })
 
-  it('should ignore sections with invalid parentId and treat them as root sections', () => {
+  it('should handle sections with invalid parentId and treat them as root sections', () => {
     const sectionsData: IGetAllSectionsResponse[] = [
       {
         sectionId: 1,
@@ -1120,26 +1068,6 @@ describe('buildSectionHierarchy', () => {
     expect(result[1].sectionId).toBe(2)
   })
 
-  it('should handle sections with invalid parent references', () => {
-    const sectionsData = [
-      {
-        sectionId: 1,
-        sectionName: 'Root',
-        parentId: -1,
-      },
-      {
-        sectionId: 2,
-        sectionName: 'Child',
-        parentId: 999,
-      },
-    ]
-
-    const result = buildSectionHierarchy({sectionsData})
-    expect(result).toHaveLength(2)
-    expect(result[0].sectionId).toBe(1)
-    expect(result[1].sectionId).toBe(2)
-  })
-
   it('should handle multiple levels of hierarchy', () => {
     const sectionsData = [
       {
@@ -1185,15 +1113,15 @@ describe('buildSectionHierarchy', () => {
   })
 
   it('should handle empty sections array', () => {
-    expect(buildSectionHierarchy({ sectionsData: [] })).toEqual([])
+    expect(buildSectionHierarchy({sectionsData: []})).toEqual([])
   })
 
   it('should handle multiple root sections', () => {
     const sections = [
-      { sectionId: 1, sectionName: 'Root 1', parentId: null },
-      { sectionId: 2, sectionName: 'Root 2', parentId: null }
+      {sectionId: 1, sectionName: 'Root 1', parentId: null},
+      {sectionId: 2, sectionName: 'Root 2', parentId: null},
     ]
-    const result = buildSectionHierarchy({ sectionsData: sections })
+    const result = buildSectionHierarchy({sectionsData: sections})
     expect(result).toHaveLength(2)
     expect(result[0].sectionId).toBe(1)
     expect(result[1].sectionId).toBe(2)
@@ -1201,38 +1129,26 @@ describe('buildSectionHierarchy', () => {
 
   it('should handle invalid parent IDs', () => {
     const sections = [
-      { sectionId: 1, sectionName: 'Section 1', parentId: 999 }, // Non-existent parent
-      { sectionId: 2, sectionName: 'Section 2', parentId: null }
+      {sectionId: 1, sectionName: 'Section 1', parentId: 999}, // Non-existent parent
+      {sectionId: 2, sectionName: 'Section 2', parentId: null},
     ]
-    const result = buildSectionHierarchy({ sectionsData: sections })
+    const result = buildSectionHierarchy({sectionsData: sections})
     expect(result).toHaveLength(2) // Both sections should become root sections
-    expect(result.map(s => s.sectionId).sort()).toEqual([1, 2])
-  })
-
-  it('should handle sections with missing parent IDs', () => {
-    const sectionsData = [
-      { sectionId: 1, sectionName: 'Section 1', parentId: null },
-      { sectionId: 2, sectionName: 'Section 2', parentId: 999 }, // Non-existent parent
-      { sectionId: 3, sectionName: 'Section 3', parentId: null }
-    ];
-
-    const result = buildSectionHierarchy({ sectionsData });
-    expect(result).toHaveLength(3);
-    expect(result.map(s => s.sectionId).sort()).toEqual([1, 2, 3]);
+    expect(result.map((s) => s.sectionId).sort()).toEqual([1, 2])
   })
 
   it('should correctly map sections to their parents', () => {
     const sectionsData = [
-      { sectionId: 1, sectionName: 'Parent 1', parentId: null },
-      { sectionId: 2, sectionName: 'Child 1', parentId: 1 },
-      { sectionId: 3, sectionName: 'Child 2', parentId: 1 }
-    ];
+      {sectionId: 1, sectionName: 'Parent 1', parentId: null},
+      {sectionId: 2, sectionName: 'Child 1', parentId: 1},
+      {sectionId: 3, sectionName: 'Child 2', parentId: 1},
+    ]
 
-    const result = buildSectionHierarchy({ sectionsData });
-    expect(result).toHaveLength(1);
-    expect(result[0].sectionId).toBe(1);
-    expect(result[0].subSections).toHaveLength(2);
-    expect(result[0].subSections.map(s => s.sectionId).sort()).toEqual([2, 3]);
+    const result = buildSectionHierarchy({sectionsData})
+    expect(result).toHaveLength(1)
+    expect(result[0].sectionId).toBe(1)
+    expect(result[0].subSections).toHaveLength(2)
+    expect(result[0].subSections.map((s) => s.sectionId).sort()).toEqual([2, 3])
   })
 
   it('should handle sections with undefined sectionName', () => {
@@ -1302,6 +1218,32 @@ describe('buildSectionHierarchy', () => {
       },
     ])
   })
+
+  it('should handle invalid parent references and multiple root sections', () => {
+    const sectionsData = [
+      {sectionId: 1, sectionName: 'Root 1', parentId: null, projectId: 1},
+      {sectionId: 2, sectionName: 'Root 2', parentId: null, projectId: 1},
+      {
+        sectionId: 3,
+        sectionName: 'Invalid Parent 1',
+        parentId: -1,
+        projectId: 1,
+      },
+      {
+        sectionId: 4,
+        sectionName: 'Invalid Parent 2',
+        parentId: 999,
+        projectId: 1,
+      },
+      {sectionId: 5, sectionName: 'Valid Child', parentId: 1, projectId: 1},
+    ]
+
+    const result = buildSectionHierarchy({sectionsData})
+    expect(result).toHaveLength(4) // All sections except the valid child should be root sections
+    expect(result.map((s) => s.sectionId).sort()).toEqual([1, 2, 3, 4])
+    expect(result[0].subSections).toHaveLength(1) // Root 1 should have the valid child
+    expect(result[0].subSections[0].sectionId).toBe(5)
+  })
 })
 
 describe('getSectionsWithTheirParents', () => {
@@ -1356,35 +1298,35 @@ describe('removeSectionAndDescendants', () => {
 
 describe('getInitialSelectedSections', () => {
   it('should handle invalid JSON in search params', () => {
-    const searchParams = new URLSearchParams();
-    searchParams.set('sectionIds', 'invalid-json');
-    expect(getInitialSelectedSections(searchParams)).toEqual([]);
-  });
+    const searchParams = new URLSearchParams()
+    searchParams.set('sectionIds', 'invalid-json')
+    expect(getInitialSelectedSections(searchParams)).toEqual([])
+  })
 
   it('should handle missing sectionIds param', () => {
-    const searchParams = new URLSearchParams();
-    expect(getInitialSelectedSections(searchParams)).toEqual([]);
-  });
+    const searchParams = new URLSearchParams()
+    expect(getInitialSelectedSections(searchParams)).toEqual([])
+  })
 
   it('should handle undefined searchParams', () => {
-    expect(getInitialSelectedSections(undefined)).toEqual([]);
-  });
+    expect(getInitialSelectedSections(undefined)).toEqual([])
+  })
 
   it('should parse valid sectionIds', () => {
-    const searchParams = new URLSearchParams();
-    searchParams.set('sectionIds', '[1,2,3]');
-    expect(getInitialSelectedSections(searchParams)).toEqual([1,2,3]);
-  });
-});
+    const searchParams = new URLSearchParams()
+    searchParams.set('sectionIds', '[1,2,3]')
+    expect(getInitialSelectedSections(searchParams)).toEqual([1, 2, 3])
+  })
+})
 
 describe('getChildSections', () => {
   it('should handle undefined subSections', () => {
-    expect(getChildSections(1, undefined)).toEqual([1]);
-  });
+    expect(getChildSections(1, undefined)).toEqual([1])
+  })
 
   it('should handle empty subSections array', () => {
-    expect(getChildSections(1, [])).toEqual([1]);
-  });
+    expect(getChildSections(1, [])).toEqual([1])
+  })
 
   it('should get all child sections recursively', () => {
     const sections: DisplaySection[] = [
@@ -1395,151 +1337,19 @@ describe('getChildSections', () => {
           {
             sectionId: 3,
             sectionName: 'Grandchild 1',
-            subSections: []
-          }
-        ]
+            subSections: [],
+          },
+        ],
       },
       {
         sectionId: 4,
         sectionName: 'Child 2',
-        subSections: []
-      }
-    ];
-    expect(getChildSections(1, sections)).toEqual([1, 2, 3, 4]);
-  });
-});
+        subSections: [],
+      },
+    ]
+    expect(getChildSections(1, sections)).toEqual([1, 2, 3, 4])
+  })
 
-describe('getInitialOpenSections', () => {
-  it('should handle parent sections that are not in the data', () => {
-    const initialSelectedSections = [2];
-    const sectionAPIData = [
-      { sectionId: 2, parentId: 999, sectionName: 'Section 2', projectId: 1 },
-    ] as ICreateSectionResponse[];
-
-    const result = getInitialOpenSections({
-      initialSelectedSections,
-      sectionAPIData,
-    });
-
-    expect(result).toEqual(expect.arrayContaining([2, 999]));
-    expect(result.length).toBe(2);
-  });
-
-  it('should handle circular references in parent sections', () => {
-    const initialSelectedSections = [1];
-    const sectionAPIData = [
-      { sectionId: 1, parentId: 2, sectionName: 'Section 1', projectId: 1 },
-      { sectionId: 2, parentId: 1, sectionName: 'Section 2', projectId: 1 },
-    ] as ICreateSectionResponse[];
-
-    const result = getInitialOpenSections({
-      initialSelectedSections,
-      sectionAPIData,
-    });
-
-    expect(result).toEqual(expect.arrayContaining([1, 2]));
-    expect(result.length).toBe(2);
-  });
-
-  it('should handle multiple selected sections with shared parents', () => {
-    const initialSelectedSections = [3, 4];
-    const sectionAPIData = [
-      { sectionId: 1, parentId: null, sectionName: 'Root', projectId: 1 },
-      { sectionId: 2, parentId: 1, sectionName: 'Parent', projectId: 1 },
-      { sectionId: 3, parentId: 2, sectionName: 'Child 1', projectId: 1 },
-      { sectionId: 4, parentId: 2, sectionName: 'Child 2', projectId: 1 },
-    ] as ICreateSectionResponse[];
-
-    const result = getInitialOpenSections({
-      initialSelectedSections,
-      sectionAPIData,
-    });
-
-    expect(result).toEqual(expect.arrayContaining([1, 2, 3, 4]));
-    expect(result.length).toBe(4);
-  });
-
-  it('should not add parent section if already in openSections', () => {
-    const initialSelectedSections = [3, 2];
-    const sectionAPIData = [
-      { sectionId: 1, parentId: null, sectionName: 'Root', projectId: 1 },
-      { sectionId: 2, parentId: 1, sectionName: 'Parent', projectId: 1 },
-      { sectionId: 3, parentId: 2, sectionName: 'Child', projectId: 1 },
-    ] as ICreateSectionResponse[];
-
-    const result = getInitialOpenSections({
-      initialSelectedSections,
-      sectionAPIData,
-    });
-
-    expect(result).toEqual([3, 2, 1, 2]);
-    expect(result.length).toBe(4);
-  });
-
-  it('should add parent section if not in openSections', () => {
-    const initialSelectedSections = [3];
-    const sectionAPIData = [
-      { sectionId: 1, parentId: null, sectionName: 'Root', projectId: 1 },
-      { sectionId: 2, parentId: 1, sectionName: 'Parent', projectId: 1 },
-      { sectionId: 3, parentId: 2, sectionName: 'Child', projectId: 1 },
-    ] as ICreateSectionResponse[];
-
-    const result = getInitialOpenSections({
-      initialSelectedSections,
-      sectionAPIData,
-    });
-
-    expect(result).toEqual([3, 2, 1]);
-    expect(result.length).toBe(3);
-  });
-
-  it('should handle section with -1 as parentId', () => {
-    const initialSelectedSections = [1];
-    const sectionAPIData = [
-      { sectionId: 1, parentId: -1, sectionName: 'Section 1', projectId: 1 },
-    ] as ICreateSectionResponse[];
-
-    const result = getInitialOpenSections({
-      initialSelectedSections,
-      sectionAPIData,
-    });
-
-    expect(result).toEqual([1]);
-    expect(result.length).toBe(1);
-  });
-
-  it('should handle section with falsy parentId', () => {
-    const initialSelectedSections = [1];
-    const sectionAPIData = [
-      { sectionId: 1, parentId: 0, sectionName: 'Section 1', projectId: 1 },
-    ] as ICreateSectionResponse[];
-
-    const result = getInitialOpenSections({
-      initialSelectedSections,
-      sectionAPIData,
-    });
-
-    expect(result).toEqual([1]);
-    expect(result.length).toBe(1);
-  });
-
-  it('should handle section not found in sectionAPIData', () => {
-    const initialSelectedSections = [999];
-    const sectionAPIData = [
-      { sectionId: 1, parentId: null, sectionName: 'Section 1', projectId: 1 },
-    ] as ICreateSectionResponse[];
-
-    const result = getInitialOpenSections({
-      initialSelectedSections,
-      sectionAPIData,
-    });
-
-    expect(result).toEqual([999]);
-    expect(result.length).toBe(1);
-  });
-})
-
-describe('getChildSections', () => {
   it('should handle deeply nested sections with multiple branches', () => {
     const section: DisplaySection = {
       sectionId: 1,
@@ -1552,7 +1362,7 @@ describe('getChildSections', () => {
             {
               sectionId: 4,
               sectionName: 'Leaf 1',
-              subSections: []
+              subSections: [],
             },
             {
               sectionId: 5,
@@ -1561,11 +1371,11 @@ describe('getChildSections', () => {
                 {
                   sectionId: 7,
                   sectionName: 'Deep Leaf 1',
-                  subSections: []
-                }
-              ]
-            }
-          ]
+                  subSections: [],
+                },
+              ],
+            },
+          ],
         },
         {
           sectionId: 3,
@@ -1574,14 +1384,144 @@ describe('getChildSections', () => {
             {
               sectionId: 6,
               sectionName: 'Leaf 3',
-              subSections: []
-            }
-          ]
-        }
-      ]
-    };
+              subSections: [],
+            },
+          ],
+        },
+      ],
+    }
 
-    const result = getChildSections(1, section.subSections);
-    expect(result).toEqual([1, 2, 4, 5, 7, 3, 6]);
-  });
+    const result = getChildSections(1, section.subSections)
+    expect(result).toEqual([1, 2, 4, 5, 7, 3, 6])
+  })
+})
+
+describe('getInitialOpenSections', () => {
+  it('should handle parent sections that are not in the data', () => {
+    const initialSelectedSections = [2]
+    const sectionAPIData = [
+      {sectionId: 2, parentId: 999, sectionName: 'Section 2', projectId: 1},
+    ] as ICreateSectionResponse[]
+
+    const result = getInitialOpenSections({
+      initialSelectedSections,
+      sectionAPIData,
+    })
+
+    expect(result).toEqual(expect.arrayContaining([2, 999]))
+    expect(result.length).toBe(2)
+  })
+
+  it('should handle circular references in parent sections', () => {
+    const initialSelectedSections = [1]
+    const sectionAPIData = [
+      {sectionId: 1, parentId: 2, sectionName: 'Section 1', projectId: 1},
+      {sectionId: 2, parentId: 1, sectionName: 'Section 2', projectId: 1},
+    ] as ICreateSectionResponse[]
+
+    const result = getInitialOpenSections({
+      initialSelectedSections,
+      sectionAPIData,
+    })
+
+    expect(result).toEqual(expect.arrayContaining([1, 2]))
+    expect(result.length).toBe(2)
+  })
+
+  it('should handle multiple selected sections with shared parents', () => {
+    const initialSelectedSections = [3, 4]
+    const sectionAPIData = [
+      {sectionId: 1, parentId: null, sectionName: 'Root', projectId: 1},
+      {sectionId: 2, parentId: 1, sectionName: 'Parent', projectId: 1},
+      {sectionId: 3, parentId: 2, sectionName: 'Child 1', projectId: 1},
+      {sectionId: 4, parentId: 2, sectionName: 'Child 2', projectId: 1},
+    ] as ICreateSectionResponse[]
+
+    const result = getInitialOpenSections({
+      initialSelectedSections,
+      sectionAPIData,
+    })
+
+    expect(result).toEqual(expect.arrayContaining([1, 2, 3, 4]))
+    expect(result.length).toBe(4)
+  })
+
+  it('should not add parent section if already in openSections', () => {
+    const initialSelectedSections = [3, 2]
+    const sectionAPIData = [
+      {sectionId: 1, parentId: null, sectionName: 'Root', projectId: 1},
+      {sectionId: 2, parentId: 1, sectionName: 'Parent', projectId: 1},
+      {sectionId: 3, parentId: 2, sectionName: 'Child', projectId: 1},
+    ] as ICreateSectionResponse[]
+
+    const result = getInitialOpenSections({
+      initialSelectedSections,
+      sectionAPIData,
+    })
+
+    expect(result).toEqual([3, 2, 1, 2])
+    expect(result.length).toBe(4)
+  })
+
+  it('should add parent section if not in openSections', () => {
+    const initialSelectedSections = [3]
+    const sectionAPIData = [
+      {sectionId: 1, parentId: null, sectionName: 'Root', projectId: 1},
+      {sectionId: 2, parentId: 1, sectionName: 'Parent', projectId: 1},
+      {sectionId: 3, parentId: 2, sectionName: 'Child', projectId: 1},
+    ] as ICreateSectionResponse[]
+
+    const result = getInitialOpenSections({
+      initialSelectedSections,
+      sectionAPIData,
+    })
+
+    expect(result).toEqual([3, 2, 1])
+    expect(result.length).toBe(3)
+  })
+
+  it('should handle section with -1 as parentId', () => {
+    const initialSelectedSections = [1]
+    const sectionAPIData = [
+      {sectionId: 1, parentId: -1, sectionName: 'Section 1', projectId: 1},
+    ] as ICreateSectionResponse[]
+
+    const result = getInitialOpenSections({
+      initialSelectedSections,
+      sectionAPIData,
+    })
+
+    expect(result).toEqual([1])
+    expect(result.length).toBe(1)
+  })
+
+  it('should handle section with falsy parentId', () => {
+    const initialSelectedSections = [1]
+    const sectionAPIData = [
+      {sectionId: 1, parentId: 0, sectionName: 'Section 1', projectId: 1},
+    ] as ICreateSectionResponse[]
+
+    const result = getInitialOpenSections({
+      initialSelectedSections,
+      sectionAPIData,
+    })
+
+    expect(result).toEqual([1])
+    expect(result.length).toBe(1)
+  })
+
+  it('should handle section not found in sectionAPIData', () => {
+    const initialSelectedSections = [999]
+    const sectionAPIData = [
+      {sectionId: 1, parentId: null, sectionName: 'Section 1', projectId: 1},
+    ] as ICreateSectionResponse[]
+
+    const result = getInitialOpenSections({
+      initialSelectedSections,
+      sectionAPIData,
+    })
+
+    expect(result).toEqual([999])
+    expect(result.length).toBe(1)
+  })
 })

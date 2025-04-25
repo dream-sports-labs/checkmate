@@ -14,7 +14,7 @@ import {
 } from '@controllers/sections.controller'
 import {useFetcher, useParams, useSearchParams} from '@remix-run/react'
 import {CirclePlus, ListRestart} from 'lucide-react'
-import React, {use, useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {API} from '~/routes/utilities/api'
 import {AddSectionDialog} from './AddSectionDialog'
 import {EditSectionDialog} from './EditSectionDialog'
