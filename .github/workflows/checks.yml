@@ -2,9 +2,7 @@ name: Checks
 
 on:
   pull_request:
-    branches:
-      - master
-      - '**'
+    types: [opened, synchronize, reopened]
 
 jobs:
   unit-test:
