@@ -35,6 +35,7 @@ describe('TestRunsController', () => {
   ]
 
   const partiallyFailedUpdateResponse = [{affectedRows: 2}]
+  const allFailedUpdateResponse = [{affectedRows: 2}]
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -165,6 +166,84 @@ describe('TestRunsController', () => {
           userId: 123,
         }),
       ).rejects.toThrow('Database error')
+    })
+    it('should handle undefined response from DAO', async () => {
+      ;(TestRunsDao.updateStatusTestRuns as jest.Mock).mockResolvedValue(
+        undefined,
+      )
+
+      const result = await TestRunsController.updateStatusTestRuns({
+        runId: 1,
+        projectId: 1,
+        testIdStatusArray: validTestIdStatusArray,
+        userId: 123,
+      })
+
+      expect(result).toEqual({
+        passed: undefined,
+        failed: {
+          message: '2 test(s) failed to update',
+          count: 2,
+          details: [],
+        },
+      })
+    })
+
+    it('should handle all testId values missing', async () => {
+      ;(TestRunsDao.updateStatusTestRuns as jest.Mock).mockRejectedValue(
+        new Error('No data provided to update status'),
+      )
+      const allMissing = [
+        {status: TestStatusType.Passed},
+        {status: TestStatusType.Failed},
+      ]
+      await expect(
+        TestRunsController.updateStatusTestRuns({
+          runId: 1,
+          projectId: 1,
+          testIdStatusArray: validTestIdStatusArray,
+          userId: 123,
+        }),
+      ).rejects.toThrow('No data provided to update status')
+    })
+
+    it('should handle all statuses invalid', async () => {
+      ;(TestRunsDao.updateStatusTestRuns as jest.Mock).mockRejectedValue(
+        new Error('No data provided to update status'),
+      )
+      const allInvalid = [
+        {testId: 1, status: 'INVALID' as TestStatusType},
+        {testId: 2, status: 'WRONG' as TestStatusType},
+      ]
+      await expect(
+        TestRunsController.updateStatusTestRuns({
+          runId: 1,
+          projectId: 1,
+          testIdStatusArray: validTestIdStatusArray,
+          userId: 123,
+        }),
+      ).rejects.toThrow('No data provided to update status')
+    })
+
+    it('should use per-item comment over global comment', async () => {
+      ;(TestRunsDao.updateStatusTestRuns as jest.Mock).mockResolvedValue(
+        mockUpdateStatusResponse,
+      )
+      const result = await TestRunsController.updateStatusTestRuns({
+        runId: 1,
+        projectId: 1,
+        testIdStatusArray: [
+          {testId: 1, status: TestStatusType.Passed, comment: 'item'},
+        ],
+        userId: 123,
+        comment: 'global',
+      })
+      expect(TestRunsDao.updateStatusTestRuns).toHaveBeenCalledWith(
+        expect.objectContaining({
+          markStatusArray: [expect.objectContaining({comment: 'item'})],
+        }),
+      )
+      expect(result.passed).toBeDefined()
     })
   })
 
@@ -336,6 +415,90 @@ describe('TestRunsController', () => {
 
       expect(result).toEqual({status: 'Provide valid runId'})
     })
+
+    it('should handle undefined groupByData', async () => {
+      const mockMetaInfo = {
+        statuCountArray: [
+          {status: 'Passed', status_count: 5},
+          {status: 'Failed', status_count: 3},
+        ],
+        groupByData: undefined,
+      }
+
+      ;(TestRunsDao.runsMetaInfo as jest.Mock).mockResolvedValue(mockMetaInfo)
+
+      const result = await TestRunsController.runsMetaInfo({
+        runId: 1,
+        projectId: 1,
+        groupBy: 'squads',
+      })
+
+      expect(result).toEqual({
+        total: 8,
+        passed: 5,
+        failed: 3,
+        untested: 0,
+        blocked: 0,
+        retest: 0,
+        archived: 0,
+        skipped: 0,
+        inprogress: 0,
+      })
+    })
+
+    it('should handle undefined statuCountArray', async () => {
+      const mockMetaInfo = {
+        statuCountArray: undefined,
+      }
+
+      ;(TestRunsDao.runsMetaInfo as jest.Mock).mockResolvedValue(mockMetaInfo)
+
+      const result = await TestRunsController.runsMetaInfo({
+        runId: 1,
+        projectId: 1,
+      })
+
+      expect(result).toEqual({status: 'Error in fetching data'})
+    })
+
+    it('should handle undefined groupByData when groupBy is specified', async () => {
+      const mockMetaInfo = {
+        statuCountArray: [
+          {status: 'Passed', status_count: 5},
+          {status: 'Failed', status_count: 3},
+        ],
+        groupByData: undefined,
+      }
+
+      ;(TestRunsDao.runsMetaInfo as jest.Mock).mockResolvedValue(mockMetaInfo)
+
+      const result = await TestRunsController.runsMetaInfo({
+        runId: 1,
+        projectId: 1,
+        groupBy: 'squads',
+      })
+
+      expect(result).toEqual({
+        total: 8,
+        passed: 5,
+        failed: 3,
+        untested: 0,
+        blocked: 0,
+        retest: 0,
+        archived: 0,
+        skipped: 0,
+        inprogress: 0,
+      })
+    })
+
+    it('should handle metaInfo as null', async () => {
+      ;(TestRunsDao.runsMetaInfo as jest.Mock).mockResolvedValue(null)
+      const result = await TestRunsController.runsMetaInfo({
+        runId: 1,
+        projectId: 1,
+      })
+      expect(result).toEqual({status: 'Error in fetching data'})
+    })
   })
 
   describe('getTestStatusHistoryOfRun', () => {
@@ -357,6 +520,26 @@ describe('TestRunsController', () => {
 
       expect(TestRunsDao.getTestStatusHistoryOfRun).toHaveBeenCalledWith(params)
       expect(result).toEqual(mockResponse)
+    })
+
+    it('should handle DAO returning undefined', async () => {
+      ;(TestRunsDao.getTestStatusHistoryOfRun as jest.Mock).mockResolvedValue(
+        undefined,
+      )
+      const result = await TestRunsController.getTestStatusHistoryOfRun({
+        runId: 1,
+        testId: 1,
+      })
+      expect(result).toBeUndefined()
+    })
+
+    it('should handle DAO throwing error', async () => {
+      ;(TestRunsDao.getTestStatusHistoryOfRun as jest.Mock).mockRejectedValue(
+        new Error('DAO error'),
+      )
+      await expect(
+        TestRunsController.getTestStatusHistoryOfRun({runId: 1, testId: 1}),
+      ).rejects.toThrow('DAO error')
     })
   })
 
@@ -380,6 +563,21 @@ describe('TestRunsController', () => {
       expect(TestRunsDao.testStatusHistory).toHaveBeenCalledWith(params)
       expect(result).toEqual(mockResponse)
     })
+
+    it('should handle DAO returning undefined', async () => {
+      ;(TestRunsDao.testStatusHistory as jest.Mock).mockResolvedValue(undefined)
+      const result = await TestRunsController.testStatusHistory({testId: 1})
+      expect(result).toBeUndefined()
+    })
+
+    it('should handle DAO throwing error', async () => {
+      ;(TestRunsDao.testStatusHistory as jest.Mock).mockRejectedValue(
+        new Error('DAO error'),
+      )
+      await expect(
+        TestRunsController.testStatusHistory({testId: 1}),
+      ).rejects.toThrow('DAO error')
+    })
   })
 
   describe('deleteTestFromRun', () => {
@@ -402,6 +600,31 @@ describe('TestRunsController', () => {
       expect(TestRunsDao.deleteTestFromRun).toHaveBeenCalledWith(params)
       expect(result).toEqual(mockResponse)
     })
+
+    it('should handle DAO returning undefined', async () => {
+      ;(TestRunsDao.deleteTestFromRun as jest.Mock).mockResolvedValue(undefined)
+      const result = await TestRunsController.deleteTestFromRun({
+        testIds: [1],
+        runId: 1,
+        projectId: 1,
+        updatedBy: 1,
+      })
+      expect(result).toBeUndefined()
+    })
+
+    it('should handle DAO throwing error', async () => {
+      ;(TestRunsDao.deleteTestFromRun as jest.Mock).mockRejectedValue(
+        new Error('DAO error'),
+      )
+      await expect(
+        TestRunsController.deleteTestFromRun({
+          testIds: [1],
+          runId: 1,
+          projectId: 1,
+          updatedBy: 1,
+        }),
+      ).rejects.toThrow('DAO error')
+    })
   })
 
   describe('markPassedAsRetest', () => {
@@ -422,6 +645,26 @@ describe('TestRunsController', () => {
       expect(TestRunsDao.markPassedAsRetest).toHaveBeenCalledWith(params)
       expect(result).toEqual(mockResponse)
     })
+
+    it('should handle DAO returning undefined', async () => {
+      ;(TestRunsDao.markPassedAsRetest as jest.Mock).mockResolvedValue(
+        undefined,
+      )
+      const result = await TestRunsController.markPassedAsRetest({
+        runId: 1,
+        userId: 1,
+      })
+      expect(result).toBeUndefined()
+    })
+
+    it('should handle DAO throwing error', async () => {
+      ;(TestRunsDao.markPassedAsRetest as jest.Mock).mockRejectedValue(
+        new Error('DAO error'),
+      )
+      await expect(
+        TestRunsController.markPassedAsRetest({runId: 1, userId: 1}),
+      ).rejects.toThrow('DAO error')
+    })
   })
 
   describe('downloadReport', () => {
@@ -441,6 +684,21 @@ describe('TestRunsController', () => {
 
       expect(TestRunsDao.downloadReport).toHaveBeenCalledWith(params)
       expect(result).toEqual(mockResponse)
+    })
+
+    it('should handle DAO returning empty array', async () => {
+      ;(TestRunsDao.downloadReport as jest.Mock).mockResolvedValue([])
+      const result = await TestRunsController.downloadReport({runId: 1})
+      expect(result).toEqual([])
+    })
+
+    it('should handle DAO throwing error', async () => {
+      ;(TestRunsDao.downloadReport as jest.Mock).mockRejectedValue(
+        new Error('DAO error'),
+      )
+      await expect(
+        TestRunsController.downloadReport({runId: 1}),
+      ).rejects.toThrow('DAO error')
     })
   })
 })

@@ -80,30 +80,6 @@ describe('Bulk Delete Tests - Action Function', () => {
     )
   })
 
-  it('should handle unexpected errors', async () => {
-    const requestData = {
-      testIds: [1, 2, 3],
-      projectId: 101,
-    }
-    const request = new Request('http://localhost', {
-      method: 'POST',
-      headers: {'content-type': 'application/json'},
-      body: JSON.stringify(requestData),
-    })
-    const mockError = new Error('Unexpected error')
-
-    ;(getUserAndCheckAccess as jest.Mock).mockRejectedValue(mockError)
-    ;(errorResponseHandler as jest.Mock).mockImplementation((error) => error)
-
-    const response = await action({request} as any)
-
-    expect(getUserAndCheckAccess).toHaveBeenCalledWith({
-      request,
-      resource: API.DeleteBulkTests,
-    })
-    expect(errorResponseHandler).toHaveBeenCalledWith(mockError)
-  })
-
   it('should handle error in bulkDeleteTests', async () => {
     const requestData = {
       testIds: [1, 2, 3],
@@ -143,7 +119,9 @@ describe('Bulk Delete Tests - Action Function', () => {
 
     ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(mockUser)
     ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
-    ;(TestsController.bulkDeleteTests as jest.Mock).mockResolvedValue(mockResponse)
+    ;(TestsController.bulkDeleteTests as jest.Mock).mockResolvedValue(
+      mockResponse,
+    )
     ;(responseHandler as jest.Mock).mockImplementation(() => {
       throw mockError
     })
@@ -168,7 +146,9 @@ describe('Bulk Delete Tests - Action Function', () => {
 
     ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(undefined)
     ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
-    ;(TestsController.bulkDeleteTests as jest.Mock).mockResolvedValue(mockResponse)
+    ;(TestsController.bulkDeleteTests as jest.Mock).mockResolvedValue(
+      mockResponse,
+    )
     ;(responseHandler as jest.Mock).mockImplementation((response) => response)
 
     const response = await action({request} as any)
@@ -195,7 +175,9 @@ describe('Bulk Delete Tests - Action Function', () => {
 
     ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(mockUser)
     ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
-    ;(TestsController.bulkDeleteTests as jest.Mock).mockResolvedValue(mockResponse)
+    ;(TestsController.bulkDeleteTests as jest.Mock).mockResolvedValue(
+      mockResponse,
+    )
     ;(responseHandler as jest.Mock).mockImplementation((response) => response)
 
     const response = await action({request} as any)

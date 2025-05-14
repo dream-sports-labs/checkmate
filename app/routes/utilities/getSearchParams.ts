@@ -69,7 +69,7 @@ const SearchParams = {
       pageSize,
       textSearch,
       filterType: filterType as 'and' | 'or',
-      sectionIds,
+      sectionIds: sectionIds?.length ? sectionIds : undefined,
       sortBy,
       sortOrder: sortOrder as ITestRunData['sortOrder'],
       platformIds: platformIds?.length ? platformIds : undefined,

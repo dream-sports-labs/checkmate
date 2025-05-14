@@ -1,6 +1,5 @@
 import {errorHandling, generateToken, sortingFunction} from '@dao/utils'
 import {SqlError} from '@services/ErrorTypes'
-import {asc, desc} from 'drizzle-orm'
 
 // Mock drizzle-orm table objects
 jest.mock('@schema/tests', () => {

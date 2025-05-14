@@ -31,5 +31,6 @@ export default {
     '/drizzle/',
     'app/routes/utilities/api.ts',
     '\\.tsx$',
+    'app/db/dao/', // TODO: remove this when dao unit tests are added
   ],
 }

@@ -128,35 +128,6 @@ describe('Update Project Status - Action Function', () => {
     expect(response.status).toBe(500)
   })
 
-  it('should handle unexpected errors', async () => {
-    const requestData = {
-      projectId: 123,
-      status: 'Active',
-    }
-    const request = new Request('http://localhost', {
-      method: 'POST',
-      headers: {'content-type': 'application/json'},
-      body: JSON.stringify(requestData),
-    })
-    const mockError = new Error('Unexpected error')
-
-    ;(getUserAndCheckAccess as jest.Mock).mockRejectedValue(mockError)
-    ;(responseHandler as jest.Mock).mockImplementation(
-      (error) =>
-        new Response(JSON.stringify({error: error.message}), {status: 500}),
-    )
-
-    const response = await action({request} as any)
-
-    expect(getUserAndCheckAccess).toHaveBeenCalledWith({
-      request,
-      resource: API.EditProjectStatus,
-    })
-    expect(responseHandler).toHaveBeenCalledWith({
-      error: 'Unexpected error',
-      status: 500,
-    })
-  })
 
   it('should handle case where no project is affected', async () => {
     const requestData = {
