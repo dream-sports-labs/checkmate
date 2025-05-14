@@ -35,27 +35,15 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
-            const path = require('path');
             
             let coverageMessage = '';
             
             try {
-              // Read the coverage summary
               const coverageSummary = JSON.parse(fs.readFileSync('./coverage/coverage-summary.json', 'utf8'));
               const totalCoverage = coverageSummary.total;
               
-              // Generate coverage badges
-              const getBadge = (percentage) => {
-                const color = percentage >= 90 ? 'brightgreen' : percentage >= 80 ? 'green' : percentage >= 70 ? 'yellowgreen' : percentage >= 60 ? 'yellow' : percentage >= 50 ? 'orange' : 'red';
-                return `![coverage](https://img.shields.io/badge/coverage-${percentage}%25-${color})`;
-              };
-              
               coverageMessage = `
               ## Test Coverage Report
-              
-              ${getBadge(totalCoverage.statements.pct)}
-              
-              ### Coverage Summary
               
               | Category | Coverage | Status |
               |----------|----------|--------|
@@ -63,48 +51,7 @@ jobs:
               | Branches | ${totalCoverage.branches.pct}% | ${totalCoverage.branches.covered}/${totalCoverage.branches.total} |
               | Functions | ${totalCoverage.functions.pct}% | ${totalCoverage.functions.covered}/${totalCoverage.functions.total} |
               | Lines | ${totalCoverage.lines.pct}% | ${totalCoverage.lines.covered}/${totalCoverage.lines.total} |
-              
-              ### Coverage Files
-              The following coverage reports are available:
-              - [HTML Report](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/${context.sha}/coverage/lcov-report/index.html)
-              - [LCOV Report](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/${context.sha}/coverage/lcov.info)
-              - [Clover Report](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/${context.sha}/coverage/clover.xml)
               `;
-              
-              // Add detailed text coverage if available
-              try {
-                const coverageText = fs.readFileSync('./coverage/coverage.txt', 'utf8');
-                coverageMessage += `
-                <details>
-                <summary>Detailed Coverage Report</summary>
-                
-                \`\`\`
-                ${coverageText}
-                \`\`\`
-                </details>
-                `;
-              } catch (e) {
-                console.log('No detailed coverage text available');
-              }
-              
-              // Add uncovered files if any
-              const uncoveredFiles = Object.entries(coverageSummary)
-                .filter(([key, value]) => key !== 'total' && value.statements.pct < 100)
-                .map(([key, value]) => ({
-                  file: key,
-                  coverage: value.statements.pct
-                }))
-                .sort((a, b) => a.coverage - b.coverage);
-              
-              if (uncoveredFiles.length > 0) {
-                coverageMessage += `
-                ### Files Needing Coverage
-                | File | Coverage |
-                |------|----------|
-                ${uncoveredFiles.map(f => `| ${f.file} | ${f.coverage}% |`).join('\n')}
-                `;
-              }
-              
             } catch (e) {
               console.error('Error reading coverage files:', e);
               coverageMessage = `
