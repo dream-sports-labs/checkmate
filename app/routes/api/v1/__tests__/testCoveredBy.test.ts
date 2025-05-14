@@ -42,7 +42,7 @@ describe("Get Test Covered By - Loader Function", () => {
     expect(TestCoveredByController.getAllTestCoveredBy).toHaveBeenCalledWith({ orgId: 123 });
     expect(responseHandler).toHaveBeenCalledWith({
       data: mockTestCoveredByData,
-      status: 500,
+      status: 200,
     });
   });
 
