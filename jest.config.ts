@@ -16,7 +16,14 @@ export default {
   testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
   setupFilesAfterEnv: ['<rootDir>/jest/mock.js'],
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
-  coverageReporters: ['lcov', ['text'], 'json-summary'],
+  coverageReporters: [
+    'text',           // Console output
+    'text-summary',   // Summary in console
+    'json-summary',   // coverage-summary.json
+    'lcov',          // coverage/lcov.info and HTML report
+    'clover',        // coverage/clover.xml
+    ['text', {file: 'coverage.txt'}] // Detailed text report
+  ],
   coveragePathIgnorePatterns: [
     '/node_modules/',
     '/db/schema/',
