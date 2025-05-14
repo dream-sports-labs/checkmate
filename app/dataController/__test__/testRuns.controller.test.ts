@@ -34,7 +34,7 @@ describe('TestRunsController', () => {
     ...invalidTestIdStatusArray,
   ]
 
-  const partiallyFailedUpdateResponse = [{affectedRows: 1}]
+  const partiallyFailedUpdateResponse = [{affectedRows: 2}]
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -89,8 +89,9 @@ describe('TestRunsController', () => {
           count: 2,
           details: [
             {
-              message:
-                'Invalid status provided, provide one of {Passed, Failed, Untested, Blocked, Retest, Archived, Skipped, InProgress}',
+              message: `Invalid status provided, provide one of {${Object.values(
+                TestStatusType,
+              ).join(', ')}}`,
               id: 3,
             },
             {
@@ -135,10 +136,10 @@ describe('TestRunsController', () => {
       })
 
       expect(result).toEqual({
-        passed: {message: 'Updated status of 1 test(s)', count: 1},
+        passed: {message: 'Updated status of 2 test(s)', count: 2},
         failed: {
-          message: '3 test(s) failed to update',
-          count: 3,
+          message: '2 test(s) failed to update',
+          count: 2,
           details: [
             {
               message:
@@ -278,10 +279,12 @@ describe('TestRunsController', () => {
       const mockEmptyStatusArray = {
         statuCountArray: [],
       }
-      
+
       const mockRunInfo = [{runId: 1, name: 'Test Run'}]
 
-      ;(TestRunsDao.runsMetaInfo as jest.Mock).mockResolvedValue(mockEmptyStatusArray)
+      ;(TestRunsDao.runsMetaInfo as jest.Mock).mockResolvedValue(
+        mockEmptyStatusArray,
+      )
       ;(RunsDao.getRunInfo as jest.Mock).mockResolvedValue(mockRunInfo)
 
       const result = await TestRunsController.runsMetaInfo({
@@ -294,12 +297,12 @@ describe('TestRunsController', () => {
         projectId: 1,
         groupBy: undefined,
       })
-      
+
       expect(RunsDao.getRunInfo).toHaveBeenCalledWith({
         runId: 1,
         projectId: 1,
       })
-      
+
       // Default values for all statuses should be 0
       expect(result).toEqual({
         total: 0,
@@ -313,15 +316,17 @@ describe('TestRunsController', () => {
         inprogress: 0,
       })
     })
-    
+
     it('should return an error message if no run is found', async () => {
       const mockEmptyStatusArray = {
         statuCountArray: [],
       }
-      
+
       const mockEmptyRunInfo: any[] = []
 
-      ;(TestRunsDao.runsMetaInfo as jest.Mock).mockResolvedValue(mockEmptyStatusArray)
+      ;(TestRunsDao.runsMetaInfo as jest.Mock).mockResolvedValue(
+        mockEmptyStatusArray,
+      )
       ;(RunsDao.getRunInfo as jest.Mock).mockResolvedValue(mockEmptyRunInfo)
 
       const result = await TestRunsController.runsMetaInfo({
@@ -337,95 +342,103 @@ describe('TestRunsController', () => {
     it('should call TestRunsDao.getTestStatusHistoryOfRun with correct parameters', async () => {
       const params = {
         runId: 1,
-        testId: 123
+        testId: 123,
       }
-      
+
       const mockResponse = [
-        {status: 'Passed', updatedBy: 1, updatedOn: new Date()}
+        {status: 'Passed', updatedBy: 1, updatedOn: new Date()},
       ]
-      
-      ;(TestRunsDao.getTestStatusHistoryOfRun as jest.Mock).mockResolvedValue(mockResponse)
-      
+
+      ;(TestRunsDao.getTestStatusHistoryOfRun as jest.Mock).mockResolvedValue(
+        mockResponse,
+      )
+
       const result = await TestRunsController.getTestStatusHistoryOfRun(params)
-      
+
       expect(TestRunsDao.getTestStatusHistoryOfRun).toHaveBeenCalledWith(params)
       expect(result).toEqual(mockResponse)
     })
   })
-  
+
   describe('testStatusHistory', () => {
     it('should call TestRunsDao.testStatusHistory with correct parameters', async () => {
       const params = {
-        testId: 123
+        testId: 123,
       }
-      
+
       const mockResponse = [
         {runId: 1, status: 'Passed', updatedBy: 1, updatedOn: new Date()},
-        {runId: 2, status: 'Failed', updatedBy: 1, updatedOn: new Date()}
+        {runId: 2, status: 'Failed', updatedBy: 1, updatedOn: new Date()},
       ]
-      
-      ;(TestRunsDao.testStatusHistory as jest.Mock).mockResolvedValue(mockResponse)
-      
+
+      ;(TestRunsDao.testStatusHistory as jest.Mock).mockResolvedValue(
+        mockResponse,
+      )
+
       const result = await TestRunsController.testStatusHistory(params)
-      
+
       expect(TestRunsDao.testStatusHistory).toHaveBeenCalledWith(params)
       expect(result).toEqual(mockResponse)
     })
   })
-  
+
   describe('deleteTestFromRun', () => {
     it('should call TestRunsDao.deleteTestFromRun with correct parameters', async () => {
       const params = {
         testIds: [123, 456],
         runId: 1,
         projectId: 1,
-        updatedBy: 100
+        updatedBy: 100,
       }
-      
+
       const mockResponse = {affectedRows: 2}
-      
-      ;(TestRunsDao.deleteTestFromRun as jest.Mock).mockResolvedValue(mockResponse)
-      
+
+      ;(TestRunsDao.deleteTestFromRun as jest.Mock).mockResolvedValue(
+        mockResponse,
+      )
+
       const result = await TestRunsController.deleteTestFromRun(params)
-      
+
       expect(TestRunsDao.deleteTestFromRun).toHaveBeenCalledWith(params)
       expect(result).toEqual(mockResponse)
     })
   })
-  
+
   describe('markPassedAsRetest', () => {
     it('should call TestRunsDao.markPassedAsRetest with correct parameters', async () => {
       const params = {
         runId: 1,
-        userId: 100
+        userId: 100,
       }
-      
+
       const mockResponse = {affectedRows: 5}
-      
-      ;(TestRunsDao.markPassedAsRetest as jest.Mock).mockResolvedValue(mockResponse)
-      
+
+      ;(TestRunsDao.markPassedAsRetest as jest.Mock).mockResolvedValue(
+        mockResponse,
+      )
+
       const result = await TestRunsController.markPassedAsRetest(params)
-      
+
       expect(TestRunsDao.markPassedAsRetest).toHaveBeenCalledWith(params)
       expect(result).toEqual(mockResponse)
     })
   })
-  
+
   describe('downloadReport', () => {
     it('should call TestRunsDao.downloadReport with correct parameters', async () => {
       const params = {
-        runId: 1
+        runId: 1,
       }
-      
+
       const mockResponse = [
         {testId: 123, title: 'Test 1', status: 'Passed'},
-        {testId: 456, title: 'Test 2', status: 'Failed'}
+        {testId: 456, title: 'Test 2', status: 'Failed'},
       ]
-      
+
       ;(TestRunsDao.downloadReport as jest.Mock).mockResolvedValue(mockResponse)
-      
+
       const result = await TestRunsController.downloadReport(params)
-      
+
       expect(TestRunsDao.downloadReport).toHaveBeenCalledWith(params)
       expect(result).toEqual(mockResponse)
     })
