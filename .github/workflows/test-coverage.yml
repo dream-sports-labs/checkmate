@@ -37,36 +37,28 @@ jobs:
             const fs = require('fs');
             const path = require('path');
             
-            // Read the text-summary coverage report
+            // Read the coverage summary
+            const coverageSummary = JSON.parse(fs.readFileSync('./coverage/coverage-summary.json', 'utf8'));
+            const totalCoverage = coverageSummary.total;
+            
+            // Read the text coverage report for details
             const coverageText = fs.readFileSync('./coverage/coverage.txt', 'utf8');
-            
-            // Extract coverage percentages using regex
-            const statementsMatch = coverageText.match(/Statements\s*:\s*(\d+\.\d+)%/);
-            const branchesMatch = coverageText.match(/Branches\s*:\s*(\d+\.\d+)%/);
-            const functionsMatch = coverageText.match(/Functions\s*:\s*(\d+\.\d+)%/);
-            const linesMatch = coverageText.match(/Lines\s*:\s*(\d+\.\d+)%/);
-            
-            // Extract covered/total numbers
-            const statementsDetails = coverageText.match(/Statements\s*:\s*(\d+\.\d+)%\s*\((\d+)\/(\d+)\)/);
-            const branchesDetails = coverageText.match(/Branches\s*:\s*(\d+\.\d+)%\s*\((\d+)\/(\d+)\)/);
-            const functionsDetails = coverageText.match(/Functions\s*:\s*(\d+\.\d+)%\s*\((\d+)\/(\d+)\)/);
-            const linesDetails = coverageText.match(/Lines\s*:\s*(\d+\.\d+)%\s*\((\d+)\/(\d+)\)/);
             
             const coverageMessage = `
             ## Test Coverage Report
             
             | Category | Coverage |
             |----------|----------|
-            | Statements | ${statementsMatch ? statementsMatch[1] : 'N/A'}% |
-            | Branches | ${branchesMatch ? branchesMatch[1] : 'N/A'}% |
-            | Functions | ${functionsMatch ? functionsMatch[1] : 'N/A'}% |
-            | Lines | ${linesMatch ? linesMatch[1] : 'N/A'}% |
+            | Statements | ${totalCoverage.statements.pct}% |
+            | Branches | ${totalCoverage.branches.pct}% |
+            | Functions | ${totalCoverage.functions.pct}% |
+            | Lines | ${totalCoverage.lines.pct}% |
             
             ### Coverage Details
-            - Statements: ${statementsDetails ? `${statementsDetails[2]}/${statementsDetails[3]}` : 'N/A'}
-            - Branches: ${branchesDetails ? `${branchesDetails[2]}/${branchesDetails[3]}` : 'N/A'}
-            - Functions: ${functionsDetails ? `${functionsDetails[2]}/${functionsDetails[3]}` : 'N/A'}
-            - Lines: ${linesDetails ? `${linesDetails[2]}/${linesDetails[3]}` : 'N/A'}
+            - Statements: ${totalCoverage.statements.covered}/${totalCoverage.statements.total}
+            - Branches: ${totalCoverage.branches.covered}/${totalCoverage.branches.total}
+            - Functions: ${totalCoverage.functions.covered}/${totalCoverage.functions.total}
+            - Lines: ${totalCoverage.lines.covered}/${totalCoverage.lines.total}
             
             <details>
             <summary>Full Coverage Report</summary>
