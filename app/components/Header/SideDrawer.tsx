@@ -75,7 +75,7 @@ export const SideDrawer = () => {
               text="Documentation"
             />
             <FooterComponent
-              href="https://discord.gg/W67bA8j8"
+              href="https://discord.gg/wBQXeYAKNc"
               setSideDrawerOpen={setSideDrawerOpen}
               text="Ask Question"
             />
