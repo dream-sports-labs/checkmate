@@ -55,7 +55,6 @@ jobs:
               console.error('Error reading coverage files:', e);
               coverageMessage = `
               ## Test Coverage Report
-              
               ❌ Failed to generate coverage report. Please check the test execution.
               `;
             }
