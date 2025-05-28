@@ -107,7 +107,9 @@ const TestsController = {
   deleteTest: (params: IDeleteTestController) => TestsDao.deleteTest(params),
   updateTest: async (params: IUpdateTestController) => {
     const results = await handleNewSectionAndSquad({
-      ...params,
+      new_section: params.new_section,
+      new_squad: params.new_squad,
+      projectId: params.projectId,
       createdBy: params.updatedBy,
     })
     if (results?.newSection) params.sectionId = results.newSection.sectionId

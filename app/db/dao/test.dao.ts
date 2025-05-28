@@ -550,8 +550,6 @@ const TestsDao = {
       labelIds,
       squadIds,
       sectionIds,
-      page,
-      pageSize = 10,
       textSearch,
       filterType,
       status = 'Active',

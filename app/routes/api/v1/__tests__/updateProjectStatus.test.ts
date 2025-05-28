@@ -128,7 +128,42 @@ describe('Update Project Status - Action Function', () => {
     expect(response.status).toBe(500)
   })
 
-  it('should handle unexpected errors', async () => {
+
+  it('should handle case where no project is affected', async () => {
+    const requestData = {
+      projectId: 123,
+      status: 'Archived',
+    }
+    const request = new Request('http://localhost', {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify(requestData),
+    })
+    const mockUser = {userId: 456}
+    const mockResponse = [{affectedRows: 0}] // No rows affected
+
+    ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(mockUser)
+    ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
+    ;(ProjectsController.updateProjectStatus as jest.Mock).mockResolvedValue(
+      mockResponse,
+    )
+    ;(responseHandler as jest.Mock).mockImplementation(
+      (data) => new Response(JSON.stringify(data), {status: 500}),
+    )
+
+    const response = await action({request} as any)
+
+    expect(ProjectsController.updateProjectStatus).toHaveBeenCalledWith({
+      ...requestData,
+      userId: mockUser.userId,
+    })
+    expect(responseHandler).toHaveBeenCalledWith({
+      error: 'No Project Deleted',
+      status: 500,
+    })
+  })
+
+  it('should handle undefined user', async () => {
     const requestData = {
       projectId: 123,
       status: 'Active',
@@ -138,23 +173,24 @@ describe('Update Project Status - Action Function', () => {
       headers: {'content-type': 'application/json'},
       body: JSON.stringify(requestData),
     })
-    const mockError = new Error('Unexpected error')
+    const mockResponse = [{affectedRows: 1}]
 
-    ;(getUserAndCheckAccess as jest.Mock).mockRejectedValue(mockError)
-    ;(responseHandler as jest.Mock).mockImplementation(
-      (error) =>
-        new Response(JSON.stringify({error: error.message}), {status: 500}),
+    ;(getUserAndCheckAccess as jest.Mock).mockResolvedValue(undefined)
+    ;(getRequestParams as jest.Mock).mockResolvedValue(requestData)
+    ;(ProjectsController.updateProjectStatus as jest.Mock).mockResolvedValue(
+      mockResponse,
     )
+    ;(responseHandler as jest.Mock).mockImplementation((response) => response)
 
     const response = await action({request} as any)
 
-    expect(getUserAndCheckAccess).toHaveBeenCalledWith({
-      request,
-      resource: API.EditProjectStatus,
+    expect(ProjectsController.updateProjectStatus).toHaveBeenCalledWith({
+      ...requestData,
+      userId: 0, // Should use 0 as a fallback for undefined user
     })
     expect(responseHandler).toHaveBeenCalledWith({
-      error: 'Unexpected error',
-      status: 500,
+      data: {message: 'Project Active'},
+      status: 200,
     })
   })
 })

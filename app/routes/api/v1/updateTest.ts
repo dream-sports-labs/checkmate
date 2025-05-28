@@ -32,7 +32,7 @@ export const BaseUpdateTestRequestSchema = z.object({
   defects: z.string().optional().nullable(),
   attachments: z.string().optional().nullable(),
   assignedTo: z.number().optional().nullable(),
-  testId: z.number().gt(0, {message: 'Test is required'}),
+  testId: z.number().gt(0, {message: 'Valid TestId is required'}),
   automationId: z.string().optional().nullable(),
   additionalGroups: z.string().optional().nullable(),
   description: z.string().optional().nullable(),

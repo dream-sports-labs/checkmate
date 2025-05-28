@@ -22,7 +22,7 @@ export const errorHandling = (error: any) => {
         cause: '' + cause + ' does not exist',
       })
   }
-  throw new SqlError(error)
+  throw new SqlError(error.message || 'Unknown error')
 }
 
 function getForeignKeyConstraint(errorString: string) {
