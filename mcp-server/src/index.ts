@@ -3,6 +3,9 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import 'dotenv/config';
+import fg from 'fast-glob';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 
 // Create server instance
@@ -50,223 +53,15 @@ async function makeRequest<T>(path: string, init?: RequestInit): Promise<T | nul
 
 // ---------------------- TOOL DEFINITIONS ----------------------
 
-// get-runs
-server.tool(
-  'get-runs',
-  'Get list of runs for a project',
-  {
-    projectId: z.number().int().positive().describe('ID of the project'),
-    page: z.number().int().positive().optional().describe('Page number (optional, default 1)'),
-    pageSize: z
-      .number()
-      .int()
-      .positive()
-      .optional()
-      .describe('Number of items per page (optional, default 250)'),
-    search: z.string().optional().describe('Search string (optional)'),
-    status: z
-      .enum(['Active', 'Locked', 'Archived', 'Deleted'])
-      .optional()
-      .describe('Run status filter (optional)'),
-  },
-  async ({ projectId, page, pageSize, search, status }) => {
-    const params = new URLSearchParams();
-    params.set('projectId', String(projectId));
-    if (page) params.set('page', String(page));
-    if (pageSize) params.set('pageSize', String(pageSize));
-    if (search) params.set('search', search);
-    if (status) params.set('status', status);
-
-    console.error("Making request to Checkmate API to get runs");
-    console.error("token: ", CHECKMATE_API_TOKEN);
-    console.error("baseurl: ", CHECKMATE_API_BASE);
-    const data = await makeRequest<any>(`api/v1/runs?${params.toString()}`);
-
-    if (!data) {
-      return {
-        content: [{ type: 'text', text: 'Failed to retrieve runs data' }],
-      };
-    }
-
-    return {
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify(data, null, 2),
-        },
-      ],
-    };
-  },
-);
-
-// get-run-state-detail
-server.tool(
-  'get-run-state-detail',
-  'Get meta information / state summary for a run',
-  {
-    runId: z.number().int().positive().describe('ID of the run'),
-    projectId: z.number().int().positive().optional().describe('ID of the project (optional)'),
-    groupBy: z.enum(['squads']).optional().describe("Group by field. Currently only 'squads' is supported (optional)"),
-  },
-  async ({ runId, projectId, groupBy }) => {
-    const params = new URLSearchParams();
-    params.set('runId', String(runId));
-    if (projectId) params.set('projectId', String(projectId));
-    if (groupBy) params.set('groupBy', groupBy);
-
-    const data = await makeRequest<any>(`api/v1/run/state-detail?${params.toString()}`);
-
-    if (!data) {
-      return {
-        content: [{ type: 'text', text: 'Failed to retrieve run state detail' }],
-      };
-    }
-
-    return {
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify(data, null, 2),
-        },
-      ],
-    };
-  },
-);
-
-// get-run-tests
-server.tool(
-  'get-run-tests',
-  'Get list of tests inside a run',
-  {
-    projectId: z.number().int().positive().describe('Project ID'),
-    runId: z.number().int().positive().describe('Run ID'),
-    page: z.number().int().positive().optional().describe('Page number (optional, default 1)'),
-    pageSize: z.number().int().positive().optional().describe('Page size (optional, default 100)'),
-    textSearch: z.string().optional().describe('Search string (optional)'),
-  },
-  async ({ projectId, runId, page, pageSize, textSearch }) => {
-    const params = new URLSearchParams();
-    params.set('projectId', String(projectId));
-    params.set('runId', String(runId));
-    if (page) params.set('page', String(page));
-    if (pageSize) params.set('pageSize', String(pageSize));
-    if (textSearch) params.set('textSearch', textSearch);
-
-    const data = await makeRequest<any>(`api/v1/run/tests?${params.toString()}`);
-
-    if (!data) {
-      return {
-        content: [{ type: 'text', text: 'Failed to retrieve run tests list' }],
-      };
-    }
-
-    return {
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify(data, null, 2),
-        },
-      ],
-    };
-  },
-);
-
-// get-run-test-status
-server.tool(
-  'get-run-test-status',
-  'Get the status of a particular test in a run',
-  {
-    projectId: z.number().int().positive().describe('Project ID'),
-    runId: z.number().int().positive().describe('Run ID'),
-    testId: z.number().int().positive().describe('Test ID'),
-  },
-  async ({ projectId, runId, testId }) => {
-    const params = new URLSearchParams({ projectId: String(projectId), runId: String(runId), testId: String(testId) });
-
-    const data = await makeRequest<any>(`api/v1/run/test-status?${params.toString()}`);
-
-    if (!data) {
-      return {
-        content: [{ type: 'text', text: 'Failed to retrieve run test status' }],
-      };
-    }
-
-    return {
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify(data, null, 2),
-        },
-      ],
-    };
-  },
-);
-
-// get-test-details
-server.tool(
-  'get-test-details',
-  'Get details of a test',
-  {
-    projectId: z.number().int().positive().describe('Project ID'),
-    testId: z.number().int().positive().describe('Test ID'),
-  },
-  async ({ projectId, testId }) => {
-    const params = new URLSearchParams({ projectId: String(projectId), testId: String(testId) });
-
-    const data = await makeRequest<any>(`api/v1/test/details?${params.toString()}`);
-
-    if (!data) {
-      return {
-        content: [{ type: 'text', text: 'Failed to retrieve test details' }],
-      };
-    }
-
-    return {
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify(data, null, 2),
-        },
-      ],
-    };
-  },
-);
-
-// get-project-tests
-server.tool(
-  'get-project-tests',
-  'Get tests of a project (not tied to a run)',
-  {
-    projectId: z.number().int().positive().describe('Project ID'),
-    page: z.number().int().positive().optional().describe('Page number (optional, default 1)'),
-    pageSize: z.number().int().positive().optional().describe('Page size (optional, default 250)'),
-    textSearch: z.string().optional().describe('Search string (optional)'),
-  },
-  async ({ projectId, page, pageSize, textSearch }) => {
-    const params = new URLSearchParams();
-    params.set('projectId', String(projectId));
-    if (page) params.set('page', String(page));
-    if (pageSize) params.set('pageSize', String(pageSize));
-    if (textSearch) params.set('textSearch', textSearch);
-
-    const data = await makeRequest<any>(`api/v1/project/tests?${params.toString()}`);
-
-    if (!data) {
-      return {
-        content: [{ type: 'text', text: 'Failed to retrieve project tests' }],
-      };
-    }
-
-    return {
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify(data, null, 2),
-        },
-      ],
-    };
-  },
-);
+// Dynamically import every tool module in src/tools/**/index.ts
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const toolFiles = await fg(path.join(__dirname, 'tools/**/index.@(js|ts)'));
+for (const file of toolFiles) {
+  const mod = await import(path.resolve(file));
+  if (typeof mod.default === 'function') {
+    mod.default(server, makeRequest);
+  }
+}
 
 // ---------------------- START SERVER ----------------------
 
