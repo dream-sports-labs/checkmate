@@ -19,10 +19,10 @@ const server = new McpServer({
 });
 
 // Base URL for the Checkmate REST API. If not provided via env, default to local dev server.
-const CHECKMATE_API_BASE = process.env.CHECKMATE_API_BASE ?? "http://localhost:3000";
+const CHECKMATE_API_BASE = process.env.CHECKMATE_API_BASE;
 
 // Auth token for private Checkmate API endpoints. Either set the env var CHECKMATE_API_TOKEN or hard-code the token here.
-const CHECKMATE_API_TOKEN = process.env.CHECKMATE_API_TOKEN ?? "93b5ac5f2ce2464f";
+const CHECKMATE_API_TOKEN = process.env.CHECKMATE_API_TOKEN;
 
 // Helper for making requests to Checkmate API endpoints
 async function makeRequest<T>(path: string, init?: RequestInit): Promise<T | null> {
