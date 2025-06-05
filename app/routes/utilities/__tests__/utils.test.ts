@@ -1,6 +1,10 @@
 import {z} from 'zod'
 import {
   checkForValidId,
+  checkForProjectId,
+  checkForTestId,
+  checkForRunId,
+  getRequestParams,
   jsonParseWithError,
   safeJsonParse,
   sqlErroMessage,
@@ -47,11 +51,11 @@ describe('jsonParseWithError', () => {
     expect(jsonParseWithError('{"key":"value"}')).toEqual({key: 'value'})
   })
 
-  it('should throw an error for invalid JSON strings', () => {
+  it('should throw an error for invalid JSON strings without paramName', () => {
     expect(() => jsonParseWithError('invalid json')).toThrow('Invalid JSON')
   })
 
-  it('should include paramName in the error message if provided', () => {
+  it('should throw an error for invalid JSON strings with paramName', () => {
     expect(() => jsonParseWithError('invalid json', 'paramName')).toThrow(
       'Invalid JSON paramName',
     )
@@ -148,5 +152,80 @@ describe('zodErrorMessage', () => {
       'Data validation error: name: Expected string, received number, age: Expected number, received string'
 
     expect(zodErrorMessage(error)).toBe(expectedMessage)
+  })
+})
+
+describe('checkForProjectId', () => {
+  it('should return true for a valid project ID', () => {
+    expect(checkForProjectId(123)).toBe(true)
+  })
+
+  it('should return false for invalid project IDs', () => {
+    expect(checkForProjectId(undefined)).toBe(false)
+    expect(checkForProjectId(NaN)).toBe(false)
+    expect(checkForProjectId(0)).toBe(false)
+  })
+})
+
+describe('checkForTestId', () => {
+  it('should return true for a valid test ID', () => {
+    expect(checkForTestId(123)).toBe(true)
+  })
+
+  it('should return false for invalid test IDs', () => {
+    expect(checkForTestId(undefined)).toBe(false)
+    expect(checkForTestId(NaN)).toBe(false)
+    expect(checkForTestId(0)).toBe(false)
+  })
+})
+
+describe('checkForRunId', () => {
+  it('should return true for a valid run ID', () => {
+    expect(checkForRunId(123)).toBe(true)
+  })
+
+  it('should return false for invalid run IDs', () => {
+    expect(checkForRunId(undefined)).toBe(false)
+    expect(checkForRunId(NaN)).toBe(false)
+    expect(checkForRunId(0)).toBe(false)
+  })
+})
+
+describe('getRequestParams', () => {
+  it('should parse request JSON data without validation', async () => {
+    const mockRequest = new Request('http://example.com', {
+      method: 'POST',
+      body: JSON.stringify({ foo: 'bar' })
+    })
+    
+    const result = await getRequestParams(mockRequest)
+    expect(result).toEqual({ foo: 'bar' })
+  })
+
+  it('should parse and validate request data with schema', async () => {
+    const schema = z.object({
+      foo: z.string()
+    })
+    
+    const mockRequest = new Request('http://example.com', {
+      method: 'POST',
+      body: JSON.stringify({ foo: 'bar' })
+    })
+    
+    const result = await getRequestParams(mockRequest, schema)
+    expect(result).toEqual({ foo: 'bar' })
+  })
+
+  it('should throw error when validation fails', async () => {
+    const schema = z.object({
+      foo: z.number()
+    })
+    
+    const mockRequest = new Request('http://example.com', {
+      method: 'POST',
+      body: JSON.stringify({ foo: 'bar' })
+    })
+    
+    await expect(getRequestParams(mockRequest, schema)).rejects.toThrow()
   })
 })

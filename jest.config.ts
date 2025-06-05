@@ -1,13 +1,14 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} **/
 import {pathsToModuleNameMapper} from 'ts-jest'
-import {compilerOptions} from './tsconfig.json'
+const tsconfig = require('./tsconfig.json')
 
 export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
+  moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
     prefix: '<rootDir>/',
   }),
+
   modulePaths: ['.'],
   transform: {
     '^.+\\.[tj]sx?$': 'ts-jest',
@@ -15,7 +16,14 @@ export default {
   testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
   setupFilesAfterEnv: ['<rootDir>/jest/mock.js'],
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
-  coverageReporters: ['lcov', ['text'], 'json-summary'],
+  coverageReporters: [
+    'text',           // Console output
+    'text-summary',   // Summary in console
+    'json-summary',   // coverage-summary.json
+    'lcov',          // coverage/lcov.info and HTML report
+    'clover',        // coverage/clover.xml
+    ['text', {file: 'coverage.txt'}] // Detailed text report
+  ],
   coveragePathIgnorePatterns: [
     '/node_modules/',
     '/db/schema/',
@@ -27,8 +35,9 @@ export default {
     '/scripts/',
     '/sql/',
     '/build/',
-    '/components/',
     '/drizzle/',
     'app/routes/utilities/api.ts',
+    '\\.tsx$',
+    'app/db/dao/', // TODO: remove this when dao unit tests are added
   ],
 }

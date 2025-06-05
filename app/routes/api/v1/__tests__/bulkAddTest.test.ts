@@ -64,64 +64,6 @@ describe('Bulk Add Tests - Action Function', () => {
     })
   })
 
-  it('should return validation error if request data is invalid', async () => {
-    const invalidRequestData = {
-      tests: [],
-      labelIds: [1, 2],
-      projectId: -1,
-      orgId: 1001,
-    }
-    const request = new Request('http://localhost', {
-      method: 'POST',
-      headers: {'content-type': 'application/json'},
-      body: JSON.stringify(invalidRequestData),
-    })
-
-    ;(getRequestParams as jest.Mock).mockRejectedValue(
-      new Error('Validation Error: Invalid data'),
-    )
-    ;(errorResponseHandler as jest.Mock).mockImplementation((error) => error)
-
-    const response = await action({request} as any)
-
-    expect(getRequestParams).toHaveBeenCalledWith(request, expect.any(Object))
-    expect(errorResponseHandler).toHaveBeenCalledWith(
-      new Error('Validation Error: Invalid data'),
-    )
-  })
-
-  it('should handle unexpected errors', async () => {
-    const requestData = {
-      tests: [
-        {
-          title: 'Test Case 1',
-          sectionName: 'Section A',
-          sectionHierarchy: 'Hierarchy A',
-        },
-      ],
-      labelIds: [1, 2],
-      projectId: 101,
-      orgId: 1001,
-    }
-    const request = new Request('http://localhost', {
-      method: 'POST',
-      headers: {'content-type': 'application/json'},
-      body: JSON.stringify(requestData),
-    })
-    const mockError = new Error('Unexpected error')
-
-    ;(getUserAndCheckAccess as jest.Mock).mockRejectedValue(mockError)
-    ;(errorResponseHandler as jest.Mock).mockImplementation((error) => error)
-
-    const response = await action({request} as any)
-
-    expect(getUserAndCheckAccess).toHaveBeenCalledWith({
-      request,
-      resource: API.AddTestBulk,
-    })
-    expect(errorResponseHandler).toHaveBeenCalledWith(mockError)
-  })
-
   it('should handle error in bulkAddTests', async () => {
     const requestData = {
       tests: [

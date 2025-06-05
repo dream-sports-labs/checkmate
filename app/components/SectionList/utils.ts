@@ -8,17 +8,30 @@ import {
 } from '@controllers/sections.controller'
 import {jsonParseWithError} from '~/routes/utilities/utils'
 
-const parentChildMap = new Map()
-
-export const getInitialOpenSections = (sectionIds: number[]) => {
+export const getInitialOpenSections = ({
+  initialSelectedSections,
+  sectionAPIData,
+}: {
+  initialSelectedSections: number[]
+  sectionAPIData: ICreateSectionResponse[]
+}): number[] => {
   const openSections: number[] = []
-  sectionIds.forEach((sectionId) => {
-    let openSectionId = sectionId
+  initialSelectedSections.forEach((sectionId) => {
+    let openSectionId: number | null = sectionId
+
     while (!!openSectionId && openSectionId != -1) {
       openSections.push(openSectionId)
-      openSectionId = parentChildMap.get(openSectionId)
+
+      const parentSectionId = sectionAPIData.find(
+        (section) => section.sectionId === openSectionId,
+      )?.parentId
+
+      if (!!parentSectionId && !openSections.includes(parentSectionId))
+        openSectionId = parentSectionId
+      else openSectionId = null
     }
   })
+
   return openSections
 }
 

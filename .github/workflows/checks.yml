@@ -2,9 +2,7 @@ name: Checks
 
 on:
   pull_request:
-    branches:
-      - master
-      - '**'
+    types: [opened, synchronize, reopened]
 
 jobs:
   unit-test:
@@ -12,6 +10,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -26,4 +27,66 @@ jobs:
         run: yarn install --immutable
 
       - name: Run unit tests
-        run: yarn unit:test
+        run: yarn unit:test:coverage
+        env:
+          NODE_ENV: test
+
+      - name: Post coverage report to PR
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+
+            let coverageMessage = '';
+
+            try {
+              const coverageSummary = JSON.parse(fs.readFileSync('./coverage/coverage-summary.json', 'utf8'));
+              const totalCoverage = coverageSummary.total;
+              
+              coverageMessage = `
+              ## Test Coverage Report
+              
+              | Category | Coverage | Status |
+              |----------|----------|--------|
+              | Statements | ${totalCoverage.statements.pct}% | ${totalCoverage.statements.covered}/${totalCoverage.statements.total} |
+              | Branches | ${totalCoverage.branches.pct}% | ${totalCoverage.branches.covered}/${totalCoverage.branches.total} |
+              | Functions | ${totalCoverage.functions.pct}% | ${totalCoverage.functions.covered}/${totalCoverage.functions.total} |
+              | Lines | ${totalCoverage.lines.pct}% | ${totalCoverage.lines.covered}/${totalCoverage.lines.total} |
+              `;
+            } catch (e) {
+              console.error('Error reading coverage files:', e);
+              coverageMessage = `
+              ## Test Coverage Report
+              ❌ Failed to generate coverage report. Please check the test execution.
+              `;
+            }
+
+            // Find existing coverage comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number
+            });
+
+            const coverageComment = comments.find(comment => 
+              comment.body.includes('## Test Coverage Report')
+            );
+
+            if (coverageComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: coverageComment.id,
+                body: coverageMessage
+              });
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: coverageMessage
+              });
+            }

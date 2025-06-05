@@ -24,7 +24,7 @@ export default defineConfig({
       },
       social: {
         github: "https://github.com/dream-sports-labs/checkmate",
-        discord: "https://discord.gg/W67bA8j8",
+        discord: "https://discord.gg/wBQXeYAKNc",
       },
       sidebar: [
         {

@@ -138,7 +138,7 @@ describe('Remove Test From Run - Action Function', () => {
     })
   })
 
-  it('should handle unexpected errors', async () => {
+  it('should handle error in getUserAndCheckAccess', async () => {
     const requestData = {
       runId: 123,
       projectId: 456,

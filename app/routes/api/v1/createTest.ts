@@ -42,8 +42,8 @@ export const action = async ({request}: ActionFunctionArgs) => {
 
     const createTestData: any = await TestsController.createTest({
       ...data,
-      assignedTo: user?.userId ?? 1,
-      createdBy: user?.userId ?? 1,
+      assignedTo: user?.userId ?? 0,
+      createdBy: user?.userId ?? 0,
     })
 
     await TestsController.updateLabelTestMap({

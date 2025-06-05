@@ -21,7 +21,7 @@
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "NODE_ENV=production node server.mjs",
     "unit:test": "NODE_ENV=test node --expose-gc --no-compilation-cache ./node_modules/jest/bin/jest --maxWorkers=70% --silent --watchAll=false --clearMocks",
-    "unit:test:coverage": "NODE_ENV=test node --expose-gc --no-compilation-cache ./node_modules/jest/bin/jest --maxWorkers=70% --silent --watchAll=false --clearMocks --coverage --coverageReporters='text-summary' --coverageReporters='text' --coverageReporters='html'"
+    "unit:test:coverage": "NODE_ENV=test node --expose-gc --no-compilation-cache ./node_modules/jest/bin/jest --maxWorkers=70% --silent --watchAll=false --clearMocks --coverage"
   },
   "dependencies": {
     "@hookform/resolvers": "3.9.0",

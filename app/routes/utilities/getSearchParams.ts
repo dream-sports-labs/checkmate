@@ -211,13 +211,16 @@ const SearchParams = {
   },
   getAllUsers: ({params, request}: ISearchParams) => {
     const url = new URL(request.url)
-    const page = Number(url.searchParams.get('page')) || 1
-    const pageSize = Number(url.searchParams.get('pageSize')) || MED_PAGE_SIZE
+    const rawPage = url.searchParams.get('page')
+    const rawPageSize = url.searchParams.get('pageSize')
+    const page = rawPage ? Number(rawPage) : 1
+    const pageSize = rawPageSize ? Number(rawPageSize) : MED_PAGE_SIZE
     const textSearch = url.searchParams.get('textSearch') || ''
     const userRoles = url.searchParams.get('userRoles')
       ? jsonParseWithError(url.searchParams.get('userRoles'), 'userRoles')
       : undefined
-    if (!page || !pageSize)
+
+    if (page <= 0 || pageSize <= 0)
       throw new Error('Invalid page or pageSize, provide valid entry', {
         cause: ErrorCause.INVALID_PARAMS,
       })

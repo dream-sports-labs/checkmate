@@ -160,4 +160,141 @@ describe('GetSearchParams', () => {
       })
     })
   })
+
+  describe('getTestStatus', () => {
+    it('should parse all valid parameters correctly', () => {
+      const params = {projectId: '1', testId: '2', runId: '3'}
+      const request = mockRequest('http://example.com')
+
+      const result = SearchParams.getTestStatus({params, request})
+
+      expect(result).toEqual({
+        projectId: 1,
+        testId: 2,
+        runId: 3,
+      })
+    })
+
+    it('should throw an error if projectId is invalid', () => {
+      const params = {testId: '2', runId: '3'}
+      const request = mockRequest('http://example.com')
+
+      expect(() => SearchParams.getTestStatus({params, request})).toThrowError(
+        'Invalid projectId',
+      )
+    })
+
+    it('should throw an error if testId is invalid', () => {
+      const params = {projectId: '1', runId: '3'}
+      const request = mockRequest('http://example.com')
+
+      expect(() => SearchParams.getTestStatus({params, request})).toThrowError(
+        'Invalid testId',
+      )
+    })
+
+    it('should throw an error if runId is invalid', () => {
+      const params = {projectId: '1', testId: '2'}
+      const request = mockRequest('http://example.com')
+
+      expect(() => SearchParams.getTestStatus({params, request})).toThrowError(
+        'Invalid runId',
+      )
+    })
+  })
+
+  describe('getAllUsers', () => {
+    it('should parse all valid parameters correctly', () => {
+      const params = {}
+      const request = mockRequest(
+        'http://example.com?page=2&pageSize=20&textSearch=test&userRoles=["admin","user"]',
+      )
+
+      const result = SearchParams.getAllUsers({params, request})
+
+      expect(result).toEqual({
+        page: 2,
+        pageSize: 20,
+        textSearch: 'test',
+        userRoles: ['admin', 'user'],
+      })
+    })
+
+    it('should handle optional parameters gracefully', () => {
+      const params = {}
+      const request = mockRequest('http://example.com')
+
+      const result = SearchParams.getAllUsers({params, request})
+
+      expect(result).toEqual({
+        page: 1,
+        pageSize: 100,
+        textSearch: '',
+        userRoles: undefined,
+      })
+    })
+
+    it('should throw error if page or pageSize is invalid', () => {
+      const request = mockRequest('http://example.com?page=0&pageSize=0')
+      expect(() => SearchParams.getAllUsers({request, params: {}})).toThrow(
+        'Invalid page or pageSize, provide valid entry',
+      )
+
+      const request2 = mockRequest('http://example.com?page=-1')
+      expect(() => SearchParams.getAllUsers({request: request2, params: {}})).toThrow(
+        'Invalid page or pageSize, provide valid entry',
+      )
+
+      const request3 = mockRequest('http://example.com?pageSize=-5')
+      expect(() => SearchParams.getAllUsers({request: request3, params: {}})).toThrow(
+        'Invalid page or pageSize, provide valid entry',
+      )
+    })
+
+    it('should throw an error if userRoles contains invalid role', () => {
+      const params = {}
+      const request = mockRequest(
+        'http://example.com?userRoles=["admin","invalid"]',
+      )
+
+      expect(() => SearchParams.getAllUsers({params, request})).toThrowError(
+        'Invalid user role',
+      )
+    })
+  })
+
+  describe('getSections', () => {
+    it('should parse all valid parameters correctly', () => {
+      const params = {projectId: '1', runId: '2'}
+      const request = mockRequest('http://example.com')
+
+      const result = SearchParams.getSections({params, request})
+
+      expect(result).toEqual({
+        projectId: 1,
+        runId: 2,
+      })
+    })
+
+    it('should handle optional runId parameter', () => {
+      const params = {projectId: '1'}
+      const request = mockRequest('http://example.com')
+
+      const result = SearchParams.getSections({params, request})
+
+      expect(result).toEqual({
+        projectId: 1,
+        runId: undefined,
+      })
+    })
+
+    it('should throw an error if projectId is invalid', () => {
+      const params = {}
+      const request = mockRequest('http://example.com')
+
+      expect(() => SearchParams.getSections({params, request})).toThrowError(
+        'Invalid projectId',
+      )
+    })
+  })
 })
