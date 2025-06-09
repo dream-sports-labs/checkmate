@@ -3,7 +3,13 @@ import {Tooltip} from '@components/Tooltip/Tooltip'
 import {ICreateSectionResponse} from '@controllers/sections.controller'
 import {Checkbox} from '@ui/checkbox'
 import {cn} from '@ui/utils'
-import {ChevronDown, ChevronRight, CirclePlus, Pencil} from 'lucide-react'
+import {
+  ChevronDown,
+  ChevronRight,
+  CirclePlus,
+  Pencil,
+  Trash2,
+} from 'lucide-react'
 import React, {memo, useCallback} from 'react'
 import {useParams} from 'react-router'
 import SectionSkeleton from './SectionSkeleton'
@@ -24,6 +30,7 @@ interface IRenderSection {
   ) => void
   addSubsectionClicked: (sectionId: number | null) => void
   editSubsectionClicked: (sectionId: number) => void
+  deleteSubsectionClicked: (sectionId: number) => void
 }
 
 const RenderSections = memo(
@@ -36,6 +43,7 @@ const RenderSections = memo(
     applySectionFilter,
     addSubsectionClicked,
     editSubsectionClicked,
+    deleteSubsectionClicked,
     sectionData,
   }: IRenderSection) => {
     sections = sections
@@ -61,6 +69,7 @@ const RenderSections = memo(
                 applySectionFilter={applySectionFilter}
                 addSubsectionClicked={addSubsectionClicked}
                 editSubsectionClicked={editSubsectionClicked}
+                deleteSubsectionClicked={deleteSubsectionClicked}
                 sectionData={sectionData}
               />
             </div>
@@ -75,6 +84,8 @@ const RenderSections = memo(
         selectedSections,
         applySectionFilter,
         addSubsectionClicked,
+        editSubsectionClicked,
+        deleteSubsectionClicked,
       ],
     )
 
@@ -154,31 +165,42 @@ const RenderSections = memo(
                     />
                   </div>
                   {!runId && (
-                    <div className="flex flex-row items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 absolute top-1/2 left-full transform -translate-y-1/2 ml-2 pb-0.5">
+                    <div className="flex flex-row items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                       <Tooltip
                         anchor={
                           <CirclePlus
+                            size={14}
                             color="green"
                             onClick={() =>
                               addSubsectionClicked(section.sectionId)
                             }
-                            size={16}
                           />
                         }
-                        content="Add SubSection"
+                        content={<div className="text-sm">Add Sub-Section</div>}
                       />
-
                       <Tooltip
                         anchor={
                           <Pencil
-                            onClick={() => {
-                              editSubsectionClicked(section.sectionId)
-                            }}
-                            color="#2d7071"
                             size={14}
+                            color="orange"
+                            onClick={() =>
+                              editSubsectionClicked(section.sectionId)
+                            }
                           />
                         }
-                        content="Edit Section"
+                        content={<div className="text-sm">Edit Section</div>}
+                      />
+                      <Tooltip
+                        anchor={
+                          <Trash2
+                            size={14}
+                            color="red"
+                            onClick={() =>
+                              deleteSubsectionClicked(section.sectionId)
+                            }
+                          />
+                        }
+                        content={<div className="text-sm">Delete Section</div>}
                       />
                     </div>
                   )}
