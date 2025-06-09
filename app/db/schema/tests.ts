@@ -58,6 +58,9 @@ export const sections = mysqlTable(
     updatedBy: int('updatedBy').references(() => users.userId, {
       onDelete: 'set null',
     }),
+    status: mysqlEnum('status', ['Active', 'Deleted'])
+      .default('Active')
+      .notNull(),
   },
   (sections) => {
     return {
