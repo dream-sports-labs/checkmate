@@ -9,6 +9,9 @@ import { Steps } from "@astrojs/starlight/components";
 1. **Docker Desktop**: Ensure Docker Desktop is installed and running.
 2. **Google OAuth Application**: Set up a Google OAuth application to enable login.
    - Follow the steps on the [Google documentation](https://developers.google.com/identity/protocols/oauth2/web-server#creatingcred) to create a new application and get a client ID and secret.
+   - **Important**: Configure the following in your GCP OAuth Dashboard:
+     - **Authorized JavaScript origins**: `http://localhost:3000` (for local development) or your domain (e.g., `https://yourdomain.com`)
+     - **Authorized redirect URIs**: `http://localhost:3000/callback` (for local development) or your domain with callback (e.g., `https://yourdomain.com/callback`)
 
 #### Local Dev Setup
 
@@ -22,14 +25,20 @@ import { Steps } from "@astrojs/starlight/components";
    ```sh frame="none"
    yarn install
    ```
-3. Create .env file,
+3. Create .env file:
    - Copy the .env.example file and rename it to .env. Update it with your specific environment variables.
+   - **Required Google OAuth Configuration**:
+     ```env
+     GOOGLE_CLIENT_ID=your_google_client_id_here
+     GOOGLE_CLIENT_SECRET=your_google_client_secret_here
+     ```
+   - Ensure these values match the credentials from your Google OAuth application created in the pre-requisites step.
 4. Set up the database and seed data:
    ```sh frame="none"
    yarn docker:db:setup
    ```
    - Create a database container using Docker.
-   - Seed the database with initial data from the `seedData.sql` file..
+   - Seed the database with initial data from the `seedData.sql` file.
 5. Start the application in development mode:
    ```sh frame="none"
    yarn dev
@@ -37,6 +46,15 @@ import { Steps } from "@astrojs/starlight/components";
 6. App will be started on http://localhost:3000
 
 </Steps>
+
+:::caution[OAuth Configuration]
+Make sure your `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are valid and that your GCP OAuth application has the correct:
+
+- **Authorized JavaScript origins**: `http://localhost:3000` (for local dev)
+- **Authorized redirect URIs**: `http://localhost:3000/callback` (for local dev)
+
+For production deployments, replace `localhost:3000` with your actual domain.
+:::
 
 #### Docker Setup
 
@@ -47,6 +65,11 @@ import { Steps } from "@astrojs/starlight/components";
    ```
 1. Create an environment file:
    - Ensure you have a .env file in place, based on .env.example.
+   - **Required Google OAuth Configuration**:
+     ```env
+     GOOGLE_CLIENT_ID=your_google_client_id_here
+     GOOGLE_CLIENT_SECRET=your_google_client_secret_here
+     ```
 2. Install dependencies
    ```sh frame="none"
    yarn install
