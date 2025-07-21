@@ -14,7 +14,7 @@ import {errorHandling} from './utils'
 const SectionsDao = {
   getAllSections: async ({projectId, runId}: IGetAllSections) => {
     try {
-      const whereClauses = []
+      const whereClauses = [eq(sections.status, 'Active')]
 
       if (projectId) {
         whereClauses.push(eq(sections.projectId, projectId))
@@ -203,6 +203,35 @@ const SectionsDao = {
       logger({
         type: LogType.SQL_ERROR,
         tag: 'Error while editing section',
+        message: error,
+      })
+      errorHandling(error)
+    }
+  },
+  deleteSection: async ({
+    sectionId,
+    projectId,
+    userId,
+  }: {
+    sectionId: number
+    projectId: number
+    userId: number
+  }) => {
+    try {
+      const data = await dbClient
+        .update(sections)
+        .set({status: 'Deleted', updatedBy: userId})
+        .where(
+          and(
+            eq(sections.sectionId, sectionId),
+            eq(sections.projectId, projectId),
+          ),
+        )
+      return data
+    } catch (error: any) {
+      logger({
+        type: LogType.SQL_ERROR,
+        tag: 'Error while deleting section',
         message: error,
       })
       errorHandling(error)

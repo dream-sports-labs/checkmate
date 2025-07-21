@@ -1,4 +1,5 @@
 import SectionsDao from '~/db/dao/sections.dao'
+import TestsDao from '~/db/dao/test.dao'
 
 export interface IGetSectionIdByHierarcy {
   sectionName: string
@@ -63,6 +64,12 @@ export interface IEditSection {
   parentId?: number | null
 }
 
+export interface IDeleteSection {
+  sectionId: number
+  projectId: number
+  userId: number
+}
+
 const SectionsController = {
   getAllSections: (
     param: IGetAllSections,
@@ -123,6 +130,22 @@ const SectionsController = {
   },
 
   editSection: async (param: IEditSection) => SectionsDao.editSection(param),
+
+  deleteSection: async (param: IDeleteSection) => {
+    const activeTests = await TestsDao.getTestsCount({
+      projectId: param.projectId,
+      sectionIds: [param.sectionId],
+      status: 'Active',
+    })
+
+    if (activeTests && activeTests.count > 0) {
+      throw new Error(
+        `Section has ${activeTests.count} active test(s) associated with it, cannot delete section`,
+      )
+    }
+
+    return SectionsDao.deleteSection(param)
+  },
 }
 
 export default SectionsController

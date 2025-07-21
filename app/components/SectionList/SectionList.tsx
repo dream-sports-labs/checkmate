@@ -17,9 +17,11 @@ import {CirclePlus, ListRestart} from 'lucide-react'
 import React, {useEffect, useState} from 'react'
 import {API} from '~/routes/utilities/api'
 import {AddSectionDialog} from './AddSectionDialog'
+
 import {EditSectionDialog} from './EditSectionDialog'
 import RenderSections from './RenderSections'
 import {SectionInfoBox} from './SectionInfoBox'
+import {DeleteSectionDialog} from './DeleteSectionDialog'
 
 export const SectionList = () => {
   const [searchParams, setSearchParams] = useSearchParams([])
@@ -28,6 +30,7 @@ export const SectionList = () => {
   )
   const [addSectionDialog, setAddSectionDialog] = useState<boolean>(false)
   const [editSectionDialog, setEditSectionDialog] = useState<boolean>(false)
+  const [deleteSectionDialog, setDeleteSectionDialog] = useState<boolean>(false)
   const [sectionAPIData, setSectionAPIData] = useState<
     ICreateSectionResponse[]
   >([])
@@ -168,6 +171,11 @@ export const SectionList = () => {
     setEditSectionDialog(true)
   }
 
+  const deleteSubsectionClicked = (sectionId: number) => {
+    setSectionId(sectionId)
+    setDeleteSectionDialog(true)
+  }
+
   const reloadSections = () => {
     sectionFetcher.load(`/${API.GetSections}?projectId=${projectId}`)
   }
@@ -201,6 +209,7 @@ export const SectionList = () => {
           toggleSection={toggleSection}
           sectionData={sectionFetcher?.data?.data}
           editSubsectionClicked={editSubsectionClicked}
+          deleteSubsectionClicked={deleteSubsectionClicked}
         />
         {!runId && (
           <button
@@ -227,6 +236,15 @@ export const SectionList = () => {
         <EditSectionDialog
           state={editSectionDialog}
           setState={setEditSectionDialog}
+          sectionId={sectionId}
+          sectionData={sectionFetcher?.data?.data}
+          reloadSections={reloadSections}
+        />
+      )}
+      {sectionId && sectionFetcher?.data?.data && (
+        <DeleteSectionDialog
+          state={deleteSectionDialog}
+          setState={setDeleteSectionDialog}
           sectionId={sectionId}
           sectionData={sectionFetcher?.data?.data}
           reloadSections={reloadSections}
