@@ -23,6 +23,7 @@ enum Actions {
   AddLabel = 'Label',
   AddSquad = 'Squad',
   CreateRun = 'Run',
+  AddPlatform = 'Platform',
 }
 
 const ACTION_ITEMS: {
@@ -45,6 +46,10 @@ const ACTION_ITEMS: {
     id: 4,
     action: Actions.CreateRun,
   },
+  {
+    id: 5,
+    action: Actions.AddPlatform
+  }
 ]
 
 export const ProjectActions = () => {
@@ -57,6 +62,8 @@ export const ProjectActions = () => {
   const [addSquadDialog, setAddSquadDialog] = useState<boolean>(false)
   const [addLabelDialog, setAddLabelDialog] = useState<boolean>(false)
   const [addRunDialog, setAddRunDialog] = useState<boolean>(false)
+  const [addPlatformDialog, setAddPlatformDialog] = useState<boolean>(false)
+
 
   useEffect(() => {
     if (saveChanges.data?.error === null) {
@@ -110,6 +117,7 @@ export const ProjectActions = () => {
     if (action === Actions.AddLabel) setAddLabelDialog(true)
     else if (action === Actions.AddSquad) setAddSquadDialog(true)
     else if (action === Actions.CreateRun) setAddRunDialog(true)
+    else if (action === Actions.AddPlatform) setAddPlatformDialog(true)
     else if (action === Actions.AddTest)
       navigate(`/project/${projectId}/tests/createTest`, {}, e)
   }
@@ -159,6 +167,19 @@ export const ProjectActions = () => {
     })
   }
 
+  const handleSaveChangesPlatforms = (value: string) => {
+    const platforms = value
+      .split(',')
+      .map((val) => val.trim())
+      .filter((val) => val !== '')
+    const postData = {platforms, projectId}
+    saveChanges.submit(postData, {
+      method: 'POST',
+      action: `/${API.AddPlatforms}`,
+      encType: 'application/json',
+    })
+  }
+
   return (
     <div>
       <DropdownMenu open={actionDD} onOpenChange={setActionDD}>
@@ -198,6 +219,12 @@ export const ProjectActions = () => {
         handleSaveChanges={handleSaveChangesSquads}
         state={addSquadDialog}
         setState={setAddSquadDialog}
+      />
+      <AddSquadsLabelsDialog
+        heading={Actions.AddPlatform}
+        handleSaveChanges={handleSaveChangesPlatforms}
+        state={addPlatformDialog}
+        setState={setAddPlatformDialog}
       />
       <AddSquadsLabelsDialog
         heading={Actions.CreateRun}
